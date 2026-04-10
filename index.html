@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Budgeting Glass Pro</title>
+<title>Budgy - Budgeting Glass</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600&display=swap');
 
@@ -12,7 +12,9 @@
   --glass-border: rgba(255, 255, 255, 0.6);
   --glass-shadow: 0 12px 40px rgba(0,0,0,0.06), inset 0 2px 2px rgba(255,255,255,0.8);
   --txt: #1c1c1e; --txt2: rgba(60,60,67,0.6); --accent: #007AFF;
-  --bg1: #e2eaf4; --bg2: #cfdcf0; --r: 24px;
+  --bg1: #fef0e7; /* Peach base */
+  --bg2: #e0f2fe; /* Light blue */
+  --r: 24px;
 }
 
 body.dark {
@@ -20,7 +22,7 @@ body.dark {
   --glass-border: rgba(255, 255, 255, 0.15);
   --glass-shadow: 0 12px 40px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.1);
   --txt: #f5f5f7; --txt2: rgba(235,235,245,0.6);
-  --bg1: #090c10; --bg2: #161b22;
+  --bg1: #111418; --bg2: #05070a;
 }
 
 *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent;}
@@ -31,16 +33,19 @@ body {
   transition: background 0.5s ease;
 }
 
-.phone-wrap { width: 100%; max-width: 420px; padding: 20px 20px 120px; position: relative; overflow: hidden; min-height: 100vh;}
+.phone-wrap { width: 100%; max-width: 420px; padding: 20px 20px 140px; position: relative; overflow-x: hidden; min-height: 100vh;
+  background-image: radial-gradient(at 10% 10%, rgba(0,122,255,0.1) 0px, transparent 50%),
+                    radial-gradient(at 90% 90%, rgba(52,199,89,0.08) 0px, transparent 50%);
+}
 
 /* Utils */
 .glass {
   background: var(--glass-bg); border: 1px solid var(--glass-border);
   border-radius: var(--r); box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(30px) saturate(1.8); -webkit-backdrop-filter: blur(30px) saturate(1.8);
+  backdrop-filter: blur(32px) saturate(1.8); -webkit-backdrop-filter: blur(32px) saturate(1.8);
 }
 
-.top-nav { display: flex; justify-content: space-between; margin-bottom: 20px; padding: 0 5px; }
+.top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 5px; }
 .icon-btn { 
   width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; 
   cursor: pointer; font-size: 18px; transition: 0.2s; background: var(--glass-bg);
@@ -57,11 +62,11 @@ body {
 .hero { padding: 30px 20px; margin-bottom: 24px; text-align: center; }
 .hero-salary-in { 
   font-size: 38px; font-weight: 300; color: var(--txt); background: transparent; 
-  border: none; outline: none; width: 100%; text-align: center;
+  border: none; outline: none; width: 100%; text-align: center; letter-spacing: -1px;
 }
 
 /* Category Wrapper */
-.cat-list { display: flex; flex-direction: column; gap: 12px; }
+.cat-list { display: flex; flex-direction: column; gap: 12px; padding-bottom: 20px; }
 .cat-wrapper { position: relative; border-radius: var(--r); }
 .cat-card { 
   padding: 16px; display: flex; align-items: center; gap: 12px; position: relative; 
@@ -72,22 +77,22 @@ body {
 
 .cat-progress-bg {
   position: absolute; top: 0; left: 0; height: 100%; 
-  background: rgba(0, 122, 255, 0.1); z-index: -1; 
+  background: rgba(0, 122, 255, 0.08); z-index: -1; 
   transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s;
 }
 
 .cat-dot { width: 40px; height: 40px; border-radius: 12px; background: rgba(120,120,128,0.15); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
 .cat-body { flex: 1; min-width: 0; }
-.cat-name-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; width: 100%; margin-bottom: 4px; }
+.cat-name-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; width: 100%; margin-bottom: 4px; font-family: inherit;}
 
 .amt-row { display: flex; align-items: center; justify-content: flex-end; gap: 6px; margin-bottom: 4px; }
 .amt-lbl { font-size: 10px; color: var(--txt2); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
-.amount-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; text-align: right; width: 90px; }
-.actual-in { font-size: 14px; font-weight: 600; color: var(--accent); background: transparent; border: none; outline: none; text-align: right; width: 90px; }
+.amount-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; text-align: right; width: 90px; font-family: inherit; }
+.actual-in { font-size: 14px; font-weight: 600; color: var(--accent); background: transparent; border: none; outline: none; text-align: right; width: 90px; font-family: inherit; }
 
 /* Bank Tag */
 .bank-tag {
-  appearance: none; -webkit-appearance: none; background: rgba(120, 120, 128, 0.12);
+  appearance: none; -webkit-appearance: none; background: rgba(120, 120, 128, 0.1);
   border: 1px solid rgba(120, 120, 128, 0.2); border-radius: 100px; padding: 2px 8px;
   font-size: 11px; font-weight: 600; color: var(--txt2); font-family: inherit; outline: none;
 }
@@ -96,24 +101,20 @@ body {
 /* Privacy Blur */
 body.privacy-on .blurrable { filter: blur(8px); opacity: 0.6; pointer-events: none; }
 
-/* Bottom Nav */
-.bottom-nav { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 360px; z-index: 100; }
-.segmented { display: flex; padding: 6px; gap: 4px; }
-.tab-btn { flex: 1; padding: 12px; border: none; background: transparent; color: var(--txt2); font-size: 14px; font-weight: 600; border-radius: 100px; cursor: pointer; transition: 0.3s; }
-.tab-btn.active { color: var(--txt); background: var(--glass-bg); box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid var(--glass-border); }
-
 /* Summary */
 .ring-container { position: relative; display: flex; justify-content: center; align-items: center; margin: 20px 0; padding: 20px; }
 .ring-center { position: absolute; text-align: center; }
-.ring-pct { font-size: 32px; font-weight: 600; transition: color 0.3s; }
+.ring-pct { font-size: 32px; font-weight: 600; transition: color 0.3s; letter-spacing: -1px;}
 
-.insight-card { padding: 18px; display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
+.insight-card { padding: 20px; display: flex; flex-direction: column; gap: 15px; margin-top: 15px; }
 .insight-row { display: flex; justify-content: space-between; font-size: 14px; align-items: center;}
 .money-text { font-weight: 600; font-size: 15px; }
 
-.bank-pill { padding: 6px 12px; border-radius: 8px; background: rgba(120,120,128,0.1); display: flex; justify-content: space-between; font-size: 13px; align-items: center; font-weight: 500;}
+/* Visual Bar Rencana vs Aktual */
+.diff-bar-bg { width: 100%; height: 8px; background: rgba(120,120,128,0.2); border-radius: 10px; overflow: hidden; margin-top: 5px; position: relative;}
+.diff-bar-fill { height: 100%; border-radius: 10px; transition: width 0.5s ease; background: var(--accent); }
 
-.btn-action { flex: 1; padding: 16px; text-align: center; font-weight: 600; cursor: pointer; font-size: 14px; border-radius: var(--r); margin-top: 15px; }
+.bank-pill { padding: 10px 15px; border-radius: 14px; background: rgba(120,120,128,0.08); display: flex; justify-content: space-between; font-size: 13px; align-items: center; font-weight: 500;}
 
 /* PIN Lock Screen */
 #pin-overlay {
@@ -122,18 +123,53 @@ body.privacy-on .blurrable { filter: blur(8px); opacity: 0.6; pointer-events: no
   z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;
   transition: opacity 0.4s;
 }
-.pin-input {
-  font-size: 32px; letter-spacing: 12px; text-align: center; width: 180px;
-  background: transparent; border: none; border-bottom: 2px solid var(--txt); outline: none;
-  color: var(--txt); font-weight: 600; margin-top: 20px;
+.pin-input { font-size: 32px; letter-spacing: 12px; text-align: center; width: 180px; background: transparent; border: none; border-bottom: 2px solid var(--txt); outline: none; color: var(--txt); font-weight: 600; margin-top: 20px; }
+
+/* --- THE NEW UNIFIED, SMOOTH, INTEGRATED NAV BAR --- */
+.bottom-nav-container {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+  width: calc(100% - 40px); max-width: 380px; z-index: 100;
 }
+
+.bottom-glass-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--glass-bg); border: 1px solid var(--glass-border);
+  border-radius: 99px; /* Pill shape */
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(32px) saturate(2); -webkit-backdrop-filter: blur(32px) saturate(2);
+  padding: 8px 15px; height: 75px; /* Sedikit lebih tinggi untuk kenyamanan */
+}
+
+/* Navigasi Tersegmen */
+.tab-btn {
+  flex: none; width: 100px; text-align: center;
+  padding: 12px 0; border: none; background: transparent;
+  color: var(--txt2); font-size: 14px; font-weight: 600; border-radius: 100px;
+  cursor: pointer; transition: 0.3s;
+}
+.tab-btn.active { color: var(--txt); background: rgba(120,120,128,0.1); }
+
+/* Tombol Tambah yang Ditanam (Integrated Add Button) - SEAMLESS */
+.integrated-add-btn {
+  flex: none; width: 60px; height: 60px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; cursor: pointer;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--accent);
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  margin: 0 -20px; /* Merapatkan ke tengah di flexbox */
+  z-index: 101;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Sedikit kedalaman */
+}
+.integrated-add-btn:active { transform: scale(0.9) translateY(1px); }
 </style>
 </head>
 <body>
 
 <div id="pin-overlay" style="display: none;">
   <div style="font-size: 48px; margin-bottom: 10px;">🔒</div>
-  <h2 style="color: var(--txt);">Aplikasi Terkunci</h2>
+  <h2 style="color: var(--txt);">Budgy Terkunci</h2>
   <input type="password" id="pin-entry" class="pin-input" inputmode="numeric" maxlength="4" placeholder="••••" />
   <div style="font-size: 12px; color: var(--txt2); margin-top: 20px;">Masukkan 4 digit PIN Anda</div>
   <button onclick="clearPin()" style="margin-top: 40px; background:none; border:none; color:#FF3B30; text-decoration:underline; font-size:12px; cursor:pointer;">Lupa PIN? Reset Aplikasi</button>
@@ -142,7 +178,11 @@ body.privacy-on .blurrable { filter: blur(8px); opacity: 0.6; pointer-events: no
 <div class="phone-wrap">
   <div class="top-nav">
     <div class="icon-btn" id="pin-toggle" title="Kunci Aplikasi">🔓</div>
-    <div style="font-weight: 600; opacity: 0.8; padding-top: 8px;">Budgy</div>
+    
+    <div style="display: flex; align-items: center; gap: 7px; font-weight: 600; font-size: 19px; letter-spacing: -0.5px;">
+      <span style="font-size: 20px;">🦜</span> Budgy
+    </div>
+    
     <div class="icon-btn" id="theme-toggle" title="Ganti Tema">🌓</div>
   </div>
   
@@ -157,11 +197,6 @@ body.privacy-on .blurrable { filter: blur(8px); opacity: 0.6; pointer-events: no
     </div>
     
     <div id="cat-list" class="cat-list"></div>
-
-    <div style="display:flex; gap:10px;">
-      <div class="glass btn-action" id="add-btn" style="color: var(--accent);">+ Tambah</div>
-      <div class="glass btn-action" id="reset-btn" style="color: #FF3B30;">Reset</div>
-    </div>
   </div>
 
   <div id="tab-ringkasan" class="tab-content">
@@ -183,28 +218,43 @@ body.privacy-on .blurrable { filter: blur(8px); opacity: 0.6; pointer-events: no
 
     <div class="glass insight-card">
       <div class="insight-row">
-        <span>Total Alokasi Rencana</span> 
+        <span style="color: var(--txt2);">Total Rencana</span> 
         <strong id="total-plan-val" class="money-text blurrable">Rp 0</strong>
       </div>
       <div class="insight-row">
-        <span>Total Aktual (Terpakai)</span> 
+        <span style="color: var(--txt2);">Total Aktual (Terpakai)</span> 
         <strong id="total-actual-val" class="money-text blurrable" style="color: var(--accent);">Rp 0</strong>
       </div>
-      <div class="insight-row" style="border-top: 1px solid var(--glass-border); padding-top: 10px;">
-        <span>Sisa Gaji Bebas</span> 
+      
+      <div style="margin-top: 10px;">
+        <div class="insight-row">
+          <span style="font-size: 12px; font-weight: 600; text-transform: uppercase;">Sisa Anggaran (Rencana - Aktual)</span>
+          <strong id="selisih-val" class="money-text blurrable">Rp 0</strong>
+        </div>
+        <div class="diff-bar-bg">
+          <div class="diff-bar-fill" id="diff-bar"></div>
+        </div>
+        <div id="diff-status" style="font-size: 11px; text-align: right; margin-top: 4px; color: var(--txt2);">Aman</div>
+      </div>
+
+      <div class="insight-row" style="border-top: 1px solid var(--glass-border); padding-top: 12px; margin-top: 5px;">
+        <span style="font-weight: 600;">Sisa Gaji Bebas</span> 
         <strong id="sisa-val" class="money-text blurrable">Rp 0</strong>
       </div>
     </div>
 
     <div style="margin: 24px 0 10px; font-size: 13px; font-weight: 600; color: var(--txt2); text-transform: uppercase; padding-left: 8px;">Penempatan Saldo Rencana</div>
-    <div class="glass insight-card" id="bank-list" style="margin-top: 0; gap: 8px;">
+    <div class="glass insight-card" id="bank-list" style="margin-top: 0; gap: 10px; padding: 15px;">
       </div>
   </div>
 </div>
 
-<div class="bottom-nav">
-  <div class="glass segmented">
+<div class="bottom-nav-container">
+  <div class="bottom-glass-bar">
     <button class="tab-btn active" data-tab="tab-alokasi">Alokasi</button>
+    
+    <div class="integrated-add-btn" id="integrated-add-btn" title="Tambah Kategori">➕</div>
+    
     <button class="tab-btn" data-tab="tab-ringkasan">Ringkasan</button>
   </div>
 </div>
@@ -217,7 +267,6 @@ const EMOJI_MAP = {
   'internet': '🌐', 'pakaian': '👗', 'skincare': '✨', 'game': '🎮', 'cicilan': '💳'
 };
 
-// State Data (Rencana & Aktual)
 let cats = JSON.parse(localStorage.getItem('cats')) || [
   {id: Date.now(), name: 'Makan', amount: 1500000, actual: 0, icon: '🍔', bank: 'BCA'},
   {id: Date.now()+1, name: 'Transportasi', amount: 500000, actual: 0, icon: '🚗', bank: 'GoPay'}
@@ -226,20 +275,16 @@ let salary = localStorage.getItem('salary') || 5000000;
 let isPrivate = false;
 let userPin = localStorage.getItem('userPin') || '';
 
-// Utilities
 const haptic = () => { if(navigator.vibrate) navigator.vibrate(10); };
 const save = () => { localStorage.setItem('cats', JSON.stringify(cats)); localStorage.setItem('salary', salary); };
 const fmt = (n) => n === 0 ? '' : Math.round(n).toLocaleString('id-ID');
 
-// Input Real-Time Formatter
 function handleInput(e, type, index) {
   let rawStr = e.target.value.replace(/\D/g, '');
   let raw = parseInt(rawStr) || 0;
-  
   if (type === 'salary') salary = raw;
   else if (type === 'amount') cats[index].amount = raw;
   else if (type === 'actual') cats[index].actual = raw;
-
   e.target.value = raw === 0 ? '' : Math.round(raw).toLocaleString('id-ID');
   save(); updateSummary();
 }
@@ -266,11 +311,11 @@ function buildList() {
 
         <div style="display:flex; flex-direction:column; gap:8px;">
           <div class="amt-row">
-            <span class="amt-lbl">Bujet</span>
+            <span class="amt-lbl">Rencana</span>
             <input class="amount-in blurrable" type="text" inputmode="numeric" value="${fmt(c.amount)}" placeholder="0" data-idx="${index}">
           </div>
           <div class="amt-row">
-            <span class="amt-lbl">Pakai</span>
+            <span class="amt-lbl">Aktual</span>
             <input class="actual-in blurrable" type="text" inputmode="numeric" value="${fmt(c.actual)}" placeholder="0" data-idx="${index}">
           </div>
         </div>
@@ -279,29 +324,35 @@ function buildList() {
     list.appendChild(wrap);
 
     const card = wrap.querySelector('.cat-card');
-    let startX = 0;
-    let isDeleting = false;
+    let startX = 0, startY = 0, isSwiping = false, isDeleting = false;
 
-    // Swipe-to-Delete
     card.addEventListener('touchstart', e => { 
       if(['INPUT','SELECT'].includes(e.target.tagName)) return; 
-      startX = e.touches[0].clientX; card.style.transition = 'none'; 
+      startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+      card.style.transition = 'none'; isSwiping = false; isDeleting = false;
     }, {passive:true});
+
     card.addEventListener('touchmove', e => {
       if(['INPUT','SELECT'].includes(e.target.tagName)) return;
-      let diff = e.touches[0].clientX - startX;
-      if(diff > 0) diff = 0;
-      if(diff < -120) { card.style.opacity = 0.4; card.style.transform = `translateX(${diff}px) scale(0.95)`; isDeleting = true; } 
-      else { card.style.opacity = 1; card.style.transform = `translateX(${diff}px)`; isDeleting = false; }
+      let diffX = e.touches[0].clientX - startX;
+      let diffY = e.touches[0].clientY - startY;
+      if (!isSwiping) { if (Math.abs(diffX) > Math.abs(diffY)) isSwiping = true; else return; }
+      if(isSwiping) {
+        if(diffX > 0) diffX = 0;
+        if(diffX < -100) { card.style.opacity = 0.5; card.style.transform = `translateX(${diffX}px) scale(0.95)`; isDeleting = true; } 
+        else { card.style.opacity = 1; card.style.transform = `translateX(${diffX}px)`; isDeleting = false; }
+      }
     }, {passive:true});
+
     card.addEventListener('touchend', e => {
       if(['INPUT','SELECT'].includes(e.target.tagName)) return;
-      card.style.transition = 'all 0.3s';
-      if(isDeleting) { haptic(); card.style.transform = 'translateX(-200%)'; setTimeout(() => hapusKategori(c.id), 250); } 
-      else { card.style.transform = 'translateX(0) scale(1)'; card.style.opacity = 1; }
+      if(isSwiping) {
+        card.style.transition = 'all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)';
+        if(isDeleting) { haptic(); card.style.transform = 'translateX(-200%)'; setTimeout(() => hapusKategori(c.id), 250); } 
+        else { card.style.transform = 'translateX(0) scale(1)'; card.style.opacity = 1; }
+      }
     });
 
-    // Inputs Events
     const nameInput = wrap.querySelector('.cat-name-in');
     nameInput.addEventListener('input', (e) => {
       cats[index].name = e.target.value;
@@ -312,139 +363,93 @@ function buildList() {
       }
       save();
     });
-
-    wrap.querySelector('.bank-tag').addEventListener('change', (e) => {
-      cats[index].bank = e.target.value; save(); updateSummary();
-    });
-
-    // Gunakan fungsi handleInput untuk format titik Real-Time
+    wrap.querySelector('.bank-tag').addEventListener('change', (e) => { cats[index].bank = e.target.value; save(); updateSummary(); });
     wrap.querySelector('.amount-in').addEventListener('input', e => handleInput(e, 'amount', index));
     wrap.querySelector('.actual-in').addEventListener('input', e => handleInput(e, 'actual', index));
   });
-  
   updateSummary();
 }
 
 function updateSummary() {
   const sal = parseInt(salary) || 0;
-  
-  let totalRencana = 0;
-  let totalAktual = 0;
+  let totalRencana = 0, totalAktual = 0;
   const bankMap = {};
 
   cats.forEach(c => {
-    let amt = parseInt(c.amount) || 0;
-    let act = parseInt(c.actual) || 0;
-    totalRencana += amt;
-    totalAktual += act;
-
-    // Progress Bar (Aktual vs Rencana)
+    let amt = parseInt(c.amount) || 0; let act = parseInt(c.actual) || 0;
+    totalRencana += amt; totalAktual += act;
     const prog = document.getElementById(`prog-${c.id}`);
     if(prog) {
-      if(amt === 0) { prog.style.width = '0%'; prog.style.backgroundColor = 'rgba(0,122,255,0.1)'; }
+      if(amt === 0) { prog.style.width = '0%'; prog.style.backgroundColor = 'rgba(0,122,255,0.08)'; }
       else {
         let p = (act / amt) * 100;
         prog.style.width = Math.min(p, 100) + '%';
-        // Berubah jadi merah transparan kalau overbudget (pemakaian melebihi batas)
-        prog.style.backgroundColor = p > 100 ? 'rgba(255,59,48,0.2)' : 'rgba(0,122,255,0.1)';
+        prog.style.backgroundColor = p > 100 ? 'rgba(255,59,48,0.15)' : 'rgba(0,122,255,0.08)';
       }
     }
-
-    // Pemetaan Saldo Bank Rencana
-    if(!bankMap[c.bank]) bankMap[c.bank] = 0;
-    bankMap[c.bank] += amt;
+    if(!bankMap[c.bank]) bankMap[c.bank] = 0; bankMap[c.bank] += amt;
   });
 
   const sisaGaji = sal - totalRencana;
   const pctGaji = sal > 0 ? Math.min(Math.round(totalRencana/sal*100), 100) : 0;
+  const selisih = totalRencana - totalAktual;
 
-  // Update Visual Summary Utama
   document.getElementById('ring-pct').textContent = pctGaji + '%';
   document.getElementById('ring-track').style.strokeDashoffset = 502 * (1 - pctGaji/100);
-  
   document.getElementById('total-plan-val').textContent = 'Rp ' + (fmt(totalRencana) || '0');
   document.getElementById('total-actual-val').textContent = 'Rp ' + (fmt(totalAktual) || '0');
+  
+  const selisihEl = document.getElementById('selisih-val');
+  const diffBar = document.getElementById('diff-bar');
+  const diffStatus = document.getElementById('diff-status');
+  selisihEl.textContent = (selisih < 0 ? '- Rp ' : 'Rp ') + fmt(Math.abs(selisih));
+  
+  if (totalRencana === 0) { diffBar.style.width = '0%'; diffStatus.textContent = '-'; } 
+  else {
+    let diffPct = (totalAktual / totalRencana) * 100;
+    diffBar.style.width = Math.min(diffPct, 100) + '%';
+    if (diffPct > 100) { selisihEl.style.color = '#FF3B30'; diffBar.style.background = '#FF3B30'; diffStatus.textContent = 'Overbudget!'; diffStatus.style.color = '#FF3B30'; } 
+    else { selisihEl.style.color = 'var(--txt)'; diffBar.style.background = 'var(--accent)'; diffStatus.textContent = `Sisa ${100 - Math.round(diffPct)}% anggaran`; diffStatus.style.color = 'var(--txt2)'; }
+  }
+
   document.getElementById('sisa-val').textContent = 'Rp ' + (fmt(sisaGaji) || '0');
   document.getElementById('sisa-val').style.color = sisaGaji < 0 ? '#FF3B30' : 'var(--txt)';
-
-  // Render Penempatan Bank
   const bankListDiv = document.getElementById('bank-list');
   bankListDiv.innerHTML = '';
   for (const [bankName, bankTotal] of Object.entries(bankMap)) {
-    if(bankTotal > 0) {
-      bankListDiv.innerHTML += `
-        <div class="bank-pill">
-          <span style="color:var(--txt2);">${bankName}</span>
-          <span class="blurrable money-text">Rp ${fmt(bankTotal)}</span>
-        </div>`;
-    }
+    if(bankTotal > 0) bankListDiv.innerHTML += `<div class="bank-pill"><span style="color:var(--txt2);">${bankName}</span><span class="blurrable money-text">Rp ${fmt(bankTotal)}</span></div>`;
   }
 }
 
 function hapusKategori(id) { cats = cats.filter(c => c.id !== id); save(); buildList(); }
-
-// Salary Input Real-Time
 const salIn = document.getElementById('salary-in');
 salIn.value = fmt(salary);
 salIn.addEventListener('input', e => handleInput(e, 'salary', null));
 
-// Bottom Nav
+// --- UPDATED LOGIC FOR THE NEW UNIFIED NAV BAR ---
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.onclick = () => {
     haptic();
     document.querySelectorAll('.tab-btn, .tab-content').forEach(el => el.classList.remove('active'));
-    btn.classList.add('active'); document.getElementById(btn.dataset.tab).classList.add('active');
+    btn.classList.add('active'); 
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    
+    // Nonaktifkan tombol tambah jika di tab ringkasan, tapi tetap tampilkan strukturnya
+    const addBtn = document.getElementById('integrated-add-btn');
+    if(btn.dataset.tab === 'tab-ringkasan') {
+      addBtn.style.opacity = '0.3'; addBtn.style.pointerEvents = 'none';
+    } else {
+      addBtn.style.opacity = '1'; addBtn.style.pointerEvents = 'auto';
+    }
   };
 });
 
-// Buttons
-document.getElementById('add-btn').onclick = () => { haptic(); cats.push({id: Date.now(), name: '', amount: 0, actual: 0, icon: '📦', bank: 'BCA'}); save(); buildList(); };
-document.getElementById('reset-btn').onclick = () => { if(confirm('Hapus semua?')) { haptic(); cats = []; salary = 0; salIn.value = ''; save(); buildList(); } };
+// Integrated Add Button Event
+document.getElementById('integrated-add-btn').onclick = () => { haptic(); cats.push({id: Date.now(), name: '', amount: 0, actual: 0, icon: '📦', bank: 'BCA'}); save(); buildList(); window.scrollTo(0, document.body.scrollHeight);};
+
 document.getElementById('theme-toggle').onclick = () => { haptic(); document.body.classList.toggle('dark'); };
-document.getElementById('privacy-toggle').onclick = (e) => {
-  haptic(); isPrivate = !isPrivate; e.target.textContent = isPrivate ? '🙈' : '👁️';
-  isPrivate ? document.body.classList.add('privacy-on') : document.body.classList.remove('privacy-on');
-};
-
-// PIN SYSTEM
-const pinIcon = document.getElementById('pin-toggle');
-const pinOverlay = document.getElementById('pin-overlay');
-const pinEntry = document.getElementById('pin-entry');
-
-if (userPin) {
-  pinIcon.textContent = '🔒';
-  pinOverlay.style.display = 'flex';
-}
-
-pinEntry.addEventListener('input', (e) => {
-  if (e.target.value.length === 4) {
-    if (e.target.value === userPin) {
-      pinOverlay.style.opacity = '0';
-      setTimeout(() => { pinOverlay.style.display = 'none'; e.target.value = ''; }, 400);
-      haptic();
-    } else {
-      e.target.value = '';
-      alert('PIN Salah!');
-      haptic();
-    }
-  }
-});
-
-pinIcon.onclick = () => {
-  if (userPin) {
-    if(confirm('Hapus PIN perlindungan saat ini?')) { userPin = ''; localStorage.setItem('userPin', ''); pinIcon.textContent = '🔓'; alert('PIN Dihapus'); }
-  } else {
-    let p = prompt('Buat PIN baru (4 angka):');
-    if (p && p.length === 4 && !isNaN(p)) { userPin = p; localStorage.setItem('userPin', p); pinIcon.textContent = '🔒'; alert('PIN Tersimpan'); } 
-    else if(p) { alert('PIN harus berupa 4 angka.'); }
-  }
-};
-
-function clearPin() {
-  if(confirm('Peringatan: Mereset akan MENGHAPUS SEMUA DATA keuangan Anda juga. Lanjutkan?')) {
-    localStorage.clear(); location.reload();
-  }
-}
+document.getElementById('privacy-toggle').onclick = (e) => { haptic(); isPrivate = !isPrivate; e.target.textContent = isPrivate ? '🙈' : '👁️'; isPrivate ? document.body.classList.add('privacy-on') : document.body.classList.remove('privacy-on'); };
+const pinIcon = document.getElementById('pin-toggle'); const pinOverlay = document.getElementById('pin-overlay'); const pinEntry = document.getElementById('pin-entry'); if (userPin) { pinIcon.textContent = '🔒'; pinOverlay.style.display = 'flex'; } pinEntry.addEventListener('input', (e) => { if (e.target.value.length === 4) { if (e.target.value === userPin) { pinOverlay.style.opacity = '0'; setTimeout(() => { pinOverlay.style.display = 'none'; e.target.value = ''; }, 400); haptic(); } else { e.target.value = ''; alert('PIN Salah!'); haptic(); } } }); pinIcon.onclick = () => { if (userPin) { if(confirm('Hapus PIN perlindungan saat ini?')) { userPin = ''; localStorage.setItem('userPin', ''); pinIcon.textContent = '🔓'; alert('PIN Dihapus'); } } else { let p = prompt('Buat PIN baru (4 angka):'); if (p && p.length === 4 && !isNaN(p)) { userPin = p; localStorage.setItem('userPin', p); pinIcon.textContent = '🔒'; alert('PIN Tersimpan'); } else if(p) alert('PIN harus berupa 4 angka.'); } }; function clearPin() { if(confirm('Peringatan: Mereset akan MENGHAPUS SEMUA DATA keuangan Anda juga. Lanjutkan?')) { localStorage.clear(); location.reload(); } }
 
 buildList();
 </script>
