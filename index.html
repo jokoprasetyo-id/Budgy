@@ -59,21 +59,41 @@ body {
 @keyframes slideUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
 
 /* Hero */
-.hero { padding: 30px 20px; margin-bottom: 24px; text-align: center; }
+.hero { padding: 30px 20px; margin-bottom: 12px; text-align: center; }
 .hero-salary-in { 
   font-size: 38px; font-weight: 300; color: var(--txt); background: transparent; 
   border: none; outline: none; width: 100%; text-align: center; letter-spacing: -1px;
 }
 
-/* Category Wrapper */
+/* Category Wrapper & Edit Mode Animations */
 .cat-list { display: flex; flex-direction: column; gap: 12px; padding-bottom: 20px; }
 .cat-wrapper { position: relative; border-radius: var(--r); }
 .cat-card { 
   padding: 16px; display: flex; align-items: center; gap: 12px; position: relative; 
   overflow: hidden; z-index: 1; background: var(--glass-bg);
   border: 1px solid var(--glass-border); border-radius: var(--r);
-  touch-action: pan-y;
 }
+
+/* Jiggle Animation */
+@keyframes jiggle {
+  0% { transform: rotate(-0.8deg); }
+  50% { transform: rotate(0.8deg); }
+  100% { transform: rotate(-0.8deg); }
+}
+.edit-mode .cat-card { animation: jiggle 0.3s infinite ease-in-out; pointer-events: none; }
+.edit-mode .cat-wrapper:nth-child(even) .cat-card { animation-direction: reverse; animation-duration: 0.35s; }
+
+/* Delete Badge */
+.delete-badge {
+  position: absolute; top: -4px; left: -4px; width: 26px; height: 26px;
+  background: #FF3B30; color: white; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600; font-size: 18px; line-height: 1; cursor: pointer;
+  opacity: 0; transform: scale(0); transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  z-index: 10; box-shadow: 0 4px 10px rgba(255,59,48,0.4);
+  pointer-events: none;
+}
+.edit-mode .delete-badge { opacity: 1; transform: scale(1); pointer-events: auto; }
 
 .cat-progress-bg {
   position: absolute; top: 0; left: 0; height: 100%; 
@@ -113,7 +133,6 @@ body.privacy-on .blurrable { filter: blur(8px); opacity: 0.6; pointer-events: no
 /* Visual Bar Rencana vs Aktual */
 .diff-bar-bg { width: 100%; height: 8px; background: rgba(120,120,128,0.2); border-radius: 10px; overflow: hidden; margin-top: 5px; position: relative;}
 .diff-bar-fill { height: 100%; border-radius: 10px; transition: width 0.5s ease; background: var(--accent); }
-
 .bank-pill { padding: 10px 15px; border-radius: 14px; background: rgba(120,120,128,0.08); display: flex; justify-content: space-between; font-size: 13px; align-items: center; font-weight: 500;}
 
 /* PIN Lock Screen */
@@ -125,22 +144,18 @@ body.privacy-on .blurrable { filter: blur(8px); opacity: 0.6; pointer-events: no
 }
 .pin-input { font-size: 32px; letter-spacing: 12px; text-align: center; width: 180px; background: transparent; border: none; border-bottom: 2px solid var(--txt); outline: none; color: var(--txt); font-weight: 600; margin-top: 20px; }
 
-/* --- THE NEW UNIFIED, SMOOTH, INTEGRATED NAV BAR --- */
+/* --- THE NEW UNIFIED NAV BAR --- */
 .bottom-nav-container {
   position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
   width: calc(100% - 40px); max-width: 380px; z-index: 100;
 }
-
 .bottom-glass-bar {
   display: flex; justify-content: space-between; align-items: center;
   background: var(--glass-bg); border: 1px solid var(--glass-border);
-  border-radius: 99px; /* Pill shape */
-  box-shadow: var(--glass-shadow);
+  border-radius: 99px; box-shadow: var(--glass-shadow);
   backdrop-filter: blur(32px) saturate(2); -webkit-backdrop-filter: blur(32px) saturate(2);
-  padding: 8px 15px; height: 75px; /* Sedikit lebih tinggi untuk kenyamanan */
+  padding: 8px 15px; height: 75px; 
 }
-
-/* Navigasi Tersegmen */
 .tab-btn {
   flex: none; width: 100px; text-align: center;
   padding: 12px 0; border: none; background: transparent;
@@ -149,18 +164,13 @@ body.privacy-on .blurrable { filter: blur(8px); opacity: 0.6; pointer-events: no
 }
 .tab-btn.active { color: var(--txt); background: rgba(120,120,128,0.1); }
 
-/* Tombol Tambah yang Ditanam (Integrated Add Button) - SEAMLESS */
 .integrated-add-btn {
   flex: none; width: 60px; height: 60px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 26px; cursor: pointer;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  color: var(--accent);
+  font-size: 26px; cursor: pointer; background: var(--glass-bg);
+  border: 1px solid var(--glass-border); color: var(--accent);
   transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-  margin: 0 -20px; /* Merapatkan ke tengah di flexbox */
-  z-index: 101;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Sedikit kedalaman */
+  margin: 0 -20px; z-index: 101; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 .integrated-add-btn:active { transform: scale(0.9) translateY(1px); }
 </style>
@@ -178,11 +188,9 @@ body.privacy-on .blurrable { filter: blur(8px); opacity: 0.6; pointer-events: no
 <div class="phone-wrap">
   <div class="top-nav">
     <div class="icon-btn" id="pin-toggle" title="Kunci Aplikasi">🔓</div>
-    
     <div style="display: flex; align-items: center; gap: 7px; font-weight: 600; font-size: 19px; letter-spacing: -0.5px;">
       <span style="font-size: 20px;">🦜</span> Budgy
     </div>
-    
     <div class="icon-btn" id="theme-toggle" title="Ganti Tema">🌓</div>
   </div>
   
@@ -196,6 +204,11 @@ body.privacy-on .blurrable { filter: blur(8px); opacity: 0.6; pointer-events: no
       </div>
     </div>
     
+    <div style="display:flex; justify-content:space-between; align-items:center; margin: 20px 0 12px; padding: 0 8px;">
+      <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase; letter-spacing: 0.5px;">Alokasi Kategori</div>
+      <div id="edit-mode-btn" style="cursor:pointer; color: var(--txt2); font-weight:bold; font-size: 22px; line-height: 0.5; padding: 5px;">⋯</div>
+    </div>
+
     <div id="cat-list" class="cat-list"></div>
   </div>
 
@@ -228,7 +241,7 @@ body.privacy-on .blurrable { filter: blur(8px); opacity: 0.6; pointer-events: no
       
       <div style="margin-top: 10px;">
         <div class="insight-row">
-          <span style="font-size: 12px; font-weight: 600; text-transform: uppercase;">Sisa Anggaran (Rencana - Aktual)</span>
+          <span style="font-size: 12px; font-weight: 600; text-transform: uppercase;">Sisa Anggaran</span>
           <strong id="selisih-val" class="money-text blurrable">Rp 0</strong>
         </div>
         <div class="diff-bar-bg">
@@ -252,9 +265,7 @@ body.privacy-on .blurrable { filter: blur(8px); opacity: 0.6; pointer-events: no
 <div class="bottom-nav-container">
   <div class="bottom-glass-bar">
     <button class="tab-btn active" data-tab="tab-alokasi">Alokasi</button>
-    
     <div class="integrated-add-btn" id="integrated-add-btn" title="Tambah Kategori">➕</div>
-    
     <button class="tab-btn" data-tab="tab-ringkasan">Ringkasan</button>
   </div>
 </div>
@@ -274,6 +285,7 @@ let cats = JSON.parse(localStorage.getItem('cats')) || [
 let salary = localStorage.getItem('salary') || 5000000;
 let isPrivate = false;
 let userPin = localStorage.getItem('userPin') || '';
+let isEditMode = false; // State untuk Mode Edit
 
 const haptic = () => { if(navigator.vibrate) navigator.vibrate(10); };
 const save = () => { localStorage.setItem('cats', JSON.stringify(cats)); localStorage.setItem('salary', salary); };
@@ -297,7 +309,9 @@ function buildList() {
     const wrap = document.createElement('div');
     wrap.className = 'cat-wrapper';
     
+    // Perhatikan tambahan .delete-badge di sini
     wrap.innerHTML = `
+      <div class="delete-badge" onclick="hapusKategori(${c.id})">−</div>
       <div class="cat-card inner" id="card-${c.id}">
         <div class="cat-progress-bg" id="prog-${c.id}"></div>
         <div class="cat-dot" id="icon-${c.id}">${c.icon}</div>
@@ -323,36 +337,6 @@ function buildList() {
     `;
     list.appendChild(wrap);
 
-    const card = wrap.querySelector('.cat-card');
-    let startX = 0, startY = 0, isSwiping = false, isDeleting = false;
-
-    card.addEventListener('touchstart', e => { 
-      if(['INPUT','SELECT'].includes(e.target.tagName)) return; 
-      startX = e.touches[0].clientX; startY = e.touches[0].clientY;
-      card.style.transition = 'none'; isSwiping = false; isDeleting = false;
-    }, {passive:true});
-
-    card.addEventListener('touchmove', e => {
-      if(['INPUT','SELECT'].includes(e.target.tagName)) return;
-      let diffX = e.touches[0].clientX - startX;
-      let diffY = e.touches[0].clientY - startY;
-      if (!isSwiping) { if (Math.abs(diffX) > Math.abs(diffY)) isSwiping = true; else return; }
-      if(isSwiping) {
-        if(diffX > 0) diffX = 0;
-        if(diffX < -100) { card.style.opacity = 0.5; card.style.transform = `translateX(${diffX}px) scale(0.95)`; isDeleting = true; } 
-        else { card.style.opacity = 1; card.style.transform = `translateX(${diffX}px)`; isDeleting = false; }
-      }
-    }, {passive:true});
-
-    card.addEventListener('touchend', e => {
-      if(['INPUT','SELECT'].includes(e.target.tagName)) return;
-      if(isSwiping) {
-        card.style.transition = 'all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)';
-        if(isDeleting) { haptic(); card.style.transform = 'translateX(-200%)'; setTimeout(() => hapusKategori(c.id), 250); } 
-        else { card.style.transform = 'translateX(0) scale(1)'; card.style.opacity = 1; }
-      }
-    });
-
     const nameInput = wrap.querySelector('.cat-name-in');
     nameInput.addEventListener('input', (e) => {
       cats[index].name = e.target.value;
@@ -369,6 +353,26 @@ function buildList() {
   });
   updateSummary();
 }
+
+// Logic untuk Mengaktifkan Mode Edit (Jiggle)
+document.getElementById('edit-mode-btn').onclick = () => {
+  haptic();
+  isEditMode = !isEditMode;
+  const list = document.getElementById('cat-list');
+  const btn = document.getElementById('edit-mode-btn');
+  
+  if (isEditMode) {
+    list.classList.add('edit-mode');
+    btn.textContent = 'Selesai';
+    btn.style.fontSize = '12px';
+    btn.style.color = 'var(--accent)';
+  } else {
+    list.classList.remove('edit-mode');
+    btn.textContent = '⋯';
+    btn.style.fontSize = '22px';
+    btn.style.color = 'var(--txt2)';
+  }
+};
 
 function updateSummary() {
   const sal = parseInt(salary) || 0;
@@ -421,12 +425,12 @@ function updateSummary() {
   }
 }
 
-function hapusKategori(id) { cats = cats.filter(c => c.id !== id); save(); buildList(); }
+function hapusKategori(id) { haptic(); cats = cats.filter(c => c.id !== id); save(); buildList(); }
 const salIn = document.getElementById('salary-in');
 salIn.value = fmt(salary);
 salIn.addEventListener('input', e => handleInput(e, 'salary', null));
 
-// --- UPDATED LOGIC FOR THE NEW UNIFIED NAV BAR ---
+// Tab Navigasi
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.onclick = () => {
     haptic();
@@ -434,7 +438,9 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.classList.add('active'); 
     document.getElementById(btn.dataset.tab).classList.add('active');
     
-    // Nonaktifkan tombol tambah jika di tab ringkasan, tapi tetap tampilkan strukturnya
+    // Matikan mode edit saat pindah tab
+    if (isEditMode) document.getElementById('edit-mode-btn').click();
+
     const addBtn = document.getElementById('integrated-add-btn');
     if(btn.dataset.tab === 'tab-ringkasan') {
       addBtn.style.opacity = '0.3'; addBtn.style.pointerEvents = 'none';
@@ -444,8 +450,13 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
   };
 });
 
-// Integrated Add Button Event
-document.getElementById('integrated-add-btn').onclick = () => { haptic(); cats.push({id: Date.now(), name: '', amount: 0, actual: 0, icon: '📦', bank: 'BCA'}); save(); buildList(); window.scrollTo(0, document.body.scrollHeight);};
+// Tombol Tambah Tengah
+document.getElementById('integrated-add-btn').onclick = () => { 
+  haptic(); 
+  if (isEditMode) document.getElementById('edit-mode-btn').click(); // Matikan edit mode jika sedang aktif
+  cats.push({id: Date.now(), name: '', amount: 0, actual: 0, icon: '📦', bank: 'BCA'}); 
+  save(); buildList(); window.scrollTo(0, document.body.scrollHeight);
+};
 
 document.getElementById('theme-toggle').onclick = () => { haptic(); document.body.classList.toggle('dark'); };
 document.getElementById('privacy-toggle').onclick = (e) => { haptic(); isPrivate = !isPrivate; e.target.textContent = isPrivate ? '🙈' : '👁️'; isPrivate ? document.body.classList.add('privacy-on') : document.body.classList.remove('privacy-on'); };
