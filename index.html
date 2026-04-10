@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Budgeting Glass Pro</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600&display=swap');
+
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-shadow: 0 12px 40px rgba(0,0,0,0.06), inset 0 2px 2px rgba(255,255,255,0.8);
+  --txt: #1c1c1e; --txt2: rgba(60,60,67,0.6); --accent: #007AFF;
+  --bg1: #e2eaf4; --bg2: #cfdcf0; --r: 24px;
+}
+
+body.dark {
+  --glass-bg: rgba(30, 30, 35, 0.5);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-shadow: 0 12px 40px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.1);
+  --txt: #f5f5f7; --txt2: rgba(235,235,245,0.6);
+  --bg1: #090c10; --bg2: #161b22;
+}
+
+*{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent;}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  background: radial-gradient(circle at top left, var(--bg1), var(--bg2));
+  min-height: 100vh; display: flex; justify-content: center; color: var(--txt);
+  transition: background 0.5s ease;
+}
+
+.phone-wrap { width: 100%; max-width: 420px; padding: 20px 20px 120px; position: relative; overflow: hidden; min-height: 100vh;}
+
+/* Utils */
+.glass {
+  background: var(--glass-bg); border: 1px solid var(--glass-border);
+  border-radius: var(--r); box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(30px) saturate(1.8); -webkit-backdrop-filter: blur(30px) saturate(1.8);
+}
+
+.top-nav { display: flex; justify-content: space-between; margin-bottom: 20px; padding: 0 5px; }
+.icon-btn { 
+  width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; 
+  cursor: pointer; font-size: 18px; transition: 0.2s; background: var(--glass-bg);
+  border: 1px solid var(--glass-border); border-radius: 50%;
+}
+.icon-btn:active { transform: scale(0.9); }
+
+/* Tab Content */
+.tab-content { display: none; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+.tab-content.active { display: block; }
+@keyframes slideUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+
+/* Hero */
+.hero { padding: 30px 20px; margin-bottom: 24px; text-align: center; }
+.hero-salary-in { 
+  font-size: 38px; font-weight: 300; color: var(--txt); background: transparent; 
+  border: none; outline: none; width: 100%; text-align: center;
+}
+
+/* Category Wrapper */
+.cat-list { display: flex; flex-direction: column; gap: 12px; }
+.cat-wrapper { position: relative; border-radius: var(--r); }
+.cat-card { 
+  padding: 16px; display: flex; align-items: center; gap: 12px; position: relative; 
+  overflow: hidden; z-index: 1; background: var(--glass-bg);
+  border: 1px solid var(--glass-border); border-radius: var(--r);
+  touch-action: pan-y;
+}
+
+.cat-progress-bg {
+  position: absolute; top: 0; left: 0; height: 100%; 
+  background: rgba(0, 122, 255, 0.1); z-index: -1; 
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s;
+}
+
+.cat-dot { width: 40px; height: 40px; border-radius: 12px; background: rgba(120,120,128,0.15); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.cat-body { flex: 1; min-width: 0; }
+.cat-name-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; width: 100%; margin-bottom: 4px; }
+
+.amt-row { display: flex; align-items: center; justify-content: flex-end; gap: 6px; margin-bottom: 4px; }
+.amt-lbl { font-size: 10px; color: var(--txt2); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+.amount-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; text-align: right; width: 90px; }
+.actual-in { font-size: 14px; font-weight: 600; color: var(--accent); background: transparent; border: none; outline: none; text-align: right; width: 90px; }
+
+/* Bank Tag */
+.bank-tag {
+  appearance: none; -webkit-appearance: none; background: rgba(120, 120, 128, 0.12);
+  border: 1px solid rgba(120, 120, 128, 0.2); border-radius: 100px; padding: 2px 8px;
+  font-size: 11px; font-weight: 600; color: var(--txt2); font-family: inherit; outline: none;
+}
+.bank-tag option { background: var(--bg1); color: var(--txt); }
+
+/* Privacy Blur */
+body.privacy-on .blurrable { filter: blur(8px); opacity: 0.6; pointer-events: none; }
+
+/* Bottom Nav */
+.bottom-nav { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 360px; z-index: 100; }
+.segmented { display: flex; padding: 6px; gap: 4px; }
+.tab-btn { flex: 1; padding: 12px; border: none; background: transparent; color: var(--txt2); font-size: 14px; font-weight: 600; border-radius: 100px; cursor: pointer; transition: 0.3s; }
+.tab-btn.active { color: var(--txt); background: var(--glass-bg); box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid var(--glass-border); }
+
+/* Summary */
+.ring-container { position: relative; display: flex; justify-content: center; align-items: center; margin: 20px 0; padding: 20px; }
+.ring-center { position: absolute; text-align: center; }
+.ring-pct { font-size: 32px; font-weight: 600; transition: color 0.3s; }
+
+.insight-card { padding: 18px; display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
+.insight-row { display: flex; justify-content: space-between; font-size: 14px; align-items: center;}
+.money-text { font-weight: 600; font-size: 15px; }
+
+.bank-pill { padding: 6px 12px; border-radius: 8px; background: rgba(120,120,128,0.1); display: flex; justify-content: space-between; font-size: 13px; align-items: center; font-weight: 500;}
+
+.btn-action { flex: 1; padding: 16px; text-align: center; font-weight: 600; cursor: pointer; font-size: 14px; border-radius: var(--r); margin-top: 15px; }
+
+/* PIN Lock Screen */
+#pin-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--glass-bg); backdrop-filter: blur(40px) saturate(2); -webkit-backdrop-filter: blur(40px) saturate(2);
+  z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: opacity 0.4s;
+}
+.pin-input {
+  font-size: 32px; letter-spacing: 12px; text-align: center; width: 180px;
+  background: transparent; border: none; border-bottom: 2px solid var(--txt); outline: none;
+  color: var(--txt); font-weight: 600; margin-top: 20px;
+}
+</style>
+</head>
+<body>
+
+<div id="pin-overlay" style="display: none;">
+  <div style="font-size: 48px; margin-bottom: 10px;">🔒</div>
+  <h2 style="color: var(--txt);">Aplikasi Terkunci</h2>
+  <input type="password" id="pin-entry" class="pin-input" inputmode="numeric" maxlength="4" placeholder="••••" />
+  <div style="font-size: 12px; color: var(--txt2); margin-top: 20px;">Masukkan 4 digit PIN Anda</div>
+  <button onclick="clearPin()" style="margin-top: 40px; background:none; border:none; color:#FF3B30; text-decoration:underline; font-size:12px; cursor:pointer;">Lupa PIN? Reset Aplikasi</button>
+</div>
+
+<div class="phone-wrap">
+  <div class="top-nav">
+    <div class="icon-btn" id="pin-toggle" title="Kunci Aplikasi">🔓</div>
+    <div style="font-weight: 600; opacity: 0.8; padding-top: 8px;">Budgy</div>
+    <div class="icon-btn" id="theme-toggle" title="Ganti Tema">🌓</div>
+  </div>
+  
+  <div id="tab-alokasi" class="tab-content active">
+    <div class="glass hero">
+      <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 12px;">Gaji Bulanan</div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;">
+        <span style="font-size:24px; opacity:0.5;">Rp</span>
+        <input class="hero-salary-in blurrable" id="salary-in" type="text" inputmode="numeric" placeholder="0" />
+        <div class="icon-btn" id="privacy-toggle" style="width: 34px; height: 34px; font-size: 15px;">👁️</div>
+      </div>
+    </div>
+    
+    <div id="cat-list" class="cat-list"></div>
+
+    <div style="display:flex; gap:10px;">
+      <div class="glass btn-action" id="add-btn" style="color: var(--accent);">+ Tambah</div>
+      <div class="glass btn-action" id="reset-btn" style="color: #FF3B30;">Reset</div>
+    </div>
+  </div>
+
+  <div id="tab-ringkasan" class="tab-content">
+    <div class="glass ring-container">
+      <svg width="200" height="200" viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(120,120,128,0.15)" stroke-width="16"/>
+        <circle id="ring-track" cx="100" cy="100" r="80" fill="none" stroke="url(#ringGrad)" stroke-width="16" stroke-linecap="round" stroke-dasharray="502" stroke-dashoffset="502" transform="rotate(-90 100 100)" style="transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);"/>
+        <defs>
+          <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#007AFF"/><stop offset="100%" stop-color="#34C759"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="ring-center">
+        <div class="ring-pct" id="ring-pct">0%</div>
+        <div style="font-size:12px; color:var(--txt2); margin-top:2px;">Bujet Dialokasikan</div>
+      </div>
+    </div>
+
+    <div class="glass insight-card">
+      <div class="insight-row">
+        <span>Total Alokasi Rencana</span> 
+        <strong id="total-plan-val" class="money-text blurrable">Rp 0</strong>
+      </div>
+      <div class="insight-row">
+        <span>Total Aktual (Terpakai)</span> 
+        <strong id="total-actual-val" class="money-text blurrable" style="color: var(--accent);">Rp 0</strong>
+      </div>
+      <div class="insight-row" style="border-top: 1px solid var(--glass-border); padding-top: 10px;">
+        <span>Sisa Gaji Bebas</span> 
+        <strong id="sisa-val" class="money-text blurrable">Rp 0</strong>
+      </div>
+    </div>
+
+    <div style="margin: 24px 0 10px; font-size: 13px; font-weight: 600; color: var(--txt2); text-transform: uppercase; padding-left: 8px;">Penempatan Saldo Rencana</div>
+    <div class="glass insight-card" id="bank-list" style="margin-top: 0; gap: 8px;">
+      </div>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <div class="glass segmented">
+    <button class="tab-btn active" data-tab="tab-alokasi">Alokasi</button>
+    <button class="tab-btn" data-tab="tab-ringkasan">Ringkasan</button>
+  </div>
+</div>
+
+<script>
+const BANKS = ['BCA', 'Mandiri', 'BNI', 'BRI', 'Jago', 'SeaBank', 'GoPay', 'OVO', 'DANA', 'Tunai'];
+const EMOJI_MAP = {
+  'makan': '🍔', 'kopi': '☕', 'listrik': '⚡', 'air': '💧', 'bensin': '⛽', 
+  'mobil': '🚗', 'belanja': '🛍️', 'tabung': '💰', 'kos': '🛏️', 'nonton': '🎬', 
+  'internet': '🌐', 'pakaian': '👗', 'skincare': '✨', 'game': '🎮', 'cicilan': '💳'
+};
+
+// State Data (Rencana & Aktual)
+let cats = JSON.parse(localStorage.getItem('cats')) || [
+  {id: Date.now(), name: 'Makan', amount: 1500000, actual: 0, icon: '🍔', bank: 'BCA'},
+  {id: Date.now()+1, name: 'Transportasi', amount: 500000, actual: 0, icon: '🚗', bank: 'GoPay'}
+];
+let salary = localStorage.getItem('salary') || 5000000;
+let isPrivate = false;
+let userPin = localStorage.getItem('userPin') || '';
+
+// Utilities
+const haptic = () => { if(navigator.vibrate) navigator.vibrate(10); };
+const save = () => { localStorage.setItem('cats', JSON.stringify(cats)); localStorage.setItem('salary', salary); };
+const fmt = (n) => n === 0 ? '' : Math.round(n).toLocaleString('id-ID');
+
+// Input Real-Time Formatter
+function handleInput(e, type, index) {
+  let rawStr = e.target.value.replace(/\D/g, '');
+  let raw = parseInt(rawStr) || 0;
+  
+  if (type === 'salary') salary = raw;
+  else if (type === 'amount') cats[index].amount = raw;
+  else if (type === 'actual') cats[index].actual = raw;
+
+  e.target.value = raw === 0 ? '' : Math.round(raw).toLocaleString('id-ID');
+  save(); updateSummary();
+}
+
+function buildList() {
+  const list = document.getElementById('cat-list');
+  list.innerHTML = '';
+  
+  cats.forEach((c, index) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'cat-wrapper';
+    
+    wrap.innerHTML = `
+      <div class="cat-card inner" id="card-${c.id}">
+        <div class="cat-progress-bg" id="prog-${c.id}"></div>
+        <div class="cat-dot" id="icon-${c.id}">${c.icon}</div>
+        
+        <div class="cat-body">
+          <input class="cat-name-in" type="text" value="${c.name}" placeholder="Nama Kategori">
+          <select class="bank-tag" data-idx="${index}">
+            ${BANKS.map(b => `<option value="${b}" ${c.bank === b ? 'selected' : ''}>${b}</option>`).join('')}
+          </select>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div class="amt-row">
+            <span class="amt-lbl">Bujet</span>
+            <input class="amount-in blurrable" type="text" inputmode="numeric" value="${fmt(c.amount)}" placeholder="0" data-idx="${index}">
+          </div>
+          <div class="amt-row">
+            <span class="amt-lbl">Pakai</span>
+            <input class="actual-in blurrable" type="text" inputmode="numeric" value="${fmt(c.actual)}" placeholder="0" data-idx="${index}">
+          </div>
+        </div>
+      </div>
+    `;
+    list.appendChild(wrap);
+
+    const card = wrap.querySelector('.cat-card');
+    let startX = 0;
+    let isDeleting = false;
+
+    // Swipe-to-Delete
+    card.addEventListener('touchstart', e => { 
+      if(['INPUT','SELECT'].includes(e.target.tagName)) return; 
+      startX = e.touches[0].clientX; card.style.transition = 'none'; 
+    }, {passive:true});
+    card.addEventListener('touchmove', e => {
+      if(['INPUT','SELECT'].includes(e.target.tagName)) return;
+      let diff = e.touches[0].clientX - startX;
+      if(diff > 0) diff = 0;
+      if(diff < -120) { card.style.opacity = 0.4; card.style.transform = `translateX(${diff}px) scale(0.95)`; isDeleting = true; } 
+      else { card.style.opacity = 1; card.style.transform = `translateX(${diff}px)`; isDeleting = false; }
+    }, {passive:true});
+    card.addEventListener('touchend', e => {
+      if(['INPUT','SELECT'].includes(e.target.tagName)) return;
+      card.style.transition = 'all 0.3s';
+      if(isDeleting) { haptic(); card.style.transform = 'translateX(-200%)'; setTimeout(() => hapusKategori(c.id), 250); } 
+      else { card.style.transform = 'translateX(0) scale(1)'; card.style.opacity = 1; }
+    });
+
+    // Inputs Events
+    const nameInput = wrap.querySelector('.cat-name-in');
+    nameInput.addEventListener('input', (e) => {
+      cats[index].name = e.target.value;
+      const word = e.target.value.toLowerCase().split(' ').pop();
+      const iconEl = document.getElementById(`icon-${c.id}`);
+      if(EMOJI_MAP[word] && iconEl.textContent !== EMOJI_MAP[word]) {
+        cats[index].icon = EMOJI_MAP[word]; iconEl.textContent = cats[index].icon;
+      }
+      save();
+    });
+
+    wrap.querySelector('.bank-tag').addEventListener('change', (e) => {
+      cats[index].bank = e.target.value; save(); updateSummary();
+    });
+
+    // Gunakan fungsi handleInput untuk format titik Real-Time
+    wrap.querySelector('.amount-in').addEventListener('input', e => handleInput(e, 'amount', index));
+    wrap.querySelector('.actual-in').addEventListener('input', e => handleInput(e, 'actual', index));
+  });
+  
+  updateSummary();
+}
+
+function updateSummary() {
+  const sal = parseInt(salary) || 0;
+  
+  let totalRencana = 0;
+  let totalAktual = 0;
+  const bankMap = {};
+
+  cats.forEach(c => {
+    let amt = parseInt(c.amount) || 0;
+    let act = parseInt(c.actual) || 0;
+    totalRencana += amt;
+    totalAktual += act;
+
+    // Progress Bar (Aktual vs Rencana)
+    const prog = document.getElementById(`prog-${c.id}`);
+    if(prog) {
+      if(amt === 0) { prog.style.width = '0%'; prog.style.backgroundColor = 'rgba(0,122,255,0.1)'; }
+      else {
+        let p = (act / amt) * 100;
+        prog.style.width = Math.min(p, 100) + '%';
+        // Berubah jadi merah transparan kalau overbudget (pemakaian melebihi batas)
+        prog.style.backgroundColor = p > 100 ? 'rgba(255,59,48,0.2)' : 'rgba(0,122,255,0.1)';
+      }
+    }
+
+    // Pemetaan Saldo Bank Rencana
+    if(!bankMap[c.bank]) bankMap[c.bank] = 0;
+    bankMap[c.bank] += amt;
+  });
+
+  const sisaGaji = sal - totalRencana;
+  const pctGaji = sal > 0 ? Math.min(Math.round(totalRencana/sal*100), 100) : 0;
+
+  // Update Visual Summary Utama
+  document.getElementById('ring-pct').textContent = pctGaji + '%';
+  document.getElementById('ring-track').style.strokeDashoffset = 502 * (1 - pctGaji/100);
+  
+  document.getElementById('total-plan-val').textContent = 'Rp ' + (fmt(totalRencana) || '0');
+  document.getElementById('total-actual-val').textContent = 'Rp ' + (fmt(totalAktual) || '0');
+  document.getElementById('sisa-val').textContent = 'Rp ' + (fmt(sisaGaji) || '0');
+  document.getElementById('sisa-val').style.color = sisaGaji < 0 ? '#FF3B30' : 'var(--txt)';
+
+  // Render Penempatan Bank
+  const bankListDiv = document.getElementById('bank-list');
+  bankListDiv.innerHTML = '';
+  for (const [bankName, bankTotal] of Object.entries(bankMap)) {
+    if(bankTotal > 0) {
+      bankListDiv.innerHTML += `
+        <div class="bank-pill">
+          <span style="color:var(--txt2);">${bankName}</span>
+          <span class="blurrable money-text">Rp ${fmt(bankTotal)}</span>
+        </div>`;
+    }
+  }
+}
+
+function hapusKategori(id) { cats = cats.filter(c => c.id !== id); save(); buildList(); }
+
+// Salary Input Real-Time
+const salIn = document.getElementById('salary-in');
+salIn.value = fmt(salary);
+salIn.addEventListener('input', e => handleInput(e, 'salary', null));
+
+// Bottom Nav
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.onclick = () => {
+    haptic();
+    document.querySelectorAll('.tab-btn, .tab-content').forEach(el => el.classList.remove('active'));
+    btn.classList.add('active'); document.getElementById(btn.dataset.tab).classList.add('active');
+  };
+});
+
+// Buttons
+document.getElementById('add-btn').onclick = () => { haptic(); cats.push({id: Date.now(), name: '', amount: 0, actual: 0, icon: '📦', bank: 'BCA'}); save(); buildList(); };
+document.getElementById('reset-btn').onclick = () => { if(confirm('Hapus semua?')) { haptic(); cats = []; salary = 0; salIn.value = ''; save(); buildList(); } };
+document.getElementById('theme-toggle').onclick = () => { haptic(); document.body.classList.toggle('dark'); };
+document.getElementById('privacy-toggle').onclick = (e) => {
+  haptic(); isPrivate = !isPrivate; e.target.textContent = isPrivate ? '🙈' : '👁️';
+  isPrivate ? document.body.classList.add('privacy-on') : document.body.classList.remove('privacy-on');
+};
+
+// PIN SYSTEM
+const pinIcon = document.getElementById('pin-toggle');
+const pinOverlay = document.getElementById('pin-overlay');
+const pinEntry = document.getElementById('pin-entry');
+
+if (userPin) {
+  pinIcon.textContent = '🔒';
+  pinOverlay.style.display = 'flex';
+}
+
+pinEntry.addEventListener('input', (e) => {
+  if (e.target.value.length === 4) {
+    if (e.target.value === userPin) {
+      pinOverlay.style.opacity = '0';
+      setTimeout(() => { pinOverlay.style.display = 'none'; e.target.value = ''; }, 400);
+      haptic();
+    } else {
+      e.target.value = '';
+      alert('PIN Salah!');
+      haptic();
+    }
+  }
+});
+
+pinIcon.onclick = () => {
+  if (userPin) {
+    if(confirm('Hapus PIN perlindungan saat ini?')) { userPin = ''; localStorage.setItem('userPin', ''); pinIcon.textContent = '🔓'; alert('PIN Dihapus'); }
+  } else {
+    let p = prompt('Buat PIN baru (4 angka):');
+    if (p && p.length === 4 && !isNaN(p)) { userPin = p; localStorage.setItem('userPin', p); pinIcon.textContent = '🔒'; alert('PIN Tersimpan'); } 
+    else if(p) { alert('PIN harus berupa 4 angka.'); }
+  }
+};
+
+function clearPin() {
+  if(confirm('Peringatan: Mereset akan MENGHAPUS SEMUA DATA keuangan Anda juga. Lanjutkan?')) {
+    localStorage.clear(); location.reload();
+  }
+}
+
+buildList();
+</script>
+</body>
+</html>
