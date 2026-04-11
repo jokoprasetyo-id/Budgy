@@ -109,7 +109,7 @@ body {
 .sl { font-size:11px; font-weight:600; color:var(--txt2); text-transform:uppercase; letter-spacing:.6px; }
 #edit-btn { font-size:20px; color:var(--txt2); cursor:pointer; padding:2px 8px; font-weight:700; }
 
-/* ── ADD BUTTON (inside kategori tab) ── */
+/* ── ADD BUTTON ── */
 #add-btn {
   display:flex; align-items:center; justify-content:center; gap:8px;
   width:100%; padding:15px; margin-bottom:16px;
@@ -125,7 +125,6 @@ body {
 /* ── CAT CARDS ── */
 #cat-list { display:flex; flex-direction:column; gap:10px; margin-bottom:10px; }
 .cw { position:relative; border-radius:var(--r); }
-
 @keyframes jig { 0%,100%{transform:rotate(-.65deg)} 50%{transform:rotate(.65deg)} }
 .edit-mode .cc { animation:jig .27s infinite ease-in-out; }
 
@@ -206,16 +205,10 @@ body {
 .sv.gn { color:var(--grn); }
 .sv.rd { color:var(--red); }
 
-/* ── DONUT BREAKDOWN ── */
-#donut-wrap { padding:18px; margin-bottom:13px; }
+/* ── CHART BARU ── */
+#chart-wrap { padding:18px; margin-bottom:13px; }
 .dw-title { font-size:11px; font-weight:600; color:var(--txt2); text-transform:uppercase; letter-spacing:.6px; margin-bottom:14px; }
-.donut-row { display:flex; align-items:center; gap:16px; }
-#donut-svg { flex-shrink:0; }
-#donut-legend { flex:1; display:flex; flex-direction:column; gap:8px; }
-.leg-item { display:flex; align-items:center; gap:8px; }
-.leg-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-.leg-name { font-size:12px; font-weight:600; color:var(--txt); flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.leg-pct { font-size:12px; font-weight:600; color:var(--txt2); }
+.leg-item { display:flex; align-items:center; padding: 4px 0; }
 
 /* progress bar */
 .pbar-wrap { padding:16px; margin-bottom:13px; }
@@ -251,39 +244,21 @@ body {
 }
 .cb2:active { transform:scale(.88); }
 
-/* ── LOGIN ── */
-#login-screen {
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  text-align:center; padding:60px 24px;
-  height:100%;
-}
-.li { font-size:52px; margin-bottom:18px; }
-.lt { font-size:21px; font-weight:700; margin-bottom:8px; }
-.ls { font-size:14px; color:var(--txt2); line-height:1.55; }
-.lb {
-  margin-top:26px; padding:14px 28px; border-radius:100px;
-  background:var(--acc); color:#fff; border:none;
-  font-weight:600; font-size:15px; cursor:pointer;
-  width:100%; font-family:inherit;
-  box-shadow:0 7px 20px rgba(0,122,255,.28); transition:.15s;
-}
-.lb:active { transform:scale(.97); }
-
 /* ── USER PROFILE TAB ── */
 #tab-user {
   display:flex; flex-direction:column; align-items:center;
-  padding:40px 20px 20px; gap:16px;
+  padding:15px 5px; gap:16px;
 }
 .up-avatar {
-  width:80px; height:80px; border-radius:50%;
+  width:72px; height:72px; border-radius:50%;
   overflow:hidden; display:flex; align-items:center; justify-content:center;
-  font-size:40px; background:rgba(120,120,128,.1);
-  border:3px solid var(--gb2);
+  font-size:36px; background:rgba(120,120,128,.1);
+  border:3px solid var(--gb2); margin-bottom: 12px;
 }
 .up-avatar img { width:100%; height:100%; object-fit:cover; }
-.up-name { font-size:18px; font-weight:700; }
+.up-name { font-size:18px; font-weight:700; margin-bottom:4px; }
 .up-email { font-size:13px; color:var(--txt2); }
+
 .up-btn {
   width:100%; padding:14px; border-radius:var(--r);
   font-size:15px; font-weight:600; cursor:pointer;
@@ -293,6 +268,15 @@ body {
 }
 .up-btn:active { transform:scale(.97); }
 .up-btn.danger { color:var(--red); border-color:rgba(255,59,48,.2); background:rgba(255,59,48,.05); }
+
+.lb {
+  padding:14px 28px; border-radius:100px;
+  background:var(--acc); color:#fff; border:none;
+  font-weight:600; font-size:15px; cursor:pointer;
+  width:100%; font-family:inherit;
+  box-shadow:0 7px 20px rgba(0,122,255,.28); transition:.15s;
+}
+.lb:active { transform:scale(.97); }
 
 /* ── BOTTOM NAV ── */
 #nav-bar {
@@ -334,25 +318,15 @@ body {
     <div id="topbar">
       <div class="wm">🦜 Budgy</div>
       <div style="display:flex;gap:8px;">
-        <div class="ib" id="theme-btn">🌓</div>
+        <div class="ib" id="theme-btn" title="Ganti Tema">🌓</div>
       </div>
     </div>
 
-    <!-- LOGIN -->
-    <div id="login-screen" style="display:none;">
-      <div class="li">🦜</div>
-      <div class="lt">Selamat Datang</div>
-      <div class="ls">Login dengan Google untuk menyimpan & sinkronisasi anggaran kamu secara otomatis.</div>
-      <button class="lb" id="big-login">Masuk dengan Google</button>
-    </div>
+    <div id="main">
 
-    <div id="main" style="display:none;">
-
-      <!-- TAB: RINGKASAN -->
       <div class="tab active" id="tab-ringkasan">
-        <!-- Donut ring -->
         <div class="g ring-wrap">
-          <svg width="180" height="180" viewBox="0 0 180 180" id="ring-svg">
+          <svg width="180" height="180" viewBox="0 0 180 180">
             <circle cx="90" cy="90" r="72" fill="none" stroke="rgba(120,120,128,0.12)" stroke-width="14"/>
             <circle id="ring-track" cx="90" cy="90" r="72" fill="none"
               stroke="url(#rg)" stroke-width="14" stroke-linecap="round"
@@ -371,7 +345,6 @@ body {
           </div>
         </div>
 
-        <!-- Stats 2x2 -->
         <div class="sgrid">
           <div class="sc g">
             <div class="sl2">Rencana</div>
@@ -391,16 +364,12 @@ body {
           </div>
         </div>
 
-        <!-- Donut breakdown per-kategori -->
-        <div class="g" id="donut-wrap">
+        <div class="g" id="chart-wrap">
           <div class="dw-title">Alokasi per Kategori</div>
-          <div class="donut-row">
-            <svg id="donut-svg" width="120" height="120" viewBox="0 0 120 120"></svg>
-            <div id="donut-legend"></div>
-          </div>
+          <div id="stacked-bar" style="display:flex; height:12px; border-radius:10px; overflow:hidden; gap:2px; margin-bottom:16px; background:rgba(120,120,128,.1);"></div>
+          <div id="chart-legend" style="display:flex; flex-direction:column; gap:8px;"></div>
         </div>
 
-        <!-- Progress bar -->
         <div class="g pbar-wrap">
           <div class="pb-row">
             <span>Progres pengeluaran</span>
@@ -410,7 +379,6 @@ body {
         </div>
       </div>
 
-      <!-- TAB: JADWAL -->
       <div class="tab" id="tab-jadwal">
         <div class="sh" style="margin-top:4px;">
           <span class="sl">Tagihan Mendatang</span>
@@ -418,7 +386,6 @@ body {
         <div id="bill-list"></div>
       </div>
 
-      <!-- TAB: KATEGORI -->
       <div class="tab" id="tab-kategori">
         <div class="g" id="hero">
           <div class="hl">Gaji Bulanan</div>
@@ -440,25 +407,36 @@ body {
         </button>
       </div>
 
-      <!-- TAB: USER -->
       <div class="tab" id="tab-user">
-        <div class="up-avatar" id="up-avatar">👤</div>
-        <div class="up-name" id="up-name">—</div>
-        <div class="up-email" id="up-email"></div>
-        <div style="width:100%; margin-top:10px; display:flex; flex-direction:column; gap:10px;">
-          <button class="up-btn g" id="up-theme">🌓 &nbsp;Ganti Tema</button>
-          <button class="up-btn danger g" id="up-logout">Keluar</button>
+        <div class="g" style="padding:24px 20px; border-radius:24px; width:100%;">
+          
+          <div id="user-logged-out" style="display:flex; flex-direction:column; align-items:center; text-align:center;">
+            <div style="font-size:48px; margin-bottom:12px;">☁️</div>
+            <h3 style="margin-bottom:6px;">Simpan ke Cloud</h3>
+            <p style="font-size:13px; color:var(--txt2); margin-bottom:20px; line-height:1.5;">Login dengan Google agar data anggaran kamu aman dan tersinkronisasi antar perangkat.</p>
+            <button class="lb" id="btn-login" style="margin-top:0;">Masuk dengan Google</button>
+          </div>
+
+          <div id="user-logged-in" style="display:none; flex-direction:column; align-items:center;">
+            <div class="up-avatar" id="up-avatar">👤</div>
+            <div class="up-name" id="up-name">—</div>
+            <div class="up-email" id="up-email"></div>
+            <button class="up-btn danger g" id="up-logout" style="margin-top:20px;">Keluar Akun</button>
+          </div>
+
+        </div>
+
+        <div style="width:100%; margin-top:5px;">
+           <button class="up-btn g" id="up-theme" style="text-align:left; display:flex; justify-content:space-between; align-items:center;">
+             <span>🌓 Tema Tampilan</span>
+             <span style="color:var(--txt2); font-size:18px;">›</span>
+           </button>
         </div>
       </div>
 
-    </div><!-- /main -->
-  </div><!-- /scroll -->
-
-  <!-- NAV BAR -->
-  <div id="nav-bar">
+    </div></div><div id="nav-bar">
     <div id="nav-pill">
 
-      <!-- Ringkasan -->
       <button class="nb active" data-tab="tab-ringkasan">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="9"/>
@@ -467,7 +445,6 @@ body {
         <div class="nd"></div>
       </button>
 
-      <!-- Jadwal -->
       <button class="nb" data-tab="tab-jadwal">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="4" width="18" height="17" rx="3"/>
@@ -477,7 +454,6 @@ body {
         <div class="nd"></div>
       </button>
 
-      <!-- Kategori -->
       <button class="nb" data-tab="tab-kategori">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/>
@@ -488,7 +464,6 @@ body {
         <div class="nd"></div>
       </button>
 
-      <!-- User / Login -->
       <button class="nb" id="nb-user" data-tab="tab-user">
         <div class="nu-face" id="nu-face">👤</div>
         <div class="nd"></div>
@@ -521,7 +496,7 @@ const prov = new GoogleAuthProvider();
 const BANKS   = ['BCA','Mandiri','BNI','BRI','Jago','SeaBank','GoPay','OVO','DANA','Tunai'];
 const EMOJIS  = {makan:'🍔',kopi:'☕',listrik:'⚡',air:'💧',bensin:'⛽',belanja:'🛍️',tabung:'💰',cicilan:'💳'};
 const MONTHS  = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
-// Warna palette untuk donut
+// Warna palette untuk Bar Chart
 const PALETTE = ['#007AFF','#34C759','#FF9500','#FF3B30','#AF52DE','#FF2D55','#5AC8FA','#FFCC00','#4CD964','#FF6B35'];
 
 let cats=[], salary=0, isEdit=false, user=null;
@@ -539,34 +514,38 @@ async function saveCloud(){
 async function loadCloud(){
   const s = await getDoc(doc(db,'users',user.uid));
   if(s.exists()){ const d=s.data(); cats=d.cats||[]; salary=d.salary||0; }
-  else { cats=JSON.parse(localStorage.getItem('cats')||'[]'); salary=+(localStorage.getItem('salary')||0); saveCloud(); }
+  else { saveCloud(); } // Jika akun baru, kirim data lokal ke cloud
   $('sal').value = fmt(salary);
   render();
 }
 const save=()=>{ localStorage.setItem('cats',JSON.stringify(cats)); localStorage.setItem('salary',salary); saveCloud(); };
 
+// Auth State Handle
 onAuthStateChanged(auth, async u=>{
   if(u){
     user=u;
-    $('login-screen').style.display='none';
-    $('main').style.display='block';
-    // nav user face
-    $('nu-face').innerHTML=`<img src="${u.photoURL}" style="border-radius:50%;width:100%;height:100%;object-fit:cover;">`;
-    // user tab
+    $('user-logged-out').style.display='none';
+    $('user-logged-in').style.display='flex';
+    $('nu-face').innerHTML=`<img src="${u.photoURL}">`;
     $('up-avatar').innerHTML=`<img src="${u.photoURL}">`;
     $('up-name').textContent = u.displayName||'Pengguna';
     $('up-email').textContent= u.email||'';
     await loadCloud();
   } else {
     user=null;
-    $('login-screen').style.display='flex';
-    $('main').style.display='none';
+    $('user-logged-out').style.display='flex';
+    $('user-logged-in').style.display='none';
     $('nu-face').innerHTML='👤';
+    // Load local storage agar app bisa dipakai offline tanpa login
+    cats=JSON.parse(localStorage.getItem('cats')||'[]');
+    salary=+(localStorage.getItem('salary')||0);
+    $('sal').value = fmt(salary);
+    render();
   }
 });
 
-$('big-login').onclick  = ()=>signInWithPopup(auth,prov);
-$('up-logout').onclick  = ()=>{ if(confirm('Logout?')) signOut(auth); };
+$('btn-login').onclick  = ()=>signInWithPopup(auth,prov);
+$('up-logout').onclick  = ()=>{ if(confirm('Yakin ingin keluar akun?')) signOut(auth); };
 $('up-theme').onclick   = ()=>{ vb(); document.body.classList.toggle('dark'); };
 $('theme-btn').onclick  = ()=>{ vb(); document.body.classList.toggle('dark'); };
 
@@ -594,50 +573,45 @@ function badgeInfo(s){
   return           {cls:'dg-g',txt:`${lbl} · ${days} hari lagi`};
 }
 
-/* ── DONUT SVG ── */
-function buildDonut(){
+/* ── CHART BARU (STACKED BAR) ── */
+function buildChart(){
   const total = cats.reduce((a,c)=>a+c.amount,0);
-  const svg   = $('donut-svg');
-  const leg   = $('donut-legend');
-  svg.innerHTML=''; leg.innerHTML='';
+  const bar   = $('stacked-bar');
+  const leg   = $('chart-legend');
+  
+  if(!bar) return;
+  bar.innerHTML=''; leg.innerHTML='';
 
   if(!total || !cats.length){
-    svg.innerHTML=`<circle cx="60" cy="60" r="44" fill="none" stroke="rgba(120,120,128,0.12)" stroke-width="13"/>`;
-    leg.innerHTML='<span style="font-size:12px;color:var(--txt2)">Belum ada data</span>';
+    bar.innerHTML='<div style="width:100%; background:rgba(120,120,128,.1);"></div>';
+    leg.innerHTML='<div class="empty" style="padding:10px 0;">Belum ada data alokasi</div>';
     return;
   }
 
-  const cx=60,cy=60,r=44,stroke=13;
-  const circ=2*Math.PI*r;
-  let offset=0;
-  // background circle
-  svg.innerHTML=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(120,120,128,0.1)" stroke-width="${stroke}"/>`;
+  // Urutkan dari pengeluaran terbesar ke terkecil
+  const sortedCats = [...cats].filter(c => c.amount > 0).sort((a,b) => b.amount - a.amount);
 
-  cats.forEach((c,i)=>{
-    if(!c.amount) return;
+  sortedCats.forEach((c,i)=>{
     const pct  = c.amount/total;
-    const dash = circ*pct - 2; // small gap
     const color= PALETTE[i%PALETTE.length];
 
-    const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');
-    circle.setAttribute('cx',cx); circle.setAttribute('cy',cy);
-    circle.setAttribute('r',r); circle.setAttribute('fill','none');
-    circle.setAttribute('stroke',color); circle.setAttribute('stroke-width',stroke);
-    circle.setAttribute('stroke-linecap','butt');
-    circle.setAttribute('stroke-dasharray',`${dash} ${circ-dash}`);
-    circle.setAttribute('stroke-dashoffset',-offset);
-    circle.setAttribute('transform',`rotate(-90 ${cx} ${cy})`);
-    svg.appendChild(circle);
-    offset += circ*pct;
+    // Segmen pada Bar
+    const seg = document.createElement('div');
+    seg.style.width = `${pct*100}%`;
+    seg.style.background = color;
+    seg.style.height = '100%';
+    bar.appendChild(seg);
 
-    // legend (max 5 items)
+    // Keterangan Legend (Max 6 teratas)
     if(i<6){
       const item=document.createElement('div');
       item.className='leg-item';
       item.innerHTML=`
-        <div class="leg-dot" style="background:${color}"></div>
-        <div class="leg-name">${c.icon} ${c.name||'—'}</div>
-        <div class="leg-pct">${Math.round(pct*100)}%</div>`;
+        <div style="background:${color}; width:10px; height:10px; border-radius:50%; flex-shrink:0;"></div>
+        <div style="font-size:16px; margin:0 8px;">${c.icon}</div>
+        <div style="flex:1; font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${c.name||'—'}</div>
+        <div style="font-size:13px; font-weight:600; color:var(--txt2); margin-right:8px;">Rp ${fmt(c.amount)}</div>
+        <div style="font-size:13px; font-weight:700; color:var(--txt); width:35px; text-align:right;">${Math.round(pct*100)}%</div>`;
       leg.appendChild(item);
     }
   });
@@ -740,8 +714,8 @@ function updateSummary(){
   $('diff-bar').style.width=bp+'%';
   $('s-prog-pct').textContent=Math.round(bp)+'%';
 
-  // Donut
-  buildDonut();
+  // Chart Baru
+  buildChart();
 
   // Bills
   const bl=$('bill-list');
@@ -774,7 +748,7 @@ function switchTab(id){
 }
 
 document.querySelectorAll('.nb[data-tab]').forEach(b=>{
-  b.onclick=()=>{ vb(); if(!user&&b.dataset.tab==='tab-user'){ signInWithPopup(auth,prov); return; } switchTab(b.dataset.tab); };
+  b.onclick=()=>{ vb(); switchTab(b.dataset.tab); };
 });
 
 /* ── ADD / EDIT ── */
