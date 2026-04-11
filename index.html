@@ -4,335 +4,529 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#fef0e7">
-<title>Budgy - Smart Budgeting</title>
-
+<title>Budgy</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600&display=swap');
 
 :root {
-  --glass-bg: rgba(255, 255, 255, 0.45);
-  --glass-border: rgba(255, 255, 255, 0.6);
-  --glass-shadow: 0 12px 40px rgba(0,0,0,0.06), inset 0 2px 2px rgba(255,255,255,0.8);
-  --footer-bg: rgba(200, 205, 215, 0.65); 
-  --txt: #1c1c1e; --txt2: rgba(60,60,67,0.6); --accent: #007AFF;
-  --bg1: #fef0e7; --bg2: #e0f2fe; --r: 24px;
+  --gb: rgba(255,255,255,0.45);
+  --gb2: rgba(255,255,255,0.6);
+  --gs: 0 8px 32px rgba(0,0,0,0.06), inset 0 1px 1px rgba(255,255,255,0.8);
+  --nb: rgba(210,215,225,0.7);
+  --txt: #1c1c1e;
+  --txt2: rgba(60,60,67,0.55);
+  --accent: #007AFF;
+  --green: #34C759;
+  --orange: #FF9500;
+  --red: #FF3B30;
+  --bg1: #fef0e7;
+  --bg2: #ddf0fd;
+  --r: 22px;
+  --nav-h: 80px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
 }
-
 body.dark {
-  --glass-bg: rgba(30, 30, 35, 0.5);
-  --glass-border: rgba(255, 255, 255, 0.15);
-  --glass-shadow: 0 12px 40px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.1);
-  --footer-bg: rgba(15, 15, 20, 0.85);
-  --txt: #f5f5f7; --txt2: rgba(235,235,245,0.6);
-  --bg1: #111418; --bg2: #05070a;
+  --gb: rgba(28,28,32,0.6);
+  --gb2: rgba(255,255,255,0.1);
+  --gs: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.06);
+  --nb: rgba(12,12,16,0.88);
+  --txt: #f5f5f7;
+  --txt2: rgba(235,235,245,0.5);
+  --bg1: #0e1014;
+  --bg2: #060a0f;
 }
 
-*{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent;}
-body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; background: radial-gradient(circle at top left, var(--bg1), var(--bg2)); min-height: 100vh; display: flex; justify-content: center; color: var(--txt); transition: background 0.5s ease; overscroll-behavior: none; }
-.phone-wrap { width: 100%; max-width: 420px; padding: 20px 20px 0; position: relative; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column;}
-.glass { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); box-shadow: var(--glass-shadow); backdrop-filter: blur(32px) saturate(1.8); -webkit-backdrop-filter: blur(32px) saturate(1.8); }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-/* UI Elements */
-.top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 5px; margin-top: env(safe-area-inset-top, 0px); }
-.icon-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; transition: 0.2s; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 50%; overflow: hidden; }
-.icon-btn img { width: 100%; height: 100%; object-fit: cover; }
+html, body { height: 100%; overflow: hidden; }
 
-.tab-content { display: none; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-.tab-content.active { display: block; }
-@keyframes slideUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
-
-.hero { padding: 30px 20px; margin-bottom: 12px; text-align: center; }
-.hero-salary-in { font-size: 38px; font-weight: 300; color: var(--txt); background: transparent; border: none; outline: none; width: 100%; text-align: center; letter-spacing: -1px; }
-
-/* Categories & Drag Handle */
-.cat-list { display: flex; flex-direction: column; gap: 12px; padding-bottom: 20px; }
-.cat-wrapper { position: relative; border-radius: var(--r); }
-.cat-card { padding: 16px; display: flex; align-items: center; gap: 12px; position: relative; overflow: hidden; z-index: 1; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); }
-
-@keyframes jiggle { 0% { transform: rotate(-0.8deg); } 50% { transform: rotate(0.8deg); } 100% { transform: rotate(-0.8deg); } }
-.edit-mode .cat-card { animation: jiggle 0.3s infinite ease-in-out; }
-.delete-badge { position: absolute; top: -4px; left: -4px; width: 26px; height: 26px; background: #FF3B30; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 18px; opacity: 0; transform: scale(0); transition: all 0.25s; z-index: 10; cursor:pointer; pointer-events: none; }
-.edit-mode .delete-badge { opacity: 1; transform: scale(1); pointer-events: auto; }
-
-.drag-handle { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 24px; color: var(--txt2); padding: 15px; display: none; cursor: grab; z-index: 20; }
-.edit-mode .drag-handle { display: block; }
-.edit-mode .amt-row, .edit-mode .date-container, .edit-mode .bank-tag { opacity: 0.2; pointer-events: none; transition: 0.3s; }
-.edit-mode .cat-name-in { pointer-events: none; }
-.cat-wrapper.dragging { z-index: 999; }
-.cat-wrapper.dragging .cat-card { animation: none !important; transform: scale(1.03); box-shadow: 0 15px 30px rgba(0,0,0,0.15); border: 1px solid var(--accent); }
-
-.cat-progress-bg { position: absolute; top: 0; left: 0; height: 100%; background: rgba(0, 122, 255, 0.08); z-index: -1; transition: width 0.8s; }
-.cat-dot { width: 40px; height: 40px; border-radius: 12px; background: rgba(120,120,128,0.15); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-.cat-body { flex: 1; min-width: 0; }
-.cat-name-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; width: 100%; margin-bottom: 4px; font-family: inherit;}
-
-.date-container { position: relative; display: inline-block; vertical-align: middle; }
-.date-tag { appearance: none; background: rgba(255, 149, 0, 0.1); border: 1px solid rgba(255, 149, 0, 0.2); border-radius: 100px; padding: 2px 10px; font-size: 11px; font-weight: 600; color: #FF9500; pointer-events: none; display: flex; align-items: center; gap: 4px; }
-.due-input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 5; }
-
-.bank-tag { appearance: none; background: rgba(120, 120, 128, 0.1); border: 1px solid rgba(120, 120, 128, 0.2); border-radius: 100px; padding: 2px 8px; font-size: 11px; font-weight: 600; color: var(--txt2); font-family: inherit; outline: none; }
-.amount-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; text-align: right; width: 90px; }
-.actual-in { font-size: 14px; font-weight: 600; color: var(--accent); background: transparent; border: none; outline: none; text-align: right; width: 90px; }
-
-/* Ringkasan & Schedule */
-.ring-container { position: relative; display: flex; justify-content: center; align-items: center; margin: 20px 0; padding: 20px; }
-.ring-pct { font-size: 32px; font-weight: 600; letter-spacing: -1px;}
-.insight-card { padding: 20px; display: flex; flex-direction: column; gap: 15px; margin-top: 15px; }
-
-/* Bill item — updated with date info */
-.bill-item { 
-  display: flex; 
-  align-items: center; 
-  justify-content: space-between; 
-  padding: 14px 16px; 
-  background: var(--glass-bg); 
-  border: 1px solid var(--glass-border);
-  border-radius: 18px; 
-  margin-bottom: 10px; 
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  transition: 0.2s;
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  background: radial-gradient(ellipse at 20% 10%, var(--bg1) 0%, var(--bg2) 100%);
+  color: var(--txt);
+  display: flex;
+  justify-content: center;
+  transition: background 0.4s;
 }
-.bill-item-left { display: flex; align-items: center; gap: 12px; }
-.bill-item-icon { 
-  width: 42px; height: 42px; 
-  border-radius: 12px; 
-  background: rgba(120,120,128,0.1); 
-  display: flex; align-items: center; justify-content: center; 
-  font-size: 20px; 
-  flex-shrink: 0;
-}
-.bill-item-name { font-size: 14px; font-weight: 600; color: var(--txt); }
-.bill-item-amount { font-size: 12px; color: var(--txt2); margin-top: 2px; }
-.bill-item-date-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: rgba(255, 59, 48, 0.08);
-  border: 1px solid rgba(255, 59, 48, 0.15);
-  border-radius: 100px;
-  padding: 2px 8px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #FF3B30;
-  margin-top: 4px;
-}
-.bill-item-date-badge.soon {
-  background: rgba(255, 149, 0, 0.1);
-  border-color: rgba(255, 149, 0, 0.2);
-  color: #FF9500;
-}
-.bill-item-date-badge.ok {
-  background: rgba(52, 199, 89, 0.08);
-  border-color: rgba(52, 199, 89, 0.2);
-  color: #34C759;
-}
-.bill-item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
-.cal-btn { width: 34px; height: 34px; border-radius: 10px; background: rgba(0,122,255,0.12); color: var(--accent); border: none; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-.cal-btn:active { transform: scale(0.92); background: rgba(0,122,255,0.2); }
 
-/* =============================================
-   BOTTOM NAV — Simetris sempurna, 3 ikon
-   ============================================= */
-.bottom-nav-container { 
-  position: sticky;
-  bottom: max(20px, env(safe-area-inset-bottom));
+/* ── LAYOUT SHELL ── */
+#app {
   width: 100%;
-  z-index: 100;
-  padding: 0 0 10px;
-  margin-top: 20px;
+  max-width: 430px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
-.bottom-glass-bar { 
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+/* scrollable content area above nav */
+#scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 0 16px calc(16px + var(--safe-b));
+  padding-top: max(16px, env(safe-area-inset-top, 16px));
+}
+
+/* ── GLASS ── */
+.g {
+  background: var(--gb);
+  border: 1px solid var(--gb2);
+  border-radius: var(--r);
+  box-shadow: var(--gs);
+  backdrop-filter: blur(28px) saturate(1.8);
+  -webkit-backdrop-filter: blur(28px) saturate(1.8);
+}
+
+/* ── TOP BAR ── */
+#topbar {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-items: center;
-  background: var(--footer-bg); 
-  border: 1px solid var(--glass-border); 
-  border-radius: 99px; 
-  padding: 8px 16px; 
-  height: 72px; 
-  backdrop-filter: blur(40px) saturate(2); 
-  -webkit-backdrop-filter: blur(40px) saturate(2); 
-  box-shadow: 0 10px 30px rgba(0,0,0,0.12); 
+  margin-bottom: 16px;
+  padding: 0 4px;
+}
+.wordmark { font-size: 19px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.topbar-right { display: flex; gap: 8px; }
+.icon-btn {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px;
+  cursor: pointer;
+  background: var(--gb);
+  border: 1px solid var(--gb2);
+  transition: transform 0.15s;
+}
+.icon-btn:active { transform: scale(0.88); }
+.icon-btn img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+/* ── TABS ── */
+.tab { display: none; animation: up 0.35s cubic-bezier(0.16,1,0.3,1) both; }
+.tab.active { display: block; }
+@keyframes up { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+/* ── HERO SALARY ── */
+#hero {
+  padding: 24px 20px 20px;
+  text-align: center;
+  margin-bottom: 14px;
+}
+.hero-label { font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 10px; }
+.hero-row { display: flex; align-items: center; justify-content: center; gap: 10px; }
+.hero-rp { font-size: 22px; opacity: 0.4; }
+#salary-in {
+  font-size: 36px; font-weight: 300; letter-spacing: -1px;
+  color: var(--txt); background: transparent; border: none; outline: none;
+  width: 100%; text-align: center; font-family: inherit;
 }
 
-/* Setiap tombol nav — sama persis ukurannya */
-.nav-btn {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
+/* ── SECTION HEADER ── */
+.sec-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin: 18px 0 10px; padding: 0 4px;
+}
+.sec-label { font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; letter-spacing: 0.6px; }
+#edit-btn { font-size: 20px; color: var(--txt2); cursor: pointer; padding: 4px 8px; font-weight: 700; transition: 0.2s; }
+
+/* ── CAT CARDS ── */
+#cat-list { display: flex; flex-direction: column; gap: 10px; padding-bottom: 8px; }
+
+.cat-wrap { position: relative; border-radius: var(--r); }
+
+@keyframes jiggle {
+  0%,100% { transform: rotate(-0.7deg); }
+  50%      { transform: rotate( 0.7deg); }
+}
+.edit-mode .cat-card { animation: jiggle 0.28s infinite ease-in-out; }
+
+.del-badge {
+  position: absolute; top: -5px; left: -5px;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--red); color: #fff;
+  font-size: 17px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(0); transition: 0.2s;
+  z-index: 10; cursor: pointer; pointer-events: none;
+}
+.edit-mode .del-badge { opacity: 1; transform: scale(1); pointer-events: auto; }
+
+.cat-card {
+  padding: 14px;
+  display: flex; align-items: center; gap: 11px;
+  position: relative; overflow: hidden; z-index: 1;
+  background: var(--gb); border: 1px solid var(--gb2); border-radius: var(--r);
+}
+.cat-prog {
+  position: absolute; top: 0; left: 0; height: 100%;
+  background: rgba(0,122,255,0.07); z-index: -1; transition: width 0.7s;
+}
+.cat-icon {
+  width: 38px; height: 38px; border-radius: 11px;
+  background: rgba(120,120,128,0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.cat-body { flex: 1; min-width: 0; }
+.cat-name {
+  font-size: 14px; font-weight: 600; color: var(--txt);
+  background: transparent; border: none; outline: none;
+  width: 100%; margin-bottom: 5px; font-family: inherit;
+}
+.cat-meta { display: flex; gap: 5px; flex-wrap: wrap; }
+
+.pill {
+  border-radius: 100px; padding: 2px 9px;
+  font-size: 11px; font-weight: 600;
+  border: 1px solid; cursor: pointer;
+  font-family: inherit; outline: none; appearance: none;
+}
+.pill-bank { background: rgba(120,120,128,0.09); border-color: rgba(120,120,128,0.2); color: var(--txt2); }
+.pill-date { background: rgba(255,149,0,0.09); border-color: rgba(255,149,0,0.2); color: var(--orange); pointer-events: none; }
+.date-wrap { position: relative; display: inline-block; }
+.date-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 5; }
+
+.cat-amounts { text-align: right; flex-shrink: 0; }
+.amt-plan {
+  font-size: 14px; font-weight: 600; color: var(--txt);
+  background: transparent; border: none; outline: none;
+  text-align: right; width: 88px; font-family: inherit;
+}
+.amt-actual {
+  font-size: 13px; font-weight: 600; color: var(--accent);
+  background: transparent; border: none; outline: none;
+  text-align: right; width: 88px; font-family: inherit; margin-top: 4px;
+}
+.drag-h {
+  font-size: 22px; color: var(--txt2); padding: 12px 6px;
+  display: none; cursor: grab; z-index: 20; flex-shrink: 0;
+}
+.edit-mode .drag-h { display: block; }
+.edit-mode .cat-amounts,
+.edit-mode .cat-meta,
+.edit-mode .cat-name { opacity: 0.2; pointer-events: none; }
+.cat-wrap.dragging { z-index: 999; }
+.cat-wrap.dragging .cat-card {
+  animation: none !important;
+  transform: scale(1.03);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.14);
+  border-color: var(--accent);
+}
+
+/* ── RINGKASAN TAB ── */
+.ring-wrap {
+  display: flex; justify-content: center; align-items: center;
+  padding: 24px; margin-bottom: 14px; position: relative;
+}
+.ring-center { position: absolute; text-align: center; }
+.ring-pct { font-size: 30px; font-weight: 600; letter-spacing: -1px; }
+.ring-sub { font-size: 11px; color: var(--txt2); margin-top: 2px; }
+
+.stats-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;
+}
+.stat-card {
+  padding: 16px; border-radius: 18px;
+}
+.stat-label { font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.stat-val { font-size: 16px; font-weight: 600; color: var(--txt); }
+.stat-val.accent { color: var(--accent); }
+.stat-val.green { color: var(--green); }
+
+.progress-row { margin-top: 12px; }
+.prog-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; }
+.prog-bar-bg { height: 6px; background: rgba(120,120,128,0.12); border-radius: 10px; overflow: hidden; }
+#diff-bar { height: 100%; width: 0; border-radius: 10px; transition: width 0.6s; background: linear-gradient(90deg, var(--accent), var(--green)); }
+
+/* ── JADWAL TAB ── */
+.bill-card {
+  display: flex; align-items: center;
+  padding: 14px 15px; margin-bottom: 10px;
+  border-radius: 18px; gap: 12px;
+}
+.bill-icon {
+  width: 42px; height: 42px; border-radius: 12px;
+  background: rgba(120,120,128,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.bill-body { flex: 1; min-width: 0; }
+.bill-name { font-size: 14px; font-weight: 600; color: var(--txt); }
+.bill-amount { font-size: 12px; color: var(--txt2); margin-top: 1px; }
+.bill-badge {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 3px 9px; border-radius: 100px;
+  font-size: 11px; font-weight: 600; margin-top: 5px;
+  border: 1px solid;
+}
+.badge-red   { background: rgba(255,59,48,0.08);   border-color: rgba(255,59,48,0.2);   color: var(--red); }
+.badge-orange{ background: rgba(255,149,0,0.09);   border-color: rgba(255,149,0,0.2);   color: var(--orange); }
+.badge-green { background: rgba(52,199,89,0.08);   border-color: rgba(52,199,89,0.2);   color: var(--green); }
+.cal-btn {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: rgba(0,122,255,0.1); border: none;
+  color: var(--accent); font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: 0.15s;
+}
+.cal-btn:active { transform: scale(0.88); background: rgba(0,122,255,0.2); }
+
+/* ── LOGIN SCREEN ── */
+#login-screen {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 60px 24px;
+  min-height: calc(100vh - var(--nav-h));
+}
+.login-icon { font-size: 52px; margin-bottom: 20px; }
+.login-title { font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+.login-sub { font-size: 14px; color: var(--txt2); line-height: 1.5; }
+.login-btn {
+  margin-top: 28px;
+  padding: 15px 28px; border-radius: 100px;
+  background: var(--accent); color: #fff;
+  border: none; font-weight: 600; font-size: 15px;
+  cursor: pointer; width: 100%; font-family: inherit;
+  box-shadow: 0 8px 20px rgba(0,122,255,0.28);
+  transition: 0.15s;
+}
+.login-btn:active { transform: scale(0.97); }
+
+/* ── BOTTOM NAV ── */
+#nav-bar {
+  /* stays at bottom of #app, full width of #app */
+  flex-shrink: 0;
+  width: 100%;
+  padding: 8px 12px calc(8px + var(--safe-b));
+  background: transparent;
+}
+#nav-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 62px;
+  background: var(--nb);
+  border: 1px solid var(--gb2);
+  border-radius: 99px;
+  backdrop-filter: blur(40px) saturate(2);
+  -webkit-backdrop-filter: blur(40px) saturate(2);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+  padding: 0 6px;
+}
+
+.nb {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0px;
+  gap: 4px;
+  height: 50px;
+  border-radius: 50px;
   border: none;
   background: transparent;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: background 0.2s;
   color: var(--txt2);
   position: relative;
-  flex-shrink: 0;
 }
-
-.nav-btn svg {
-  width: 24px;
-  height: 24px;
-  transition: all 0.25s;
+.nb svg { width: 22px; height: 22px; transition: transform 0.2s; }
+.nb .nb-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--accent); opacity: 0; transition: opacity 0.2s;
 }
+.nb.active { color: var(--txt); background: rgba(120,120,128,0.13); }
+.nb.active svg { transform: scale(1.08); }
+.nb.active .nb-dot { opacity: 1; }
 
-.nav-btn.active {
-  background: rgba(120,120,128,0.15);
-  color: var(--txt);
-}
-
-.nav-btn.active svg {
-  transform: scale(1.1);
-}
-
-/* Tombol tengah (Add) — sedikit lebih besar */
-.nav-btn.add-btn {
-  width: 52px;
-  height: 52px;
-  background: var(--accent);
-  color: white;
-  box-shadow: 0 4px 14px rgba(0,122,255,0.35);
-}
-
-.nav-btn.add-btn:active {
-  transform: scale(0.88);
-}
-
-.nav-btn:not(.add-btn):active {
-  transform: scale(0.88);
-}
-
-/* Active dot indicator */
-.nav-dot {
-  width: 4px;
-  height: 4px;
+/* Add btn — middle */
+.nb-add {
+  flex: 0 0 52px;
+  width: 52px; height: 52px;
   border-radius: 50%;
   background: var(--accent);
-  opacity: 0;
-  transition: 0.25s;
-  margin-top: 3px;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 14px rgba(0,122,255,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
 }
-.nav-btn.active .nav-dot { opacity: 1; }
-.nav-btn.add-btn .nav-dot { display: none; }
+.nb-add svg { width: 22px; height: 22px; }
+.nb-add:active { transform: scale(0.88); box-shadow: 0 2px 8px rgba(0,122,255,0.2); }
 
-/* Welcome Screen */
-#login-prompt { display: none; text-align: center; padding: 60px 20px; }
-.login-btn { margin-top: 30px; padding: 14px 24px; border-radius: 100px; background: var(--accent); color: white; border: none; font-weight: 600; font-size: 15px; cursor: pointer; width: 100%; box-shadow: 0 8px 20px rgba(0, 122, 255, 0.3); }
+/* user btn in nav */
+.nb-user {
+  width: 32px; height: 32px; border-radius: 50%;
+  overflow: hidden; display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.nb-user img { width: 100%; height: 100%; object-fit: cover; }
 
-/* Ring center absolute overlay */
-.ring-center { position: absolute; text-align: center; }
+.empty { text-align: center; font-size: 13px; color: var(--txt2); padding: 24px 0; }
 </style>
 </head>
 <body>
 
-<div class="phone-wrap">
-  <div class="top-nav">
-    <div style="display: flex; align-items: center; gap: 7px; font-weight: 600; font-size: 19px;"><span>🦜</span> Budgy</div>
-    <div style="display: flex; gap: 10px;">
-      <div class="icon-btn" id="theme-toggle">🌓</div>
-      <div class="icon-btn" id="auth-btn">👤</div>
+<div id="app">
+  <div id="scroll-area">
+
+    <!-- TOP BAR (only in logged-in state) -->
+    <div id="topbar">
+      <div class="wordmark">🦜 Budgy</div>
+      <div class="topbar-right">
+        <div class="icon-btn" id="theme-btn">🌓</div>
+      </div>
     </div>
-  </div>
 
-  <div id="login-prompt">
-    <div style="font-size: 48px; margin-bottom: 20px;">🔒</div>
-    <h2 style="color: var(--txt);">Selamat Datang</h2>
-    <p style="color: var(--txt2); font-size: 14px; margin-top: 10px;">Silakan login dengan Google untuk mengelola anggaran Anda secara otomatis.</p>
-    <button id="big-login-btn" class="login-btn">Masuk dengan Google</button>
-  </div>
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen" style="display:none;">
+      <div class="login-icon">🦜</div>
+      <div class="login-title">Selamat Datang di Budgy</div>
+      <div class="login-sub">Login dengan Google untuk menyimpan &amp; sinkronisasi anggaran kamu.</div>
+      <button class="login-btn" id="big-login-btn">Masuk dengan Google</button>
+    </div>
 
-  <div id="main-app-content" style="display: none;">
-    <div id="tab-alokasi" class="tab-content active">
-      <div class="glass hero">
-        <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 12px;">Gaji Bulanan</div>
-        <div style="display:flex;align-items:center;justify-content:center;gap:12px;">
-          <span style="font-size:24px; opacity:0.5;">Rp</span>
-          <input class="hero-salary-in" id="salary-in" type="text" inputmode="numeric" />
+    <!-- MAIN CONTENT -->
+    <div id="main" style="display:none;">
+
+      <!-- TAB: ALOKASI -->
+      <div class="tab active" id="tab-alokasi">
+        <div id="hero" class="g">
+          <div class="hero-label">Gaji Bulanan</div>
+          <div class="hero-row">
+            <span class="hero-rp">Rp</span>
+            <input id="salary-in" class="hero-in" type="text" inputmode="numeric" placeholder="0">
+          </div>
+        </div>
+        <div class="sec-header">
+          <span class="sec-label">Kategori</span>
+          <span id="edit-btn">⋯</span>
+        </div>
+        <div id="cat-list"></div>
+      </div>
+
+      <!-- TAB: RINGKASAN -->
+      <div class="tab" id="tab-ringkasan">
+        <div class="g ring-wrap">
+          <svg width="190" height="190" viewBox="0 0 190 190">
+            <circle cx="95" cy="95" r="76" fill="none" stroke="rgba(120,120,128,0.13)" stroke-width="15"/>
+            <circle id="ring-track" cx="95" cy="95" r="76" fill="none"
+              stroke="url(#rg)" stroke-width="15" stroke-linecap="round"
+              stroke-dasharray="477.5" stroke-dashoffset="477.5"
+              transform="rotate(-90 95 95)"/>
+            <defs>
+              <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#007AFF"/>
+                <stop offset="100%" stop-color="#34C759"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-pct" id="ring-pct">0%</div>
+            <div class="ring-sub">Terpakai</div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card g">
+            <div class="stat-label">Rencana</div>
+            <div class="stat-val" id="s-plan">Rp 0</div>
+          </div>
+          <div class="stat-card g">
+            <div class="stat-label">Aktual</div>
+            <div class="stat-val accent" id="s-actual">Rp 0</div>
+          </div>
+          <div class="stat-card g">
+            <div class="stat-label">Sisa Anggaran</div>
+            <div class="stat-val" id="s-selisih">Rp 0</div>
+          </div>
+          <div class="stat-card g">
+            <div class="stat-label">Gaji Bebas</div>
+            <div class="stat-val green" id="s-sisa">Rp 0</div>
+          </div>
+        </div>
+
+        <div class="g" style="padding:18px;">
+          <div class="prog-label">
+            <span style="font-size:12px;color:var(--txt2);">Progres pengeluaran</span>
+            <span style="font-size:12px;font-weight:600;" id="s-prog-pct">0%</span>
+          </div>
+          <div class="prog-bar-bg"><div id="diff-bar"></div></div>
         </div>
       </div>
-      
-      <div style="display:flex; justify-content:space-between; align-items:center; margin: 20px 0 12px; padding: 0 8px;">
-        <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase;">Alokasi Kategori</div>
-        <div id="edit-mode-btn" style="cursor:pointer; color: var(--txt2); font-weight:bold; font-size: 22px;">⋯</div>
-      </div>
-      <div id="cat-list" class="cat-list"></div>
-    </div>
 
-    <div id="tab-ringkasan" class="tab-content">
-      <div class="glass ring-container">
-        <svg width="200" height="200" viewBox="0 0 200 200">
-          <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(120,120,128,0.15)" stroke-width="16"/>
-          <circle id="ring-track" cx="100" cy="100" r="80" fill="none" stroke="url(#ringGrad)" stroke-width="16" stroke-linecap="round" stroke-dasharray="502" stroke-dashoffset="502" transform="rotate(-90 100 100)"/>
-          <defs><linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#007AFF"/><stop offset="100%" stop-color="#34C759"/></linearGradient></defs>
+      <!-- TAB: JADWAL -->
+      <div class="tab" id="tab-jadwal">
+        <div class="sec-header" style="margin-top:4px;">
+          <span class="sec-label">Tagihan Mendatang</span>
+        </div>
+        <div id="bill-list"></div>
+      </div>
+
+    </div><!-- /main -->
+  </div><!-- /scroll-area -->
+
+  <!-- BOTTOM NAV — inside #app so it's always centered with content -->
+  <div id="nav-bar">
+    <div id="nav-pill">
+
+      <!-- Alokasi -->
+      <button class="nb active" data-tab="tab-alokasi" id="nb-alokasi">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/>
+          <rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/>
         </svg>
-        <div class="ring-center"><div class="ring-pct" id="ring-pct">0%</div><div style="font-size:12px; color:var(--txt2);">Terpakai</div></div>
-      </div>
+        <div class="nb-dot"></div>
+      </button>
 
-      <div style="margin: 24px 0 10px; font-size: 13px; font-weight: 600; color: var(--txt2); text-transform: uppercase; padding-left: 8px;">Jadwal Tagihan</div>
-      <div id="bill-schedule-list" style="margin-bottom: 15px;"></div>
+      <!-- Tambah -->
+      <button class="nb-add" id="nb-add">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+      </button>
 
-      <div class="glass insight-card">
-        <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Total Rencana</span><strong id="total-plan-val"></strong></div>
-        <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:10px;"><span>Total Aktual</span><strong id="total-actual-val" style="color:var(--accent);"></strong></div>
-        <div style="margin-top: 15px; border-top:1px solid var(--glass-border); padding-top:15px;">
-          <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Sisa Anggaran</span><strong id="selisih-val"></strong></div>
-          <div style="width:100%; height:8px; background:rgba(120,120,128,0.1); border-radius:10px; margin-top:8px; overflow:hidden;"><div id="diff-bar" style="height:100%; width:0%; transition:0.5s;"></div></div>
-        </div>
-        <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:15px;"><span>Sisa Gaji Bebas</span><strong id="sisa-val"></strong></div>
-      </div>
+      <!-- Jadwal -->
+      <button class="nb" data-tab="tab-jadwal" id="nb-jadwal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="17" rx="3"/>
+          <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        <div class="nb-dot"></div>
+      </button>
+
+      <!-- Ringkasan -->
+      <button class="nb" data-tab="tab-ringkasan" id="nb-ringkasan">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"/>
+          <polyline points="12 7 12 12 15 15"/>
+        </svg>
+        <div class="nb-dot"></div>
+      </button>
+
+      <!-- User / Login -->
+      <button class="nb" id="nb-user">
+        <div class="nb-user" id="nb-user-face">👤</div>
+        <div class="nb-dot" style="opacity:0;"></div>
+      </button>
+
     </div>
   </div>
-
-
-<!-- BOTTOM NAV -->
-<div class="bottom-nav-container" id="bottom-nav" style="display: none;">
-  <div class="bottom-glass-bar">
-
-    <!-- Alokasi -->
-    <button class="nav-btn active" data-tab="tab-alokasi" id="btn-alokasi">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="7" height="7" rx="1.5"/>
-        <rect x="14" y="3" width="7" height="7" rx="1.5"/>
-        <rect x="3" y="14" width="7" height="7" rx="1.5"/>
-        <rect x="14" y="14" width="7" height="7" rx="1.5"/>
-      </svg>
-      <div class="nav-dot"></div>
-    </button>
-
-    <!-- Add (Tengah) -->
-    <button class="nav-btn add-btn" id="integrated-add-btn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <line x1="12" y1="5" x2="12" y2="19"/>
-        <line x1="5" y1="12" x2="19" y2="12"/>
-      </svg>
-    </button>
-
-    <!-- Ringkasan -->
-    <button class="nav-btn" data-tab="tab-ringkasan" id="btn-ringkasan">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="9"/>
-        <path d="M12 7v5l3 3"/>
-      </svg>
-      <div class="nav-dot"></div>
-    </button>
-
-  </div>
-</div>
-</div>
+</div><!-- /app -->
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { initializeApp }        from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut }
+                                from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc }
+                                from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-const firebaseConfig = {
+const FB = {
   apiKey: "AIzaSyCudBjzhXcqSWVF4kzakcPomeVj_GcHtys",
   authDomain: "budgy-7e6e1.firebaseapp.com",
   projectId: "budgy-7e6e1",
@@ -340,299 +534,285 @@ const firebaseConfig = {
   messagingSenderId: "733464255051",
   appId: "1:733464255051:web:d30d49716990d3a8a7cbce"
 };
-
-const app = initializeApp(firebaseConfig);
+const app  = initializeApp(FB);
 const auth = getAuth(app);
-const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
+const db   = getFirestore(app);
+const prov = new GoogleAuthProvider();
 
-const BANKS = ['BCA', 'Mandiri', 'BNI', 'BRI', 'Jago', 'SeaBank', 'GoPay', 'OVO', 'DANA', 'Tunai'];
-const EMOJI_MAP = { 'makan': '🍔', 'kopi': '☕', 'listrik': '⚡', 'air': '💧', 'bensin': '⛽', 'belanja': '🛍️', 'tabung': '💰', 'cicilan': '💳' };
+const BANKS = ['BCA','Mandiri','BNI','BRI','Jago','SeaBank','GoPay','OVO','DANA','Tunai'];
+const EMOJIS = { makan:'🍔', kopi:'☕', listrik:'⚡', air:'💧', bensin:'⛽', belanja:'🛍️', tabung:'💰', cicilan:'💳' };
 const MONTHS = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
 
-let cats = [];
-let salary = 0;
-let isEditMode = false;
-let currentUser = null;
-let dragEl = null;
-let startY = 0;
+let cats = [], salary = 0, isEdit = false, currentUser = null;
+let dragEl = null, dragStartY = 0;
 
-const haptic = () => { if(navigator.vibrate) navigator.vibrate(10); };
-const fmt = (n) => n === 0 ? '0' : Math.round(n).toLocaleString('id-ID');
+const $ = id => document.getElementById(id);
+const haptic = () => navigator.vibrate?.(8);
+const fmt = n => n === 0 ? '0' : Math.round(n).toLocaleString('id-ID');
 
-// Firebase Logic
-async function saveToFirebase() {
+/* ── AUTH ── */
+async function saveCloud() {
   if (!currentUser) return;
-  try { await setDoc(doc(db, "users", currentUser.uid), { cats: cats, salary: salary }); } 
-  catch (e) { console.error(e); }
+  try { await setDoc(doc(db,'users',currentUser.uid), { cats, salary }); } catch(e){}
 }
 
-async function loadFromFirebase() {
-  if (!currentUser) return;
-  const docSnap = await getDoc(doc(db, "users", currentUser.uid));
-  if (docSnap.exists()) {
-    const d = docSnap.data();
-    cats = d.cats || [];
+async function loadCloud() {
+  const snap = await getDoc(doc(db,'users',currentUser.uid));
+  if (snap.exists()) {
+    const d = snap.data();
+    cats   = d.cats   || [];
     salary = d.salary || 0;
   } else {
-    cats = JSON.parse(localStorage.getItem('cats')) || [];
-    salary = localStorage.getItem('salary') || 0;
-    saveToFirebase();
+    cats   = JSON.parse(localStorage.getItem('cats')   || '[]');
+    salary = +(localStorage.getItem('salary') || 0);
+    saveCloud();
   }
-  document.getElementById('salary-in').value = fmt(salary);
-  buildList();
+  $('salary-in').value = fmt(salary);
+  render();
 }
 
-const save = () => { 
-  localStorage.setItem('cats', JSON.stringify(cats)); 
-  localStorage.setItem('salary', salary); 
-  saveToFirebase();
+const save = () => {
+  localStorage.setItem('cats',   JSON.stringify(cats));
+  localStorage.setItem('salary', salary);
+  saveCloud();
 };
 
-onAuthStateChanged(auth, async (user) => {
-  const btn = document.getElementById('auth-btn');
+onAuthStateChanged(auth, async user => {
   if (user) {
     currentUser = user;
-    btn.innerHTML = `<img src="${user.photoURL}">`;
-    document.getElementById('login-prompt').style.display = 'none';
-    document.getElementById('main-app-content').style.display = 'block';
-    document.getElementById('bottom-nav').style.display = 'flex';
-    await loadFromFirebase();
+    $('login-screen').style.display = 'none';
+    $('main').style.display = 'block';
+    $('nb-user-face').innerHTML = `<img src="${user.photoURL}">`;
+    await loadCloud();
   } else {
     currentUser = null;
-    btn.innerHTML = '👤';
-    document.getElementById('main-app-content').style.display = 'none';
-    document.getElementById('bottom-nav').style.display = 'none';
-    document.getElementById('login-prompt').style.display = 'block';
+    $('login-screen').style.display = 'flex';
+    $('main').style.display = 'none';
+    $('nb-user-face').innerHTML = '👤';
   }
 });
 
-// Google Calendar Integration
-window.addToGoogleCalendar = (idx) => {
+const doLogin  = () => signInWithPopup(auth, prov);
+const doLogout = () => { if(confirm('Logout dari Budgy?')) signOut(auth); };
+
+$('big-login-btn').onclick = doLogin;
+$('nb-user').onclick = () => { haptic(); currentUser ? doLogout() : doLogin(); };
+
+/* ── GOOGLE CALENDAR ── */
+window.toGcal = idx => {
   haptic();
   const c = cats[idx];
-  const dateStr = c.due.replace(/-/g, '');
-  const title = encodeURIComponent(`Bayar ${c.name} - Rp ${fmt(c.amount - c.actual)}`);
-  const details = encodeURIComponent(`Budgy Reminder: Tagihan ${c.name}\nBank: ${c.bank}`);
-  const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dateStr}/${dateStr}&details=${details}&sf=true&output=xml`;
-  window.open(url, '_blank');
+  const d = c.due.replace(/-/g,'');
+  const t = encodeURIComponent(`Bayar ${c.name} – Rp ${fmt(c.amount - c.actual)}`);
+  const det = encodeURIComponent(`Budgy: ${c.name}\nBank: ${c.bank}`);
+  window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${t}&dates=${d}/${d}&details=${det}&sf=true&output=xml`,'_blank');
 };
 
-const handleAuth = () => {
-  haptic();
-  if (currentUser) { if(confirm('Logout?')) signOut(auth); }
-  else signInWithPopup(auth, provider);
-};
-document.getElementById('auth-btn').onclick = handleAuth;
-document.getElementById('big-login-btn').onclick = handleAuth;
-
-window.hapusKategori = function(id) { cats = cats.filter(c => c.id !== id); save(); buildList(); };
-
-// Format Tanggal untuk Tampilan
-function getDisplayDate(dateStr) {
-  if(!dateStr) return '📅 Atur Tgl';
-  const d = new Date(dateStr);
+/* ── HELPERS ── */
+function fmtDate(s) {
+  if (!s) return '📅 Atur';
+  const d = new Date(s);
   return `⏳ ${d.getDate()} ${MONTHS[d.getMonth()]}`;
 }
 
-// Hitung selisih hari dari hari ini
-function getDaysUntil(dateStr) {
-  if (!dateStr) return null;
+function badgeInfo(s) {
+  if (!s) return null;
   const today = new Date(); today.setHours(0,0,0,0);
-  const due = new Date(dateStr);
-  const diff = Math.round((due - today) / (1000 * 60 * 60 * 24));
-  return diff;
+  const due   = new Date(s);
+  const days  = Math.round((due - today) / 86400000);
+  const label = `${due.getDate()} ${MONTHS[due.getMonth()]}`;
+  if (days < 0)  return { cls:'badge-red',    txt:`${label} · Lewat` };
+  if (days === 0) return { cls:'badge-orange', txt:`${label} · Hari ini!` };
+  if (days <= 3)  return { cls:'badge-orange', txt:`${label} · ${days} hari lagi` };
+  return              { cls:'badge-green',  txt:`${label} · ${days} hari lagi` };
 }
 
-function getDateBadgeInfo(dateStr) {
-  const days = getDaysUntil(dateStr);
-  if (days === null) return null;
-  const d = new Date(dateStr);
-  const dateLabel = `${d.getDate()} ${MONTHS[d.getMonth()]}`;
-  
-  let cls = 'ok';
-  let label = '';
-  if (days < 0) { cls = ''; label = `${dateLabel} · Sudah lewat`; }
-  else if (days === 0) { cls = 'soon'; label = `${dateLabel} · Hari ini!`; }
-  else if (days <= 3) { cls = 'soon'; label = `${dateLabel} · ${days} hari lagi`; }
-  else if (days <= 7) { cls = 'ok'; label = `${dateLabel} · ${days} hari lagi`; }
-  else { cls = 'ok'; label = `${dateLabel} · ${days} hari lagi`; }
-  
-  return { cls, label };
-}
-
-function buildList() {
-  const list = document.getElementById('cat-list');
+/* ── RENDER CATEGORY LIST ── */
+function render() {
+  const list = $('cat-list');
   list.innerHTML = '';
-  cats.forEach((c, index) => {
+  list.classList.toggle('edit-mode', isEdit);
+
+  cats.forEach((c, i) => {
     const wrap = document.createElement('div');
-    wrap.className = 'cat-wrapper';
+    wrap.className = 'cat-wrap';
     wrap.dataset.id = c.id;
     wrap.innerHTML = `
-      <div class="delete-badge" onclick="window.hapusKategori(${c.id})">−</div>
+      <div class="del-badge" onclick="delCat(${c.id})">−</div>
       <div class="cat-card">
-        <div class="cat-progress-bg" id="prog-${c.id}"></div>
-        <div class="cat-dot">${c.icon}</div>
+        <div class="cat-prog" id="prog-${c.id}"></div>
+        <div class="cat-icon">${c.icon}</div>
         <div class="cat-body">
-          <input class="cat-name-in" type="text" value="${c.name}" placeholder="Kategori">
-          <div style="display:flex; gap:6px;">
-            <select class="bank-tag" data-idx="${index}">${BANKS.map(b => `<option value="${b}" ${c.bank === b ? 'selected' : ''}>${b}</option>`).join('')}</select>
-            <div class="date-container">
-              <div class="date-tag">${getDisplayDate(c.due)}</div>
-              <input type="date" value="${c.due}" data-idx="${index}" class="due-input">
+          <input class="cat-name" type="text" value="${c.name}" placeholder="Nama kategori">
+          <div class="cat-meta">
+            <select class="pill pill-bank">${BANKS.map(b=>`<option ${c.bank===b?'selected':''}>${b}</option>`).join('')}</select>
+            <div class="date-wrap">
+              <div class="pill pill-date">${fmtDate(c.due)}</div>
+              <input type="date" class="date-input" value="${c.due}">
             </div>
           </div>
         </div>
-        <div style="text-align:right">
-          <div class="amt-row"><input class="amount-in" type="text" inputmode="numeric" value="${fmt(c.amount)}"></div>
-          <div class="amt-row" style="margin-top:5px;"><input class="actual-in" type="text" inputmode="numeric" value="${fmt(c.actual)}"></div>
+        <div class="cat-amounts">
+          <input class="amt-plan"   type="text" inputmode="numeric" value="${fmt(c.amount)}">
+          <input class="amt-actual" type="text" inputmode="numeric" value="${fmt(c.actual)}">
         </div>
-        <div class="drag-handle">≡</div>
+        <div class="drag-h">≡</div>
       </div>`;
     list.appendChild(wrap);
 
-    wrap.querySelector('.due-input').onchange = (e) => { cats[index].due = e.target.value; save(); updateSummary(); buildList(); };
-    wrap.querySelector('.cat-name-in').oninput = (e) => {
-      cats[index].name = e.target.value;
-      const word = e.target.value.toLowerCase().split(' ').pop();
-      if(EMOJI_MAP[word]) { cats[index].icon = EMOJI_MAP[word]; buildList(); }
+    wrap.querySelector('.date-input').onchange = e => { cats[i].due = e.target.value; save(); render(); };
+    wrap.querySelector('.cat-name').oninput    = e => {
+      cats[i].name = e.target.value;
+      const w = e.target.value.toLowerCase().split(' ').pop();
+      if (EMOJIS[w]) { cats[i].icon = EMOJIS[w]; render(); return; }
       save();
     };
-    wrap.querySelector('.bank-tag').onchange = (e) => { cats[index].bank = e.target.value; save(); updateSummary(); };
-    wrap.querySelector('.amount-in').oninput = (e) => handleVal(e, index, 'amount');
-    wrap.querySelector('.actual-in').oninput = (e) => handleVal(e, index, 'actual');
+    wrap.querySelector('.pill-bank').onchange  = e => { cats[i].bank = e.target.value; save(); updateSummary(); };
+    wrap.querySelector('.amt-plan').oninput    = e => numInput(e, i, 'amount');
+    wrap.querySelector('.amt-actual').oninput  = e => numInput(e, i, 'actual');
 
-    // Drag & Drop
-    const handle = wrap.querySelector('.drag-handle');
-    handle.addEventListener('touchstart', (e) => {
-      e.preventDefault(); dragEl = wrap; dragEl.classList.add('dragging'); startY = e.touches[0].clientY; haptic();
-    }, {passive: false});
-
-    handle.addEventListener('touchmove', (e) => {
-      if(!dragEl) return;
-      e.preventDefault();
-      let y = e.touches[0].clientY;
-      dragEl.style.transform = `translateY(${y - startY}px)`;
-      let siblings = [...document.querySelectorAll('.cat-wrapper:not(.dragging)')];
-      let nextEl = siblings.find(sib => { let rect = sib.getBoundingClientRect(); return y > rect.top && y < rect.bottom; });
-      if(nextEl) {
-          let rect = nextEl.getBoundingClientRect();
-          if(y > rect.top + rect.height / 2) list.insertBefore(dragEl, nextEl.nextSibling);
-          else list.insertBefore(dragEl, nextEl);
-          startY = y; dragEl.style.transform = `translateY(0)`; haptic();
+    // drag-to-reorder (touch)
+    const dh = wrap.querySelector('.drag-h');
+    dh.addEventListener('touchstart', e => {
+      e.preventDefault(); dragEl = wrap; wrap.classList.add('dragging');
+      dragStartY = e.touches[0].clientY; haptic();
+    }, {passive:false});
+    dh.addEventListener('touchmove', e => {
+      if (!dragEl) return; e.preventDefault();
+      const y = e.touches[0].clientY;
+      dragEl.style.transform = `translateY(${y - dragStartY}px)`;
+      const sib = [...document.querySelectorAll('.cat-wrap:not(.dragging)')];
+      const over = sib.find(s => { const r = s.getBoundingClientRect(); return y > r.top && y < r.bottom; });
+      if (over) {
+        const r = over.getBoundingClientRect();
+        list.insertBefore(dragEl, y > r.top + r.height/2 ? over.nextSibling : over);
+        dragStartY = y; dragEl.style.transform = ''; haptic();
       }
-    }, {passive: false});
-
-    handle.addEventListener('touchend', () => {
-      if(!dragEl) return;
+    }, {passive:false});
+    dh.addEventListener('touchend', () => {
+      if (!dragEl) return;
       dragEl.classList.remove('dragging'); dragEl.style.transform = ''; dragEl = null;
-      let newCats = [];
-      document.querySelectorAll('.cat-wrapper').forEach(w => {
-          let cat = cats.find(c => c.id === parseInt(w.dataset.id));
-          if(cat) newCats.push(cat);
+      const newCats = [];
+      document.querySelectorAll('.cat-wrap').forEach(w => {
+        const c = cats.find(c => c.id === +w.dataset.id);
+        if (c) newCats.push(c);
       });
-      cats = newCats; save(); buildList();
+      cats = newCats; save(); render();
     });
   });
+
   updateSummary();
 }
 
-function handleVal(e, idx, key) {
-  let val = parseInt(e.target.value.replace(/\D/g, '')) || 0;
-  cats[idx][key] = val;
-  e.target.value = fmt(val);
+function numInput(e, i, key) {
+  const v = parseInt(e.target.value.replace(/\D/g,'')) || 0;
+  cats[i][key] = v;
+  e.target.value = fmt(v);
   save(); updateSummary();
 }
 
+window.delCat = id => { cats = cats.filter(c => c.id !== id); save(); render(); };
+
+/* ── UPDATE SUMMARY + BILLS ── */
 function updateSummary() {
-  const sal = parseInt(salary) || 0;
+  const sal = +salary || 0;
   let tPlan = 0, tAct = 0;
-  const today = new Date(); today.setHours(0,0,0,0);
-  let pending = [];
+  const pending = [];
 
   cats.forEach((c, idx) => {
     tPlan += c.amount; tAct += c.actual;
-    const prog = document.getElementById(`prog-${c.id}`);
-    if(prog) {
-      let p = c.amount > 0 ? (c.actual/c.amount)*100 : 0;
-      prog.style.width = Math.min(p, 100) + '%';
-      prog.style.backgroundColor = p > 100 ? 'rgba(255,59,48,0.15)' : 'rgba(0,122,255,0.08)';
+    const p = $(`prog-${c.id}`);
+    if (p) {
+      const pct = c.amount > 0 ? (c.actual / c.amount) * 100 : 0;
+      p.style.width = Math.min(pct, 100) + '%';
+      p.style.background = pct > 100 ? 'rgba(255,59,48,0.12)' : 'rgba(0,122,255,0.07)';
     }
-    if(c.due && c.actual < c.amount) pending.push({ ...c, idx, dateObj: new Date(c.due) });
+    if (c.due && c.actual < c.amount)
+      pending.push({ ...c, idx, dateObj: new Date(c.due) });
   });
 
-  // Build bill schedule dengan info tanggal
-  const billDiv = document.getElementById('bill-schedule-list');
-  billDiv.innerHTML = '';
-  if(pending.length) {
-    pending.sort((a,b) => a.dateObj - b.dateObj).forEach(b => {
-      const badgeInfo = getDateBadgeInfo(b.due);
-      const badgeHTML = badgeInfo 
-        ? `<div class="bill-item-date-badge ${badgeInfo.cls}">📅 ${badgeInfo.label}</div>`
-        : '';
-      
-      const item = document.createElement('div');
-      item.className = 'bill-item';
-      item.innerHTML = `
-        <div class="bill-item-left">
-          <div class="bill-item-icon">${b.icon}</div>
-          <div>
-            <div class="bill-item-name">${b.name}</div>
-            <div class="bill-item-amount">Rp ${fmt(b.amount - b.actual)}</div>
-            ${badgeHTML}
-          </div>
-        </div>
-        <div class="bill-item-right">
-          <button class="cal-btn" onclick="window.addToGoogleCalendar(${b.idx})" title="Tambah ke Google Calendar">🗓️</button>
-        </div>`;
-      billDiv.appendChild(item);
-    });
-  } else {
-    billDiv.innerHTML = '<div style="text-align:center; font-size:13px; opacity:0.5; padding:10px;">Semua lunas! 🎉</div>';
-  }
+  // Ring
+  const pct = sal > 0 ? Math.round((tPlan / sal) * 100) : 0;
+  $('ring-pct').textContent = pct + '%';
+  $('ring-track').style.strokeDashoffset = 477.5 * (1 - pct / 100);
 
-  const pct = sal > 0 ? Math.round((tPlan/sal)*100) : 0;
-  document.getElementById('ring-pct').textContent = pct + '%';
-  document.getElementById('ring-track').style.strokeDashoffset = 502 * (1 - pct/100);
-  document.getElementById('total-plan-val').textContent = 'Rp ' + fmt(tPlan);
-  document.getElementById('total-actual-val').textContent = 'Rp ' + fmt(tAct);
-  document.getElementById('selisih-val').textContent = 'Rp ' + fmt(tPlan - tAct);
-  document.getElementById('diff-bar').style.width = tPlan > 0 ? Math.min((tAct/tPlan)*100, 100)+'%' : '0%';
-  document.getElementById('sisa-val').textContent = 'Rp ' + fmt(sal - tPlan);
+  // Stats
+  $('s-plan').textContent   = 'Rp ' + fmt(tPlan);
+  $('s-actual').textContent = 'Rp ' + fmt(tAct);
+  $('s-selisih').textContent= 'Rp ' + fmt(tPlan - tAct);
+  $('s-sisa').textContent   = 'Rp ' + fmt(sal - tPlan);
+
+  // Progress bar
+  const barPct = tPlan > 0 ? Math.min((tAct / tPlan) * 100, 100) : 0;
+  $('diff-bar').style.width = barPct + '%';
+  $('s-prog-pct').textContent = Math.round(barPct) + '%';
+
+  // Bill list
+  const bl = $('bill-list');
+  bl.innerHTML = '';
+  if (!pending.length) {
+    bl.innerHTML = '<div class="empty">Semua tagihan lunas 🎉</div>';
+    return;
+  }
+  pending.sort((a,b) => a.dateObj - b.dateObj).forEach(b => {
+    const bi = badgeInfo(b.due);
+    const card = document.createElement('div');
+    card.className = 'bill-card g';
+    card.innerHTML = `
+      <div class="bill-icon">${b.icon}</div>
+      <div class="bill-body">
+        <div class="bill-name">${b.name}</div>
+        <div class="bill-amount">Rp ${fmt(b.amount - b.actual)}</div>
+        ${bi ? `<div class="bill-badge ${bi.cls}">📅 ${bi.txt}</div>` : ''}
+      </div>
+      <button class="cal-btn" onclick="toGcal(${b.idx})">🗓️</button>`;
+    bl.appendChild(card);
+  });
 }
 
-document.getElementById('salary-in').oninput = (e) => { salary = parseInt(e.target.value.replace(/\D/g, '')) || 0; e.target.value = fmt(salary); save(); updateSummary(); };
+/* ── NAV ── */
+function switchTab(tabId) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nb[data-tab]').forEach(b => b.classList.remove('active'));
+  $(tabId).classList.add('active');
+  const btn = document.querySelector(`.nb[data-tab="${tabId}"]`);
+  if (btn) btn.classList.add('active');
+  if (isEdit) toggleEdit(); // exit edit mode on tab switch
+  // disable add btn on non-alokasi tabs
+  $('nb-add').style.opacity = tabId === 'tab-alokasi' ? '1' : '0.35';
+  $('nb-add').style.pointerEvents = tabId === 'tab-alokasi' ? 'auto' : 'none';
+}
 
-document.getElementById('edit-mode-btn').onclick = () => { 
-  haptic(); isEditMode = !isEditMode; 
-  document.getElementById('cat-list').classList.toggle('edit-mode'); 
-  document.getElementById('edit-mode-btn').textContent = isEditMode ? 'Selesai' : '⋯'; 
-};
-
-// Tab navigation — tombol ikon
-document.querySelectorAll('.nav-btn[data-tab]').forEach(b => b.onclick = () => {
-  haptic(); 
-  document.querySelectorAll('.nav-btn[data-tab]').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-  b.classList.add('active'); 
-  document.getElementById(b.dataset.tab).classList.add('active');
-  if(isEditMode) document.getElementById('edit-mode-btn').click();
-  const addBtn = document.getElementById('integrated-add-btn');
-  const isRingkasan = b.dataset.tab === 'tab-ringkasan';
-  addBtn.style.opacity = isRingkasan ? '0.35' : '1';
-  addBtn.style.pointerEvents = isRingkasan ? 'none' : 'auto';
+document.querySelectorAll('.nb[data-tab]').forEach(b => {
+  b.onclick = () => { haptic(); switchTab(b.dataset.tab); };
 });
-// Set initial active state correctly
-document.getElementById('btn-alokasi').classList.add('active');
 
-document.getElementById('integrated-add-btn').onclick = () => { 
-  haptic(); 
-  if(isEditMode) document.getElementById('edit-mode-btn').click(); 
-  cats.push({id: Date.now(), name: '', amount: 0, actual: 0, icon: '📦', bank: 'BCA', due:''}); 
-  save(); buildList(); 
+$('nb-add').onclick = () => {
+  haptic();
+  if (isEdit) toggleEdit();
+  cats.push({ id: Date.now(), name:'', amount:0, actual:0, icon:'📦', bank:'BCA', due:'' });
+  save(); render();
+  // scroll to bottom so new card is visible
+  setTimeout(() => $('scroll-area').scrollTo({ top: 99999, behavior:'smooth' }), 60);
 };
 
-document.getElementById('theme-toggle').onclick = () => { haptic(); document.body.classList.toggle('dark'); };
+/* ── EDIT MODE ── */
+function toggleEdit() {
+  isEdit = !isEdit;
+  $('cat-list').classList.toggle('edit-mode', isEdit);
+  $('edit-btn').textContent = isEdit ? 'Selesai' : '⋯';
+}
+$('edit-btn').onclick = () => { haptic(); toggleEdit(); };
+
+/* ── SALARY INPUT ── */
+$('salary-in').oninput = e => {
+  salary = parseInt(e.target.value.replace(/\D/g,'')) || 0;
+  e.target.value = fmt(salary);
+  save(); updateSummary();
+};
+
+/* ── THEME ── */
+$('theme-btn').onclick = () => { haptic(); document.body.classList.toggle('dark'); };
 </script>
 </body>
 </html>
