@@ -33,8 +33,11 @@ body.dark {
 body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; background: radial-gradient(circle at top left, var(--bg1), var(--bg2)); min-height: 100vh; display: flex; justify-content: center; color: var(--txt); transition: background 0.5s ease; overscroll-behavior: none; }
 .phone-wrap { width: 100%; max-width: 420px; padding: 20px 20px 140px; position: relative; overflow-x: hidden; min-height: 100vh;}
 .glass { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); box-shadow: var(--glass-shadow); backdrop-filter: blur(32px) saturate(1.8); -webkit-backdrop-filter: blur(32px) saturate(1.8); }
+
+/* Header & Icons */
 .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 5px; margin-top: env(safe-area-inset-top, 0px); }
-.icon-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; transition: 0.2s; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 50%; }
+.icon-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; transition: 0.2s; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 50%; overflow: hidden; }
+.icon-btn img { width: 100%; height: 100%; object-fit: cover; } /* Untuk Foto Profil */
 
 .tab-content { display: none; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
 .tab-content.active { display: block; }
@@ -43,10 +46,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-se
 .hero { padding: 30px 20px; margin-bottom: 12px; text-align: center; }
 .hero-salary-in { font-size: 38px; font-weight: 300; color: var(--txt); background: transparent; border: none; outline: none; width: 100%; text-align: center; letter-spacing: -1px; }
 
+/* Categories */
 .cat-list { display: flex; flex-direction: column; gap: 12px; padding-bottom: 20px; }
 .cat-wrapper { position: relative; border-radius: var(--r); }
 .cat-card { padding: 16px; display: flex; align-items: center; gap: 12px; position: relative; overflow: hidden; z-index: 1; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); }
-
 @keyframes jiggle { 0% { transform: rotate(-0.8deg); } 50% { transform: rotate(0.8deg); } 100% { transform: rotate(-0.8deg); } }
 .edit-mode .cat-card { animation: jiggle 0.3s infinite ease-in-out; pointer-events: none; }
 .delete-badge { position: absolute; top: -4px; left: -4px; width: 26px; height: 26px; background: #FF3B30; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 18px; opacity: 0; transform: scale(0); transition: all 0.25s; z-index: 10; pointer-events: none; cursor:pointer;}
@@ -58,14 +61,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-se
 .cat-body { flex: 1; min-width: 0; }
 .cat-name-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; width: 100%; margin-bottom: 4px; font-family: inherit;}
 
+/* Date Picker & Tags */
 .date-container { position: relative; display: inline-block; vertical-align: middle; }
 .date-tag { appearance: none; background: rgba(255, 149, 0, 0.1); border: 1px solid rgba(255, 149, 0, 0.2); border-radius: 100px; padding: 2px 10px; font-size: 11px; font-weight: 600; color: #FF9500; pointer-events: none; }
 .due-input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 5; }
-
 .bank-tag { appearance: none; background: rgba(120, 120, 128, 0.1); border: 1px solid rgba(120, 120, 128, 0.2); border-radius: 100px; padding: 2px 8px; font-size: 11px; font-weight: 600; color: var(--txt2); font-family: inherit; outline: none; }
 .amount-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; text-align: right; width: 90px; }
 .actual-in { font-size: 14px; font-weight: 600; color: var(--accent); background: transparent; border: none; outline: none; text-align: right; width: 90px; }
 
+/* Summary Page */
 .alert-banner { background: rgba(255, 59, 48, 0.15); border: 1px solid rgba(255, 59, 48, 0.3); border-radius: var(--r); padding: 15px; margin-bottom: 15px; display: none; align-items: center; gap: 12px; color: #FF3B30; backdrop-filter: blur(20px); }
 .ring-container { position: relative; display: flex; justify-content: center; align-items: center; margin: 20px 0; padding: 20px; }
 .ring-pct { font-size: 32px; font-weight: 600; letter-spacing: -1px;}
@@ -73,77 +77,86 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-se
 .money-text { font-weight: 600; font-size: 15px; }
 .bill-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; background: rgba(120,120,128,0.05); border-radius: 14px; margin-bottom: 8px;}
 
+/* Navigation Bar */
 .bottom-nav-container { position: fixed; bottom: max(30px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 380px; z-index: 100; }
 .bottom-glass-bar { display: flex; justify-content: space-between; align-items: center; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 99px; padding: 8px 15px; height: 75px; }
 .tab-btn { flex: none; width: 100px; text-align: center; padding: 12px 0; border: none; background: transparent; color: var(--txt2); font-size: 14px; font-weight: 600; border-radius: 100px; cursor: pointer; }
 .tab-btn.active { color: var(--txt); background: rgba(120,120,128,0.1); }
 .integrated-add-btn { flex: none; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; cursor: pointer; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--accent); margin: 0 -20px; z-index: 101; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-#pin-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--glass-bg); backdrop-filter: blur(40px) saturate(2); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.pin-input { font-size: 32px; letter-spacing: 12px; text-align: center; width: 180px; background: transparent; border: none; border-bottom: 2px solid var(--txt); outline: none; color: var(--txt); font-weight: 600; }
+/* Welcome / Login State */
+#login-prompt { display: none; text-align: center; padding: 60px 20px; animation: slideUp 0.5s ease; }
 </style>
 </head>
 <body>
 
-<div id="pin-overlay" style="display: none;">
-  <div style="font-size: 48px; margin-bottom: 10px;">🔒</div>
-  <h2 style="color: var(--txt);">Budgy Terkunci</h2>
-  <input type="password" id="pin-entry" class="pin-input" inputmode="numeric" maxlength="4" placeholder="••••" />
-  <button id="btn-reset-app" style="margin-top: 40px; background:none; border:none; color:#FF3B30; text-decoration:underline; font-size:12px; cursor:pointer;">Reset Aplikasi</button>
-</div>
-
 <div class="phone-wrap">
   <div class="top-nav">
-    <div class="icon-btn" id="pin-toggle" title="Atur PIN">🔓</div>
     <div style="display: flex; align-items: center; gap: 7px; font-weight: 600; font-size: 19px;"><span>🦜</span> Budgy</div>
-    <div class="icon-btn" id="auth-btn" title="Login / Sync Data">👤</div>
-  </div>
-  
-  <div id="tab-alokasi" class="tab-content active">
-    <div class="glass hero">
-      <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 12px;">Gaji Bulanan</div>
-      <div style="display:flex;align-items:center;justify-content:center;gap:12px;">
-        <span style="font-size:24px; opacity:0.5;">Rp</span>
-        <input class="hero-salary-in blurrable" id="salary-in" type="text" inputmode="numeric" />
-        <div class="icon-btn" id="privacy-toggle" style="width: 34px; height: 34px; font-size: 15px;">👁️</div>
-      </div>
+    <div style="display: flex; gap: 10px;">
+      <div class="icon-btn" id="theme-toggle" title="Ganti Tema">🌓</div>
+      <div class="icon-btn" id="auth-btn" title="Login / Logout">👤</div>
     </div>
-    
-    <div style="display:flex; justify-content:space-between; align-items:center; margin: 20px 0 12px; padding: 0 8px;">
-      <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase;">Alokasi Kategori</div>
-      <div id="edit-mode-btn" style="cursor:pointer; color: var(--txt2); font-weight:bold; font-size: 22px;">⋯</div>
-    </div>
-    <div id="cat-list" class="cat-list"></div>
   </div>
 
-  <div id="tab-ringkasan" class="tab-content">
-    <div id="alert-banner" class="alert-banner"><div style="font-size: 24px;">⚠️</div><div><div style="font-size: 14px; font-weight: 600;">Tagihan Mendekat!</div><div id="alert-msg" style="font-size: 12px; opacity: 0.8;"></div></div></div>
+  <div id="login-prompt">
+    <div style="font-size: 48px; margin-bottom: 20px;">🔒</div>
+    <h2 style="color: var(--txt);">Selamat Datang</h2>
+    <p style="color: var(--txt2); font-size: 14px; margin-top: 10px; line-height: 1.5;">
+      Silakan login menggunakan akun Google Anda untuk mengakses, menyimpan, dan menyinkronkan data keuangan Anda.
+    </p>
+    <button id="big-login-btn" class="glass" style="margin-top: 30px; padding: 14px 24px; border-radius: 100px; background: var(--accent); color: white; border: none; font-weight: 600; font-size: 15px; cursor: pointer; width: 100%; box-shadow: 0 8px 20px rgba(0, 122, 255, 0.3);">
+      Masuk dengan Google
+    </button>
+  </div>
+
+  <div id="main-app-content" style="display: none;">
     
-    <div class="glass ring-container">
-      <svg width="200" height="200" viewBox="0 0 200 200">
-        <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(120,120,128,0.15)" stroke-width="16"/>
-        <circle id="ring-track" cx="100" cy="100" r="80" fill="none" stroke="url(#ringGrad)" stroke-width="16" stroke-linecap="round" stroke-dasharray="502" stroke-dashoffset="502" transform="rotate(-90 100 100)"/>
-        <defs><linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#007AFF"/><stop offset="100%" stop-color="#34C759"/></linearGradient></defs>
-      </svg>
-      <div class="ring-center"><div class="ring-pct" id="ring-pct">0%</div><div style="font-size:12px; color:var(--txt2);">Terpakai</div></div>
+    <div id="tab-alokasi" class="tab-content active">
+      <div class="glass hero">
+        <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 12px;">Gaji Bulanan</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:12px;">
+          <span style="font-size:24px; opacity:0.5;">Rp</span>
+          <input class="hero-salary-in" id="salary-in" type="text" inputmode="numeric" />
+        </div>
+      </div>
+      
+      <div style="display:flex; justify-content:space-between; align-items:center; margin: 20px 0 12px; padding: 0 8px;">
+        <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase;">Alokasi Kategori</div>
+        <div id="edit-mode-btn" style="cursor:pointer; color: var(--txt2); font-weight:bold; font-size: 22px;">⋯</div>
+      </div>
+      <div id="cat-list" class="cat-list"></div>
     </div>
 
-    <div style="margin: 24px 0 10px; font-size: 13px; font-weight: 600; color: var(--txt2); text-transform: uppercase; padding-left: 8px;">Jadwal Tagihan</div>
-    <div class="glass insight-card" id="bill-schedule-list" style="margin-top: 0; padding: 12px;"></div>
-
-    <div class="glass insight-card">
-      <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Total Rencana</span><strong id="total-plan-val" class="money-text blurrable"></strong></div>
-      <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:10px;"><span>Total Aktual</span><strong id="total-actual-val" class="money-text blurrable" style="color:var(--accent);"></strong></div>
-      <div style="margin-top: 15px; border-top:1px solid var(--glass-border); padding-top:15px;">
-        <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Sisa Anggaran</span><strong id="selisih-val" class="money-text blurrable"></strong></div>
-        <div style="width:100%; height:8px; background:rgba(120,120,128,0.1); border-radius:10px; margin-top:8px; overflow:hidden;"><div id="diff-bar" style="height:100%; width:0%; transition:0.5s;"></div></div>
+    <div id="tab-ringkasan" class="tab-content">
+      <div id="alert-banner" class="alert-banner"><div style="font-size: 24px;">⚠️</div><div><div style="font-size: 14px; font-weight: 600;">Tagihan Mendekat!</div><div id="alert-msg" style="font-size: 12px; opacity: 0.8;"></div></div></div>
+      
+      <div class="glass ring-container">
+        <svg width="200" height="200" viewBox="0 0 200 200">
+          <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(120,120,128,0.15)" stroke-width="16"/>
+          <circle id="ring-track" cx="100" cy="100" r="80" fill="none" stroke="url(#ringGrad)" stroke-width="16" stroke-linecap="round" stroke-dasharray="502" stroke-dashoffset="502" transform="rotate(-90 100 100)"/>
+          <defs><linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#007AFF"/><stop offset="100%" stop-color="#34C759"/></linearGradient></defs>
+        </svg>
+        <div class="ring-center"><div class="ring-pct" id="ring-pct">0%</div><div style="font-size:12px; color:var(--txt2);">Terpakai</div></div>
       </div>
-      <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:15px;"><span>Sisa Gaji Bebas</span><strong id="sisa-val" class="money-text blurrable"></strong></div>
+
+      <div style="margin: 24px 0 10px; font-size: 13px; font-weight: 600; color: var(--txt2); text-transform: uppercase; padding-left: 8px;">Jadwal Tagihan</div>
+      <div class="glass insight-card" id="bill-schedule-list" style="margin-top: 0; padding: 12px;"></div>
+
+      <div class="glass insight-card">
+        <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Total Rencana</span><strong id="total-plan-val" class="money-text"></strong></div>
+        <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:10px;"><span>Total Aktual</span><strong id="total-actual-val" class="money-text" style="color:var(--accent);"></strong></div>
+        <div style="margin-top: 15px; border-top:1px solid var(--glass-border); padding-top:15px;">
+          <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Sisa Anggaran</span><strong id="selisih-val" class="money-text"></strong></div>
+          <div style="width:100%; height:8px; background:rgba(120,120,128,0.1); border-radius:10px; margin-top:8px; overflow:hidden;"><div id="diff-bar" style="height:100%; width:0%; transition:0.5s;"></div></div>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:15px;"><span>Sisa Gaji Bebas</span><strong id="sisa-val" class="money-text"></strong></div>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="bottom-nav-container">
+<div class="bottom-nav-container" id="bottom-nav" style="display: none;">
   <div class="bottom-glass-bar">
     <button class="tab-btn active" data-tab="tab-alokasi">Alokasi</button>
     <div class="integrated-add-btn" id="integrated-add-btn">➕</div>
@@ -152,7 +165,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-se
 </div>
 
 <script type="module">
-// 1. IMPORT FIREBASE (MODULAR SDK)
+// 1. IMPORT FIREBASE
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -176,8 +189,7 @@ const manifestData = {
   "name": "Budgy Pro", "short_name": "Budgy", "start_url": "./", "display": "standalone", "background_color": "#fef0e7", "theme_color": "#fef0e7",
   "icons": [ { "src": "https://cdn-icons-png.flaticon.com/512/3064/3064029.png", "sizes": "512x512", "type": "image/png" } ]
 };
-const manifestBlob = new Blob([JSON.stringify(manifestData)], {type: 'application/json'});
-document.getElementById('manifest-link').href = URL.createObjectURL(manifestBlob);
+document.getElementById('manifest-link').href = URL.createObjectURL(new Blob([JSON.stringify(manifestData)], {type: 'application/json'}));
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -186,28 +198,23 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// LOGIKA APLIKASI
+// LOGIKA APLIKASI UTAMA
 const BANKS = ['BCA', 'Mandiri', 'BNI', 'BRI', 'Jago', 'SeaBank', 'GoPay', 'OVO', 'DANA', 'Tunai'];
 const EMOJI_MAP = { 'makan': '🍔', 'kopi': '☕', 'listrik': '⚡', 'air': '💧', 'bensin': '⛽', 'belanja': '🛍️', 'tabung': '💰', 'cicilan': '💳' };
 
-let cats = JSON.parse(localStorage.getItem('cats')) || [{id: Date.now(), name: 'Makan', amount: 1500000, actual: 0, icon: '🍔', bank: 'BCA', due: ''}];
-let salary = localStorage.getItem('salary') || 5000000;
-let isPrivate = false;
-let userPin = localStorage.getItem('userPin') || '';
+let cats = [];
+let salary = 0;
 let isEditMode = false;
 let currentUser = null;
 
 const haptic = () => { if(navigator.vibrate) navigator.vibrate(10); };
 const fmt = (n) => n === 0 ? '0' : Math.round(n).toLocaleString('id-ID');
 
-// FIREBASE SYNC LOGIC
+// FIREBASE & LOCAL STORAGE LOGIC
 async function saveToFirebase() {
   if (!currentUser) return;
-  try {
-    await setDoc(doc(db, "users", currentUser.uid), { cats: cats, salary: salary });
-  } catch (error) {
-    console.error("Gagal simpan ke Firebase:", error);
-  }
+  try { await setDoc(doc(db, "users", currentUser.uid), { cats: cats, salary: salary }); } 
+  catch (error) { console.error("Gagal simpan ke Firebase:", error); }
 }
 
 async function loadFromFirebase() {
@@ -218,14 +225,27 @@ async function loadFromFirebase() {
       const data = docSnap.data();
       cats = data.cats || [];
       salary = data.salary || 0;
-      document.getElementById('salary-in').value = fmt(salary);
-      buildList();
     } else {
-      // Jika user baru, simpan data lokal saat ini ke cloud
-      saveToFirebase();
+      // Migrasi data offline jika ada (saat user baru pertama kali login)
+      cats = JSON.parse(localStorage.getItem('cats')) || [{id: Date.now(), name: 'Makan', amount: 1500000, actual: 0, icon: '🍔', bank: 'BCA', due: ''}];
+      salary = localStorage.getItem('salary') || 5000000;
+      saveToFirebase(); // Dorong ke Cloud
     }
+    
+    // Simpan ke local storage agar loading selanjutnya lebih cepat
+    localStorage.setItem('cats', JSON.stringify(cats));
+    localStorage.setItem('salary', salary);
+
+    // Render Instan
+    document.getElementById('salary-in').value = fmt(salary);
+    buildList();
   } catch (error) {
-    console.error("Gagal ambil data Firebase:", error);
+    console.error("Gagal ambil data:", error);
+    // Jika offline, tarik dari local storage
+    cats = JSON.parse(localStorage.getItem('cats')) || [];
+    salary = localStorage.getItem('salary') || 0;
+    document.getElementById('salary-in').value = fmt(salary);
+    buildList();
   }
 }
 
@@ -235,38 +255,63 @@ const save = () => {
   saveToFirebase();
 };
 
-// FIREBASE AUTHENTICATION LISTENER
+// ===============================================
+// AUTHENTICATION STATE OBSERVER (PENGATUR TAMPILAN)
+// ===============================================
 onAuthStateChanged(auth, async (user) => {
   const authBtn = document.getElementById('auth-btn');
+  const mainAppContent = document.getElementById('main-app-content');
+  const loginPrompt = document.getElementById('login-prompt');
+  const bottomNav = document.getElementById('bottom-nav');
+
   if (user) {
+    // 1. STATE: LOGGED IN
     currentUser = user;
-    authBtn.textContent = '✅';
-    authBtn.style.background = 'var(--accent)';
-    authBtn.style.color = 'white';
+    
+    // Ganti ikon menjadi Foto Profil Google
+    authBtn.innerHTML = `<img src="${user.photoURL}" alt="Profile">`;
+    authBtn.style.border = "2px solid var(--accent)";
+
+    // Sembunyikan layar login, munculkan aplikasi (Kategori & Gaji)
+    loginPrompt.style.display = 'none';
+    mainAppContent.style.display = 'block';
+    bottomNav.style.display = 'flex';
+
     await loadFromFirebase();
   } else {
+    // 2. STATE: LOGGED OUT
     currentUser = null;
-    authBtn.textContent = '👤';
-    authBtn.style.background = 'var(--glass-bg)';
-    authBtn.style.color = 'var(--txt)';
+    
+    // Kembalikan ikon orang biasa
+    authBtn.innerHTML = '👤';
+    authBtn.style.border = "1px solid var(--glass-border)";
+
+    // Sembunyikan aplikasi (Kategori & Gaji hilang), munculkan layar login
+    mainAppContent.style.display = 'none';
+    bottomNav.style.display = 'none';
+    loginPrompt.style.display = 'block';
+
+    // Kosongkan variabel demi keamanan
+    cats = [];
+    salary = 0;
   }
 });
 
-// AUTH BUTTON CLICK
-document.getElementById('auth-btn').onclick = () => {
+// FUNGSI TOMBOL LOGIN/LOGOUT
+const handleLoginLogout = () => {
   haptic();
   if (currentUser) {
-    if(confirm('Logout dari akun Firebase?')) signOut(auth);
+    if(confirm('Keluar dari akun Anda? Data akan tersimpan aman di Cloud.')) signOut(auth);
   } else {
-    signInWithPopup(auth, provider).catch(error => {
-      alert("Login gagal: " + error.message);
-    });
+    signInWithPopup(auth, provider).catch(error => alert("Login gagal: " + error.message));
   }
 };
 
+document.getElementById('auth-btn').onclick = handleLoginLogout;
+document.getElementById('big-login-btn').onclick = handleLoginLogout;
+
+// UI RENDER FUNCTIONS
 window.hapusKategori = function(id) { cats = cats.filter(c => c.id !== id); save(); buildList(); };
-window.clearPin = function() { if(confirm('Mereset akan MENGHAPUS SEMUA DATA. Lanjutkan?')) { localStorage.clear(); location.reload(); } };
-document.getElementById('btn-reset-app').addEventListener('click', window.clearPin);
 
 function formatDate(dateStr) {
   if(!dateStr) return '📅 Atur Tgl';
@@ -300,8 +345,8 @@ function buildList() {
           </div>
         </div>
         <div style="text-align:right">
-          <div class="amt-row"><input class="amount-in blurrable" type="text" inputmode="numeric" value="${fmt(c.amount)}" data-idx="${index}"></div>
-          <div class="amt-row" style="margin-top:5px;"><input class="actual-in blurrable" type="text" inputmode="numeric" value="${fmt(c.actual)}" data-idx="${index}"></div>
+          <div class="amt-row"><input class="amount-in" type="text" inputmode="numeric" value="${fmt(c.amount)}" data-idx="${index}"></div>
+          <div class="amt-row" style="margin-top:5px;"><input class="actual-in" type="text" inputmode="numeric" value="${fmt(c.actual)}" data-idx="${index}"></div>
         </div>
       </div>
     `;
@@ -369,7 +414,7 @@ function updateSummary() {
       billDiv.innerHTML += `
         <div class="bill-item">
           <div style="display:flex; align-items:center; gap:10px;"><div style="font-size:20px;">${b.icon}</div><div><div style="font-size:14px; font-weight:600;">${b.name}</div><div style="font-size:11px; color:${colorTag};">${formatDate(b.due)} • ${statusText}</div></div></div>
-          <div style="text-align:right;"><div style="font-size:14px; font-weight:600;" class="blurrable">Rp ${fmt(b.amount - b.actual)}</div><div style="font-size:10px; color:var(--txt2);">Sisa Bayar</div></div>
+          <div style="text-align:right;"><div style="font-size:14px; font-weight:600;">Rp ${fmt(b.amount - b.actual)}</div><div style="font-size:10px; color:var(--txt2);">Sisa Bayar</div></div>
         </div>`;
     });
   }
@@ -386,7 +431,6 @@ function updateSummary() {
 }
 
 document.getElementById('salary-in').oninput = (e) => { salary = parseInt(e.target.value.replace(/\D/g, '')) || 0; e.target.value = fmt(salary); save(); updateSummary(); };
-document.getElementById('salary-in').value = fmt(salary);
 
 document.getElementById('edit-mode-btn').onclick = () => { haptic(); isEditMode = !isEditMode; document.getElementById('cat-list').classList.toggle('edit-mode'); document.getElementById('edit-mode-btn').textContent = isEditMode ? 'Selesai' : '⋯'; };
 
@@ -404,13 +448,6 @@ document.getElementById('integrated-add-btn').onclick = () => {
 };
 
 document.getElementById('theme-toggle').onclick = () => { haptic(); document.body.classList.toggle('dark'); };
-document.getElementById('privacy-toggle').onclick = () => { haptic(); isPrivate = !isPrivate; document.body.classList.toggle('privacy-on'); };
-
-if (userPin) document.getElementById('pin-overlay').style.display = 'flex';
-document.getElementById('pin-entry').oninput = (e) => { if (e.target.value === userPin) { document.getElementById('pin-overlay').style.opacity = '0'; setTimeout(()=>{document.getElementById('pin-overlay').style.display = 'none';}, 400); haptic(); } };
-document.getElementById('pin-toggle').onclick = () => { haptic(); if(userPin) { if(confirm('Hapus PIN?')) { userPin = ''; localStorage.setItem('userPin', ''); location.reload(); } } else { let p = prompt('Buat PIN (4 angka):'); if(p && p.length === 4) { userPin = p; localStorage.setItem('userPin', p); location.reload(); } } };
-
-buildList();
 </script>
 </body>
 </html>
