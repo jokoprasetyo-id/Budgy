@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Budgy</title>
 <link rel="manifest" id="manifest-link">
-<link rel="apple-touch-icon" href="image_2.png">
+<link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3064/3064029.png">
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600&display=swap');
@@ -30,21 +30,9 @@ body.dark {
 }
 
 *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent;}
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-  background: radial-gradient(circle at top left, var(--bg1), var(--bg2));
-  min-height: 100vh; display: flex; justify-content: center; color: var(--txt);
-  transition: background 0.5s ease; overscroll-behavior: none;
-}
-
+body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; background: radial-gradient(circle at top left, var(--bg1), var(--bg2)); min-height: 100vh; display: flex; justify-content: center; color: var(--txt); transition: background 0.5s ease; overscroll-behavior: none; }
 .phone-wrap { width: 100%; max-width: 420px; padding: 20px 20px 140px; position: relative; overflow-x: hidden; min-height: 100vh;}
-
-.glass {
-  background: var(--glass-bg); border: 1px solid var(--glass-border);
-  border-radius: var(--r); box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(32px) saturate(1.8); -webkit-backdrop-filter: blur(32px) saturate(1.8);
-}
-
+.glass { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); box-shadow: var(--glass-shadow); backdrop-filter: blur(32px) saturate(1.8); -webkit-backdrop-filter: blur(32px) saturate(1.8); }
 .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 5px; margin-top: env(safe-area-inset-top, 0px); }
 .icon-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; transition: 0.2s; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 50%; }
 
@@ -61,16 +49,15 @@ body {
 
 @keyframes jiggle { 0% { transform: rotate(-0.8deg); } 50% { transform: rotate(0.8deg); } 100% { transform: rotate(-0.8deg); } }
 .edit-mode .cat-card { animation: jiggle 0.3s infinite ease-in-out; pointer-events: none; }
-.delete-badge { position: absolute; top: -4px; left: -4px; width: 26px; height: 26px; background: #FF3B30; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 18px; opacity: 0; transform: scale(0); transition: all 0.25s; z-index: 10; pointer-events: none; }
+.delete-badge { position: absolute; top: -4px; left: -4px; width: 26px; height: 26px; background: #FF3B30; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 18px; opacity: 0; transform: scale(0); transition: all 0.25s; z-index: 10; pointer-events: none; cursor:pointer;}
 .edit-mode .delete-badge { opacity: 1; transform: scale(1); pointer-events: auto; }
 
 .notif-dot { position: absolute; top: 10px; right: 10px; width: 10px; height: 10px; background: #FF3B30; border-radius: 50%; display: none; box-shadow: 0 0 8px rgba(255,59,48,0.8); }
-.cat-progress-bg { position: absolute; top: 0; left: 0; height: 100%; background: rgba(0, 122, 255, 0.08); z-index: -1; }
+.cat-progress-bg { position: absolute; top: 0; left: 0; height: 100%; background: rgba(0, 122, 255, 0.08); z-index: -1; transition: width 0.8s; }
 .cat-dot { width: 40px; height: 40px; border-radius: 12px; background: rgba(120,120,128,0.15); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
 .cat-body { flex: 1; min-width: 0; }
 .cat-name-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; width: 100%; margin-bottom: 4px; font-family: inherit;}
 
-/* DATE PICKER FIX */
 .date-container { position: relative; display: inline-block; vertical-align: middle; }
 .date-tag { appearance: none; background: rgba(255, 149, 0, 0.1); border: 1px solid rgba(255, 149, 0, 0.2); border-radius: 100px; padding: 2px 10px; font-size: 11px; font-weight: 600; color: #FF9500; pointer-events: none; }
 .due-input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 5; }
@@ -80,11 +67,11 @@ body {
 .actual-in { font-size: 14px; font-weight: 600; color: var(--accent); background: transparent; border: none; outline: none; text-align: right; width: 90px; }
 
 .alert-banner { background: rgba(255, 59, 48, 0.15); border: 1px solid rgba(255, 59, 48, 0.3); border-radius: var(--r); padding: 15px; margin-bottom: 15px; display: none; align-items: center; gap: 12px; color: #FF3B30; backdrop-filter: blur(20px); }
-
 .ring-container { position: relative; display: flex; justify-content: center; align-items: center; margin: 20px 0; padding: 20px; }
 .ring-pct { font-size: 32px; font-weight: 600; letter-spacing: -1px;}
 .insight-card { padding: 20px; display: flex; flex-direction: column; gap: 15px; margin-top: 15px; }
 .money-text { font-weight: 600; font-size: 15px; }
+.bill-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; background: rgba(120,120,128,0.05); border-radius: 14px; margin-bottom: 8px;}
 
 .bottom-nav-container { position: fixed; bottom: max(30px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 380px; z-index: 100; }
 .bottom-glass-bar { display: flex; justify-content: space-between; align-items: center; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 99px; padding: 8px 15px; height: 75px; }
@@ -102,7 +89,7 @@ body {
   <div style="font-size: 48px; margin-bottom: 10px;">🔒</div>
   <h2 style="color: var(--txt);">Budgy Terkunci</h2>
   <input type="password" id="pin-entry" class="pin-input" inputmode="numeric" maxlength="4" placeholder="••••" />
-  <button onclick="clearPin()" style="margin-top: 40px; background:none; border:none; color:#FF3B30; text-decoration:underline; font-size:12px; cursor:pointer;">Reset Aplikasi</button>
+  <button id="btn-reset-app" style="margin-top: 40px; background:none; border:none; color:#FF3B30; text-decoration:underline; font-size:12px; cursor:pointer;">Reset Aplikasi</button>
 </div>
 
 <div class="phone-wrap">
@@ -130,7 +117,8 @@ body {
   </div>
 
   <div id="tab-ringkasan" class="tab-content">
-    <div id="alert-banner" class="alert-banner"><div style="font-size: 24px;">⚠️</div><div><div style="font-size: 14px; font-weight: 600;">Tagihan Jatuh Tempo!</div><div id="alert-msg" style="font-size: 12px; opacity: 0.8;"></div></div></div>
+    <div id="alert-banner" class="alert-banner"><div style="font-size: 24px;">⚠️</div><div><div style="font-size: 14px; font-weight: 600;">Tagihan Mendekat!</div><div id="alert-msg" style="font-size: 12px; opacity: 0.8;"></div></div></div>
+    
     <div class="glass ring-container">
       <svg width="200" height="200" viewBox="0 0 200 200">
         <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(120,120,128,0.15)" stroke-width="16"/>
@@ -139,6 +127,10 @@ body {
       </svg>
       <div class="ring-center"><div class="ring-pct" id="ring-pct">0%</div><div style="font-size:12px; color:var(--txt2);">Terpakai</div></div>
     </div>
+
+    <div style="margin: 24px 0 10px; font-size: 13px; font-weight: 600; color: var(--txt2); text-transform: uppercase; padding-left: 8px;">Jadwal Tagihan</div>
+    <div class="glass insight-card" id="bill-schedule-list" style="margin-top: 0; padding: 12px;"></div>
+
     <div class="glass insight-card">
       <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Total Rencana</span><strong id="total-plan-val" class="money-text blurrable"></strong></div>
       <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:10px;"><span>Total Aktual</span><strong id="total-actual-val" class="money-text blurrable" style="color:var(--accent);"></strong></div>
@@ -148,7 +140,6 @@ body {
       </div>
       <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:15px;"><span>Sisa Gaji Bebas</span><strong id="sisa-val" class="money-text blurrable"></strong></div>
     </div>
-    <div id="bank-list" class="glass insight-card" style="margin-bottom: 20px;"></div>
   </div>
 </div>
 
@@ -160,13 +151,55 @@ body {
   </div>
 </div>
 
-<script>
-// PWA Virtual Service Worker
+<script type="module">
+// 1. IMPORT FIREBASE (MODULAR SDK)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+// Jika nanti butuh database (Firestore), import getFirestore di sini.
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCudBjzhXcqSWVF4kzakcPomeVj_GcHtys",
+  authDomain: "budgy-7e6e1.firebaseapp.com",
+  projectId: "budgy-7e6e1",
+  storageBucket: "budgy-7e6e1.firebasestorage.app",
+  messagingSenderId: "733464255051",
+  appId: "1:733464255051:web:d30d49716990d3a8a7cbce",
+  measurementId: "G-PNHCVDRW0L"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+console.log("Firebase Terhubung!");
+
+// 2. PWA SETUP (Sesuai Standar Baru)
+const manifestData = {
+  "name": "Budgy Pro",
+  "short_name": "Budgy",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#fef0e7",
+  "theme_color": "#fef0e7",
+  "icons": [
+    { "src": "https://cdn-icons-png.flaticon.com/512/3064/3064029.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "https://cdn-icons-png.flaticon.com/512/3064/3064029.png", "sizes": "512x512", "type": "image/png" }
+  ]
+};
+const manifestBlob = new Blob([JSON.stringify(manifestData)], {type: 'application/json'});
+document.getElementById('manifest-link').href = URL.createObjectURL(manifestBlob);
+
 if ('serviceWorker' in navigator) {
-  const blob = new Blob([`self.addEventListener('fetch', function(e) { });`], {type: 'application/javascript'});
-  navigator.serviceWorker.register(URL.createObjectURL(blob));
+  window.addEventListener('load', () => {
+    const swCode = `
+      self.addEventListener('install', e => self.skipWaiting());
+      self.addEventListener('fetch', e => e.respondWith(fetch(e.request)));
+    `;
+    const swBlob = new Blob([swCode], {type: 'application/javascript'});
+    navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(err => console.log('SW Gagal', err));
+  });
 }
 
+// 3. LOGIKA APLIKASI UTAMA
 const BANKS = ['BCA', 'Mandiri', 'BNI', 'BRI', 'Jago', 'SeaBank', 'GoPay', 'OVO', 'DANA', 'Tunai'];
 const EMOJI_MAP = { 'makan': '🍔', 'kopi': '☕', 'listrik': '⚡', 'air': '💧', 'bensin': '⛽', 'belanja': '🛍️', 'tabung': '💰', 'cicilan': '💳' };
 
@@ -177,13 +210,32 @@ let userPin = localStorage.getItem('userPin') || '';
 let isEditMode = false;
 
 const haptic = () => { if(navigator.vibrate) navigator.vibrate(10); };
-const save = () => { localStorage.setItem('cats', JSON.stringify(cats)); localStorage.setItem('salary', salary); };
+const save = () => { 
+  localStorage.setItem('cats', JSON.stringify(cats)); 
+  localStorage.setItem('salary', salary); 
+  // Nanti fungsi simpan ke Firestore bisa ditaruh di sini
+};
 const fmt = (n) => n === 0 ? '0' : Math.round(n).toLocaleString('id-ID');
+
+// Expose fungsi ke window agar bisa dipanggil HTML inline
+window.hapusKategori = function(id) { 
+  cats = cats.filter(c => c.id !== id); 
+  save(); buildList(); 
+};
+
+window.clearPin = function() {
+  if(confirm('Peringatan: Mereset akan MENGHAPUS SEMUA DATA. Lanjutkan?')) { 
+    localStorage.clear(); location.reload(); 
+  }
+};
+
+document.getElementById('btn-reset-app').addEventListener('click', window.clearPin);
 
 function formatDate(dateStr) {
   if(!dateStr) return '📅 Atur Tgl';
   const d = new Date(dateStr);
-  return '⏳ Tgl ' + d.getDate();
+  const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
+  return `${d.getDate()} ${months[d.getMonth()]}`;
 }
 
 function buildList() {
@@ -193,7 +245,7 @@ function buildList() {
     const wrap = document.createElement('div');
     wrap.className = 'cat-wrapper';
     wrap.innerHTML = `
-      <div class="delete-badge" onclick="hapusKategori(${c.id})">−</div>
+      <div class="delete-badge" onclick="window.hapusKategori(${c.id})">−</div>
       <div class="cat-card">
         <div class="notif-dot" id="dot-${c.id}"></div>
         <div class="cat-progress-bg" id="prog-${c.id}"></div>
@@ -218,16 +270,14 @@ function buildList() {
     `;
     list.appendChild(wrap);
 
-    // INPUT EVENTS
     wrap.querySelector('.due-input').onchange = (e) => {
       cats[index].due = e.target.value;
-      document.getElementById(`due-lbl-${c.id}`).textContent = formatDate(e.target.value);
-      save(); updateSummary();
+      save(); updateSummary(); buildList(); // Re-render untuk update UI
     };
     wrap.querySelector('.cat-name-in').oninput = (e) => {
       cats[index].name = e.target.value;
       const word = e.target.value.toLowerCase().split(' ').pop();
-      if(EMOJI_MAP[word]) { cats[index].icon = EMOJI_MAP[word]; buildList(); }
+      if(EMOJI_MAP[word]) { cats[index].icon = EMOJI_MAP[word]; wrap.querySelector('.cat-dot').textContent = EMOJI_MAP[word]; }
       save();
     };
     wrap.querySelector('.bank-tag').onchange = (e) => { cats[index].bank = e.target.value; save(); updateSummary(); };
@@ -247,8 +297,10 @@ function handleVal(e, idx, key) {
 function updateSummary() {
   const sal = parseInt(salary) || 0;
   let tPlan = 0, tAct = 0, alerts = 0;
-  const bankMap = {};
   const today = new Date(); today.setHours(0,0,0,0);
+  
+  // Untuk Daftar Tagihan
+  let pendingBills = [];
 
   cats.forEach(c => {
     tPlan += c.amount; tAct += c.actual;
@@ -258,20 +310,56 @@ function updateSummary() {
       prog.style.width = Math.min(p, 100) + '%';
       prog.style.backgroundColor = p > 100 ? 'rgba(255,59,48,0.15)' : 'rgba(0,122,255,0.08)';
     }
-    if(!bankMap[c.bank]) bankMap[c.bank] = 0; bankMap[c.bank] += c.amount;
     
-    // Check Alerts
     const dot = document.getElementById(`dot-${c.id}`);
     if(c.due && c.actual < c.amount) {
-      const diff = Math.ceil((new Date(c.due) - today) / 86400000);
+      const dDate = new Date(c.due);
+      const diff = Math.ceil((dDate - today) / 86400000);
+      
+      // Simpan ke array tagihan
+      pendingBills.push({ ...c, diffDays: diff, dateObj: dDate });
+
       if(diff <= 3) { alerts++; if(dot) dot.style.display = 'block'; }
+      else if(dot) dot.style.display = 'none';
     } else if(dot) dot.style.display = 'none';
   });
 
+  // Render Alert
   const banner = document.getElementById('alert-banner');
-  if(alerts > 0) { banner.style.display = 'flex'; document.getElementById('alert-msg').textContent = `Ada ${alerts} tagihan mendekati jatuh tempo.`; }
+  if(alerts > 0) { banner.style.display = 'flex'; document.getElementById('alert-msg').textContent = `Ada ${alerts} tagihan yang butuh perhatianmu (<= 3 Hari).`; }
   else banner.style.display = 'none';
 
+  // Render Daftar Tagihan
+  const billDiv = document.getElementById('bill-schedule-list');
+  billDiv.innerHTML = '';
+  if(pendingBills.length === 0) {
+    billDiv.innerHTML = '<div style="text-align:center; color:var(--txt2); font-size:13px; padding: 10px;">Yeay! Tidak ada tagihan tertunda. 🎉</div>';
+  } else {
+    // Sortir berdasarkan tanggal terdekat
+    pendingBills.sort((a, b) => a.dateObj - b.dateObj);
+    pendingBills.forEach(b => {
+      let colorTag = b.diffDays < 0 ? '#FF3B30' : (b.diffDays <= 3 ? '#FF9500' : 'var(--txt)');
+      let statusText = b.diffDays < 0 ? 'Terlewat!' : (b.diffDays === 0 ? 'Hari Ini' : `${b.diffDays} hari lagi`);
+      
+      billDiv.innerHTML += `
+        <div class="bill-item">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="font-size:20px;">${b.icon}</div>
+            <div>
+              <div style="font-size:14px; font-weight:600;">${b.name}</div>
+              <div style="font-size:11px; color:${colorTag};">${formatDate(b.due)} • ${statusText}</div>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:14px; font-weight:600;" class="blurrable">Rp ${fmt(b.amount - b.actual)}</div>
+            <div style="font-size:10px; color:var(--txt2);">Sisa Bayar</div>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  // Update Lingkaran & Angka Utama
   const pct = sal > 0 ? Math.round((tPlan/sal)*100) : 0;
   document.getElementById('ring-pct').textContent = pct + '%';
   document.getElementById('ring-track').style.strokeDashoffset = 502 * (1 - pct/100);
@@ -281,41 +369,39 @@ function updateSummary() {
   document.getElementById('diff-bar').style.width = tPlan > 0 ? Math.min((tAct/tPlan)*100, 100)+'%' : '0%';
   document.getElementById('diff-bar').style.backgroundColor = tAct > tPlan ? '#FF3B30' : '#007AFF';
   document.getElementById('sisa-val').textContent = 'Rp ' + fmt(sal - tPlan);
-
-  const bDiv = document.getElementById('bank-list'); bDiv.innerHTML = '';
-  Object.entries(bankMap).forEach(([n, v]) => { if(v > 0) bDiv.innerHTML += `<div style="display:flex; justify-content:space-between; font-size:13px; margin-top:10px;"><span>${n}</span><strong class="money-text">Rp ${fmt(v)}</strong></div>`; });
 }
 
-function hapusKategori(id) { cats = cats.filter(c => c.id !== id); save(); buildList(); }
 document.getElementById('salary-in').oninput = (e) => { salary = parseInt(e.target.value.replace(/\D/g, '')) || 0; e.target.value = fmt(salary); save(); updateSummary(); };
 document.getElementById('salary-in').value = fmt(salary);
 
 document.getElementById('edit-mode-btn').onclick = () => {
-  isEditMode = !isEditMode;
+  haptic(); isEditMode = !isEditMode;
   document.getElementById('cat-list').classList.toggle('edit-mode');
   document.getElementById('edit-mode-btn').textContent = isEditMode ? 'Selesai' : '⋯';
 };
 
 document.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => {
+  haptic();
   document.querySelectorAll('.tab-btn, .tab-content').forEach(el => el.classList.remove('active'));
   b.classList.add('active'); document.getElementById(b.dataset.tab).classList.add('active');
   document.getElementById('integrated-add-btn').style.opacity = b.dataset.tab === 'tab-ringkasan' ? '0.3' : '1';
 });
 
 document.getElementById('integrated-add-btn').onclick = () => {
-  if(isEditMode) document.getElementById('edit-mode-btn').click();
+  haptic(); if(isEditMode) document.getElementById('edit-mode-btn').click();
   cats.push({id: Date.now(), name: '', amount: 0, actual: 0, icon: '📦', bank: 'BCA', due:''});
-  save(); buildList();
+  save(); buildList(); setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 100);
 };
 
-document.getElementById('theme-toggle').onclick = () => document.body.classList.toggle('dark');
-document.getElementById('privacy-toggle').onclick = () => { isPrivate = !isPrivate; document.body.classList.toggle('privacy-on'); };
+document.getElementById('theme-toggle').onclick = () => { haptic(); document.body.classList.toggle('dark'); };
+document.getElementById('privacy-toggle').onclick = () => { haptic(); isPrivate = !isPrivate; document.body.classList.toggle('privacy-on'); };
 
 if (userPin) document.getElementById('pin-overlay').style.display = 'flex';
 document.getElementById('pin-entry').oninput = (e) => {
-  if (e.target.value === userPin) { document.getElementById('pin-overlay').style.display = 'none'; }
+  if (e.target.value === userPin) { document.getElementById('pin-overlay').style.opacity = '0'; setTimeout(()=>{document.getElementById('pin-overlay').style.display = 'none';}, 400); haptic(); }
 };
 document.getElementById('pin-toggle').onclick = () => {
+  haptic();
   if(userPin) { if(confirm('Hapus PIN?')) { userPin = ''; localStorage.setItem('userPin', ''); location.reload(); } }
   else { let p = prompt('Buat PIN (4 angka):'); if(p && p.length === 4) { userPin = p; localStorage.setItem('userPin', p); location.reload(); } }
 };
