@@ -139,19 +139,20 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-se
   bottom: max(30px, env(safe-area-inset-bottom)); 
   left: 50%; 
   transform: translateX(-50%); 
-  width: calc(100% - 40px); 
-  max-width: 340px; 
+  width: calc(min(100vw, 420px) - 40px); 
+  max-width: 380px; 
   z-index: 100; 
 }
 
 .bottom-glass-bar { 
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-around;
+  justify-items: center;
   background: var(--footer-bg); 
   border: 1px solid var(--glass-border); 
   border-radius: 99px; 
-  padding: 8px 12px; 
+  padding: 8px 16px; 
   height: 72px; 
   backdrop-filter: blur(40px) saturate(2); 
   -webkit-backdrop-filter: blur(40px) saturate(2); 
@@ -618,11 +619,13 @@ document.querySelectorAll('.nav-btn[data-tab]').forEach(b => b.onclick = () => {
   b.classList.add('active'); 
   document.getElementById(b.dataset.tab).classList.add('active');
   if(isEditMode) document.getElementById('edit-mode-btn').click();
-  // Tombol add disable di ringkasan
   const addBtn = document.getElementById('integrated-add-btn');
-  addBtn.style.opacity = b.dataset.tab === 'tab-ringkasan' ? '0.35' : '1';
-  addBtn.style.pointerEvents = b.dataset.tab === 'tab-ringkasan' ? 'none' : 'auto';
+  const isRingkasan = b.dataset.tab === 'tab-ringkasan';
+  addBtn.style.opacity = isRingkasan ? '0.35' : '1';
+  addBtn.style.pointerEvents = isRingkasan ? 'none' : 'auto';
 });
+// Set initial active state correctly
+document.getElementById('btn-alokasi').classList.add('active');
 
 document.getElementById('integrated-add-btn').onclick = () => { 
   haptic(); 
