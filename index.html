@@ -94,9 +94,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-se
 
 <div class="phone-wrap">
   <div class="top-nav">
-    <div class="icon-btn" id="pin-toggle">🔓</div>
+    <div class="icon-btn" id="pin-toggle" title="Atur PIN">🔓</div>
     <div style="display: flex; align-items: center; gap: 7px; font-weight: 600; font-size: 19px;"><span>🦜</span> Budgy</div>
-    <div class="icon-btn" id="theme-toggle">🌓</div>
+    <div class="icon-btn" id="auth-btn" title="Login / Sync Data">👤</div>
   </div>
   
   <div id="tab-alokasi" class="tab-content active">
@@ -154,8 +154,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-se
 <script type="module">
 // 1. IMPORT FIREBASE (MODULAR SDK)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-// Jika nanti butuh database (Firestore), import getFirestore di sini.
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCudBjzhXcqSWVF4kzakcPomeVj_GcHtys",
@@ -163,43 +163,30 @@ const firebaseConfig = {
   projectId: "budgy-7e6e1",
   storageBucket: "budgy-7e6e1.firebasestorage.app",
   messagingSenderId: "733464255051",
-  appId: "1:733464255051:web:d30d49716990d3a8a7cbce",
-  measurementId: "G-PNHCVDRW0L"
+  appId: "1:733464255051:web:d30d49716990d3a8a7cbce"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-console.log("Firebase Terhubung!");
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
 
-// 2. PWA SETUP (Sesuai Standar Baru)
+// PWA Setup
 const manifestData = {
-  "name": "Budgy Pro",
-  "short_name": "Budgy",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#fef0e7",
-  "theme_color": "#fef0e7",
-  "icons": [
-    { "src": "https://cdn-icons-png.flaticon.com/512/3064/3064029.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "https://cdn-icons-png.flaticon.com/512/3064/3064029.png", "sizes": "512x512", "type": "image/png" }
-  ]
+  "name": "Budgy Pro", "short_name": "Budgy", "start_url": "./", "display": "standalone", "background_color": "#fef0e7", "theme_color": "#fef0e7",
+  "icons": [ { "src": "https://cdn-icons-png.flaticon.com/512/3064/3064029.png", "sizes": "512x512", "type": "image/png" } ]
 };
 const manifestBlob = new Blob([JSON.stringify(manifestData)], {type: 'application/json'});
 document.getElementById('manifest-link').href = URL.createObjectURL(manifestBlob);
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    const swCode = `
-      self.addEventListener('install', e => self.skipWaiting());
-      self.addEventListener('fetch', e => e.respondWith(fetch(e.request)));
-    `;
-    const swBlob = new Blob([swCode], {type: 'application/javascript'});
+    const swBlob = new Blob([`self.addEventListener('install', e => self.skipWaiting()); self.addEventListener('fetch', e => e.respondWith(fetch(e.request)));`], {type: 'application/javascript'});
     navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(err => console.log('SW Gagal', err));
   });
 }
 
-// 3. LOGIKA APLIKASI UTAMA
+// LOGIKA APLIKASI
 const BANKS = ['BCA', 'Mandiri', 'BNI', 'BRI', 'Jago', 'SeaBank', 'GoPay', 'OVO', 'DANA', 'Tunai'];
 const EMOJI_MAP = { 'makan': '🍔', 'kopi': '☕', 'listrik': '⚡', 'air': '💧', 'bensin': '⛽', 'belanja': '🛍️', 'tabung': '💰', 'cicilan': '💳' };
 
@@ -208,27 +195,77 @@ let salary = localStorage.getItem('salary') || 5000000;
 let isPrivate = false;
 let userPin = localStorage.getItem('userPin') || '';
 let isEditMode = false;
+let currentUser = null;
 
 const haptic = () => { if(navigator.vibrate) navigator.vibrate(10); };
+const fmt = (n) => n === 0 ? '0' : Math.round(n).toLocaleString('id-ID');
+
+// FIREBASE SYNC LOGIC
+async function saveToFirebase() {
+  if (!currentUser) return;
+  try {
+    await setDoc(doc(db, "users", currentUser.uid), { cats: cats, salary: salary });
+  } catch (error) {
+    console.error("Gagal simpan ke Firebase:", error);
+  }
+}
+
+async function loadFromFirebase() {
+  if (!currentUser) return;
+  try {
+    const docSnap = await getDoc(doc(db, "users", currentUser.uid));
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      cats = data.cats || [];
+      salary = data.salary || 0;
+      document.getElementById('salary-in').value = fmt(salary);
+      buildList();
+    } else {
+      // Jika user baru, simpan data lokal saat ini ke cloud
+      saveToFirebase();
+    }
+  } catch (error) {
+    console.error("Gagal ambil data Firebase:", error);
+  }
+}
+
 const save = () => { 
   localStorage.setItem('cats', JSON.stringify(cats)); 
   localStorage.setItem('salary', salary); 
-  // Nanti fungsi simpan ke Firestore bisa ditaruh di sini
-};
-const fmt = (n) => n === 0 ? '0' : Math.round(n).toLocaleString('id-ID');
-
-// Expose fungsi ke window agar bisa dipanggil HTML inline
-window.hapusKategori = function(id) { 
-  cats = cats.filter(c => c.id !== id); 
-  save(); buildList(); 
+  saveToFirebase();
 };
 
-window.clearPin = function() {
-  if(confirm('Peringatan: Mereset akan MENGHAPUS SEMUA DATA. Lanjutkan?')) { 
-    localStorage.clear(); location.reload(); 
+// FIREBASE AUTHENTICATION LISTENER
+onAuthStateChanged(auth, async (user) => {
+  const authBtn = document.getElementById('auth-btn');
+  if (user) {
+    currentUser = user;
+    authBtn.textContent = '✅';
+    authBtn.style.background = 'var(--accent)';
+    authBtn.style.color = 'white';
+    await loadFromFirebase();
+  } else {
+    currentUser = null;
+    authBtn.textContent = '👤';
+    authBtn.style.background = 'var(--glass-bg)';
+    authBtn.style.color = 'var(--txt)';
+  }
+});
+
+// AUTH BUTTON CLICK
+document.getElementById('auth-btn').onclick = () => {
+  haptic();
+  if (currentUser) {
+    if(confirm('Logout dari akun Firebase?')) signOut(auth);
+  } else {
+    signInWithPopup(auth, provider).catch(error => {
+      alert("Login gagal: " + error.message);
+    });
   }
 };
 
+window.hapusKategori = function(id) { cats = cats.filter(c => c.id !== id); save(); buildList(); };
+window.clearPin = function() { if(confirm('Mereset akan MENGHAPUS SEMUA DATA. Lanjutkan?')) { localStorage.clear(); location.reload(); } };
 document.getElementById('btn-reset-app').addEventListener('click', window.clearPin);
 
 function formatDate(dateStr) {
@@ -270,10 +307,7 @@ function buildList() {
     `;
     list.appendChild(wrap);
 
-    wrap.querySelector('.due-input').onchange = (e) => {
-      cats[index].due = e.target.value;
-      save(); updateSummary(); buildList(); // Re-render untuk update UI
-    };
+    wrap.querySelector('.due-input').onchange = (e) => { cats[index].due = e.target.value; save(); updateSummary(); buildList(); };
     wrap.querySelector('.cat-name-in').oninput = (e) => {
       cats[index].name = e.target.value;
       const word = e.target.value.toLowerCase().split(' ').pop();
@@ -298,8 +332,6 @@ function updateSummary() {
   const sal = parseInt(salary) || 0;
   let tPlan = 0, tAct = 0, alerts = 0;
   const today = new Date(); today.setHours(0,0,0,0);
-  
-  // Untuk Daftar Tagihan
   let pendingBills = [];
 
   cats.forEach(c => {
@@ -315,51 +347,33 @@ function updateSummary() {
     if(c.due && c.actual < c.amount) {
       const dDate = new Date(c.due);
       const diff = Math.ceil((dDate - today) / 86400000);
-      
-      // Simpan ke array tagihan
       pendingBills.push({ ...c, diffDays: diff, dateObj: dDate });
-
       if(diff <= 3) { alerts++; if(dot) dot.style.display = 'block'; }
       else if(dot) dot.style.display = 'none';
     } else if(dot) dot.style.display = 'none';
   });
 
-  // Render Alert
   const banner = document.getElementById('alert-banner');
   if(alerts > 0) { banner.style.display = 'flex'; document.getElementById('alert-msg').textContent = `Ada ${alerts} tagihan yang butuh perhatianmu (<= 3 Hari).`; }
   else banner.style.display = 'none';
 
-  // Render Daftar Tagihan
   const billDiv = document.getElementById('bill-schedule-list');
   billDiv.innerHTML = '';
   if(pendingBills.length === 0) {
     billDiv.innerHTML = '<div style="text-align:center; color:var(--txt2); font-size:13px; padding: 10px;">Yeay! Tidak ada tagihan tertunda. 🎉</div>';
   } else {
-    // Sortir berdasarkan tanggal terdekat
     pendingBills.sort((a, b) => a.dateObj - b.dateObj);
     pendingBills.forEach(b => {
       let colorTag = b.diffDays < 0 ? '#FF3B30' : (b.diffDays <= 3 ? '#FF9500' : 'var(--txt)');
       let statusText = b.diffDays < 0 ? 'Terlewat!' : (b.diffDays === 0 ? 'Hari Ini' : `${b.diffDays} hari lagi`);
-      
       billDiv.innerHTML += `
         <div class="bill-item">
-          <div style="display:flex; align-items:center; gap:10px;">
-            <div style="font-size:20px;">${b.icon}</div>
-            <div>
-              <div style="font-size:14px; font-weight:600;">${b.name}</div>
-              <div style="font-size:11px; color:${colorTag};">${formatDate(b.due)} • ${statusText}</div>
-            </div>
-          </div>
-          <div style="text-align:right;">
-            <div style="font-size:14px; font-weight:600;" class="blurrable">Rp ${fmt(b.amount - b.actual)}</div>
-            <div style="font-size:10px; color:var(--txt2);">Sisa Bayar</div>
-          </div>
-        </div>
-      `;
+          <div style="display:flex; align-items:center; gap:10px;"><div style="font-size:20px;">${b.icon}</div><div><div style="font-size:14px; font-weight:600;">${b.name}</div><div style="font-size:11px; color:${colorTag};">${formatDate(b.due)} • ${statusText}</div></div></div>
+          <div style="text-align:right;"><div style="font-size:14px; font-weight:600;" class="blurrable">Rp ${fmt(b.amount - b.actual)}</div><div style="font-size:10px; color:var(--txt2);">Sisa Bayar</div></div>
+        </div>`;
     });
   }
 
-  // Update Lingkaran & Angka Utama
   const pct = sal > 0 ? Math.round((tPlan/sal)*100) : 0;
   document.getElementById('ring-pct').textContent = pct + '%';
   document.getElementById('ring-track').style.strokeDashoffset = 502 * (1 - pct/100);
@@ -374,11 +388,7 @@ function updateSummary() {
 document.getElementById('salary-in').oninput = (e) => { salary = parseInt(e.target.value.replace(/\D/g, '')) || 0; e.target.value = fmt(salary); save(); updateSummary(); };
 document.getElementById('salary-in').value = fmt(salary);
 
-document.getElementById('edit-mode-btn').onclick = () => {
-  haptic(); isEditMode = !isEditMode;
-  document.getElementById('cat-list').classList.toggle('edit-mode');
-  document.getElementById('edit-mode-btn').textContent = isEditMode ? 'Selesai' : '⋯';
-};
+document.getElementById('edit-mode-btn').onclick = () => { haptic(); isEditMode = !isEditMode; document.getElementById('cat-list').classList.toggle('edit-mode'); document.getElementById('edit-mode-btn').textContent = isEditMode ? 'Selesai' : '⋯'; };
 
 document.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => {
   haptic();
@@ -397,14 +407,8 @@ document.getElementById('theme-toggle').onclick = () => { haptic(); document.bod
 document.getElementById('privacy-toggle').onclick = () => { haptic(); isPrivate = !isPrivate; document.body.classList.toggle('privacy-on'); };
 
 if (userPin) document.getElementById('pin-overlay').style.display = 'flex';
-document.getElementById('pin-entry').oninput = (e) => {
-  if (e.target.value === userPin) { document.getElementById('pin-overlay').style.opacity = '0'; setTimeout(()=>{document.getElementById('pin-overlay').style.display = 'none';}, 400); haptic(); }
-};
-document.getElementById('pin-toggle').onclick = () => {
-  haptic();
-  if(userPin) { if(confirm('Hapus PIN?')) { userPin = ''; localStorage.setItem('userPin', ''); location.reload(); } }
-  else { let p = prompt('Buat PIN (4 angka):'); if(p && p.length === 4) { userPin = p; localStorage.setItem('userPin', p); location.reload(); } }
-};
+document.getElementById('pin-entry').oninput = (e) => { if (e.target.value === userPin) { document.getElementById('pin-overlay').style.opacity = '0'; setTimeout(()=>{document.getElementById('pin-overlay').style.display = 'none';}, 400); haptic(); } };
+document.getElementById('pin-toggle').onclick = () => { haptic(); if(userPin) { if(confirm('Hapus PIN?')) { userPin = ''; localStorage.setItem('userPin', ''); location.reload(); } } else { let p = prompt('Buat PIN (4 angka):'); if(p && p.length === 4) { userPin = p; localStorage.setItem('userPin', p); location.reload(); } } };
 
 buildList();
 </script>
