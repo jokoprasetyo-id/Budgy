@@ -9,603 +9,333 @@
 @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --gb:  rgba(255,255,255,0.48);
-  --gb2: rgba(255,255,255,0.65);
-  --gs:  0 8px 30px rgba(0,0,0,0.05), inset 0 1px 1px rgba(255,255,255,0.9);
-  --nb:  rgba(208,213,222,0.72);
-  --txt: #1c1c1e;
-  --txt2:rgba(60,60,67,0.52);
-  --acc: #007AFF;
-  --grn: #34C759;
-  --org: #FF9500;
-  --red: #FF3B30;
-  --bg1: #fdeee4;
-  --bg2: #daeffe;
-  --r:   22px;
-  --sb:  env(safe-area-inset-bottom, 0px);
-  --st:  env(safe-area-inset-top, 0px);
+  --glass-bg: rgba(255, 255, 255, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-shadow: 0 12px 40px rgba(0,0,0,0.06), inset 0 2px 2px rgba(255,255,255,0.8);
+  --footer-bg: rgba(200, 205, 215, 0.65); 
+  --txt: #1c1c1e; --txt2: rgba(60,60,67,0.6); --accent: #007AFF;
+  --grn: #34C759; --red: #FF3B30; --org: #FF9500;
+  --bg1: #fef0e7; --bg2: #e0f2fe; --r: 24px;
 }
+
 body.dark {
-  --gb:  rgba(26,26,30,0.62);
-  --gb2: rgba(255,255,255,0.09);
-  --gs:  0 8px 32px rgba(0,0,0,0.55), inset 0 1px 1px rgba(255,255,255,0.05);
-  --nb:  rgba(10,10,14,0.9);
-  --txt: #f2f2f7;
-  --txt2:rgba(235,235,245,0.48);
-  --bg1: #0d1015;
-  --bg2: #050a10;
+  --glass-bg: rgba(30, 30, 35, 0.5);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-shadow: 0 12px 40px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.1);
+  --footer-bg: rgba(15, 15, 20, 0.85);
+  --txt: #f5f5f7; --txt2: rgba(235,235,245,0.6);
+  --bg1: #111418; --bg2: #05070a;
 }
 
-*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-html,body { height:100%; overflow:hidden; }
+*{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent;}
+body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; background: radial-gradient(circle at top left, var(--bg1), var(--bg2)); min-height: 100vh; display: flex; justify-content: center; color: var(--txt); transition: background 0.5s ease; overscroll-behavior: none; }
+.phone-wrap { width: 100%; max-width: 420px; padding: 20px 20px 140px; position: relative; overflow-x: hidden; min-height: 100vh;}
+.glass { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); box-shadow: var(--glass-shadow); backdrop-filter: blur(32px) saturate(1.8); -webkit-backdrop-filter: blur(32px) saturate(1.8); }
 
-body {
-  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;
-  background: radial-gradient(ellipse at 15% 5%, var(--bg1) 0%, var(--bg2) 100%);
-  color: var(--txt);
-  display: flex;
-  justify-content: center;
-  transition: background 0.45s;
-}
+/* UI Elements */
+.top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 5px; margin-top: env(safe-area-inset-top, 0px); }
+.wm { font-size: 19px; font-weight: 600; display: flex; align-items: center; gap: 7px; }
 
-/* ── SHELL ── */
-#app {
-  width:100%; max-width:430px;
-  height:100%;
-  display:flex; flex-direction:column;
-}
+.tab-content { display: none; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+.tab-content.active { display: block; }
+@keyframes slideUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
 
-#scroll {
-  flex:1; overflow-y:auto; overflow-x:hidden;
-  -webkit-overflow-scrolling:touch;
-  overscroll-behavior:contain;
-  padding: calc(max(14px, var(--st))) 15px 12px;
-}
+/* Hero / Gaji */
+.hero { padding: 30px 20px; margin-bottom: 12px; text-align: center; }
+.hero-salary-in { font-size: 38px; font-weight: 300; color: var(--txt); background: transparent; border: none; outline: none; width: 100%; text-align: center; letter-spacing: -1px; }
 
-/* ── GLASS ── */
-.g {
-  background:var(--gb); border:1px solid var(--gb2);
-  border-radius:var(--r); box-shadow:var(--gs);
-  backdrop-filter:blur(30px) saturate(1.9);
-  -webkit-backdrop-filter:blur(30px) saturate(1.9);
-}
+/* Categories & Drag Handle */
+.cat-list { display: flex; flex-direction: column; gap: 12px; padding-bottom: 20px; }
+.cat-wrapper { position: relative; border-radius: var(--r); }
+.cat-card { padding: 16px; display: flex; align-items: center; gap: 12px; position: relative; overflow: hidden; z-index: 1; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); }
 
-/* ── TOPBAR ── */
-#topbar {
-  display:flex; justify-content:space-between; align-items:center;
-  margin-bottom:15px; padding:0 3px;
-}
-.wm { font-size:18px; font-weight:700; display:flex; align-items:center; gap:6px; letter-spacing:-.2px; }
-.ib {
-  width:36px; height:36px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  font-size:16px; cursor:pointer;
-  background:var(--gb); border:1px solid var(--gb2);
-  transition:transform .15s;
-}
-.ib:active { transform:scale(.88); }
+@keyframes jiggle { 0% { transform: rotate(-0.8deg); } 50% { transform: rotate(0.8deg); } 100% { transform: rotate(-0.8deg); } }
+.edit-mode .cat-card { animation: jiggle 0.3s infinite ease-in-out; }
+.delete-badge { position: absolute; top: -4px; left: -4px; width: 26px; height: 26px; background: #FF3B30; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 18px; opacity: 0; transform: scale(0); transition: all 0.25s; z-index: 10; cursor:pointer; pointer-events: none; }
+.edit-mode .delete-badge { opacity: 1; transform: scale(1); pointer-events: auto; }
 
-/* ── TABS ── */
-.tab { display:none; animation:up .32s cubic-bezier(.16,1,.3,1) both; }
-.tab.active { display:block; }
-@keyframes up { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+.drag-handle { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 24px; color: var(--txt2); padding: 15px; display: none; cursor: grab; z-index: 20; }
+.edit-mode .drag-handle { display: block; }
+.edit-mode .amt-row, .edit-mode .date-container, .edit-mode .bank-tag { opacity: 0.2; pointer-events: none; transition: 0.3s; }
+.edit-mode .cat-name-in { pointer-events: none; }
+.cat-wrapper.dragging { z-index: 999; }
+.cat-wrapper.dragging .cat-card { animation: none !important; transform: scale(1.03); box-shadow: 0 15px 30px rgba(0,0,0,0.15); border: 1px solid var(--accent); }
 
-/* ── HERO (kategori tab) ── */
-#hero { padding:22px 20px 18px; text-align:center; margin-bottom:13px; }
-.hl { font-size:11px; font-weight:600; color:var(--txt2); text-transform:uppercase; letter-spacing:.6px; margin-bottom:9px; }
-.hr { display:flex; align-items:center; justify-content:center; gap:8px; }
-.hrp { font-size:20px; opacity:.38; }
-#sal {
-  font-size:34px; font-weight:300; letter-spacing:-1px;
-  color:var(--txt); background:transparent; border:none; outline:none;
-  width:100%; text-align:center; font-family:inherit;
-}
+.cat-progress-bg { position: absolute; top: 0; left: 0; height: 100%; background: rgba(0, 122, 255, 0.08); z-index: -1; transition: width 0.8s; }
+.cat-dot { width: 40px; height: 40px; border-radius: 12px; background: rgba(120,120,128,0.15); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.cat-body { flex: 1; min-width: 0; }
+.cat-name-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; width: 100%; margin-bottom: 4px; font-family: inherit;}
 
-/* ── SEC HEADER ── */
-.sh {
-  display:flex; justify-content:space-between; align-items:center;
-  margin:16px 0 9px; padding:0 3px;
-}
-.sl { font-size:11px; font-weight:600; color:var(--txt2); text-transform:uppercase; letter-spacing:.6px; }
-#edit-btn { font-size:20px; color:var(--txt2); cursor:pointer; padding:2px 8px; font-weight:700; }
+/* Badges */
+.date-container { position: relative; display: inline-block; vertical-align: middle; }
+.date-tag { appearance: none; background: rgba(255, 149, 0, 0.1); border: 1px solid rgba(255, 149, 0, 0.2); border-radius: 100px; padding: 2px 10px; font-size: 11px; font-weight: 600; color: #FF9500; pointer-events: none; display: flex; align-items: center; gap: 4px; }
+.due-input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 5; }
 
-/* ── ADD BUTTON ── */
-#add-btn {
-  display:flex; align-items:center; justify-content:center; gap:8px;
-  width:100%; padding:15px; margin-bottom:16px;
-  border-radius:var(--r); border:1.5px dashed rgba(0,122,255,0.3);
-  background:rgba(0,122,255,0.04);
-  color:var(--acc); font-size:14px; font-weight:600;
-  cursor:pointer; font-family:inherit;
-  transition: background .2s, border-color .2s;
-}
-#add-btn:active { background:rgba(0,122,255,0.08); }
-#add-btn svg { width:18px; height:18px; }
+.bank-tag { appearance: none; background: rgba(120, 120, 128, 0.1); border: 1px solid rgba(120, 120, 128, 0.2); border-radius: 100px; padding: 2px 8px; font-size: 11px; font-weight: 600; color: var(--txt2); font-family: inherit; outline: none; }
+.amount-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; text-align: right; width: 90px; }
+.actual-in { font-size: 14px; font-weight: 600; color: var(--accent); background: transparent; border: none; outline: none; text-align: right; width: 90px; }
 
-/* ── CAT CARDS ── */
-#cat-list { display:flex; flex-direction:column; gap:10px; margin-bottom:10px; }
-.cw { position:relative; border-radius:var(--r); }
-@keyframes jig { 0%,100%{transform:rotate(-.65deg)} 50%{transform:rotate(.65deg)} }
-.edit-mode .cc { animation:jig .27s infinite ease-in-out; }
+/* Ringkasan Elements */
+.ring-container { position: relative; display: flex; justify-content: center; align-items: center; margin: 20px 0; padding: 20px; }
+.ring-pct { font-size: 32px; font-weight: 600; letter-spacing: -1px;}
+.insight-card { padding: 20px; display: flex; flex-direction: column; gap: 15px; margin-top: 15px; }
+.bill-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; background: rgba(120,120,128,0.05); border-radius: 14px; margin-bottom: 10px; transition: 0.2s;}
+.cal-btn { width: 34px; height: 34px; border-radius: 8px; background: rgba(255, 149, 0, 0.15); color: #FF9500; border: 1px solid rgba(255, 149, 0, 0.3); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+.cal-btn:active { transform: scale(0.9); }
 
-.del {
-  position:absolute; top:-5px; left:-5px;
-  width:24px; height:24px; border-radius:50%;
-  background:var(--red); color:#fff;
-  font-size:16px; font-weight:700;
-  display:flex; align-items:center; justify-content:center;
-  opacity:0; transform:scale(0); transition:.2s;
-  z-index:10; cursor:pointer; pointer-events:none;
-}
-.edit-mode .del { opacity:1; transform:scale(1); pointer-events:auto; }
+/* --- PROFILE & LOGIN CARD (DI DALAM TAB RINGKASAN) --- */
+.profile-card { align-items: center; text-align: center; margin-top: 30px; }
+.up-avatar { width: 72px; height: 72px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 36px; background: rgba(120,120,128,0.1); border: 3px solid var(--glass-border); margin: 0 auto 12px; }
+.up-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.up-name { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.up-email { font-size: 13px; color: var(--txt2); margin-bottom: 20px; }
+.btn-red { width: 100%; padding: 14px; border-radius: 100px; font-size: 15px; font-weight: 600; cursor: pointer; background: rgba(255,59,48,0.08); color: var(--red); border: 1px solid rgba(255,59,48,0.2); transition: 0.2s; }
+.btn-red:active { transform: scale(0.97); }
+.btn-blue { width: 100%; padding: 14px; border-radius: 100px; font-size: 15px; font-weight: 600; cursor: pointer; background: var(--accent); color: white; border: none; box-shadow: 0 8px 20px rgba(0, 122, 255, 0.3); transition: 0.2s; }
+.btn-blue:active { transform: scale(0.97); }
+.btn-menu { width: 100%; padding: 16px 20px; border-radius: var(--r); font-size: 15px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--txt); margin-top: 10px; transition: 0.2s; }
+.btn-menu:active { transform: scale(0.97); }
 
-.cc {
-  padding:13px 13px;
-  display:flex; align-items:center; gap:10px;
-  position:relative; overflow:hidden; z-index:1;
-  background:var(--gb); border:1px solid var(--gb2); border-radius:var(--r);
+/* --- NAVIGATION BAR SIMETRIS --- */
+.bottom-nav-container { position: fixed; bottom: max(30px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 380px; z-index: 100; }
+.bottom-glass-bar { 
+  display: flex; justify-content: space-between; align-items: center; position: relative; 
+  background: var(--footer-bg); border: 1px solid var(--glass-border); 
+  border-radius: 99px; padding: 8px 15px; height: 75px; 
+  backdrop-filter: blur(40px) saturate(2); -webkit-backdrop-filter: blur(40px) saturate(2); 
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
 }
-.cprog {
-  position:absolute; top:0; left:0; height:100%;
-  background:rgba(0,122,255,.065); z-index:-1; transition:width .7s;
+.tab-btn { width: 35%; text-align: center; padding: 14px 0; border: none; background: transparent; color: var(--txt2); font-size: 14px; font-weight: 600; border-radius: 100px; cursor: pointer; transition: 0.3s; }
+.tab-btn.active { color: var(--txt); background: rgba(120,120,128,0.15); }
+.integrated-add-btn { 
+  position: absolute; left: 50%; transform: translateX(-50%);
+  width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; cursor: pointer; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--accent); z-index: 101; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); 
 }
-.ci {
-  width:37px; height:37px; border-radius:11px;
-  background:rgba(120,120,128,.11);
-  display:flex; align-items:center; justify-content:center;
-  font-size:17px; flex-shrink:0;
-}
-.cb { flex:1; min-width:0; }
-.cn {
-  font-size:14px; font-weight:600; color:var(--txt);
-  background:transparent; border:none; outline:none;
-  width:100%; margin-bottom:4px; font-family:inherit;
-}
-.cm { display:flex; gap:5px; flex-wrap:wrap; }
-.pill {
-  border-radius:100px; padding:2px 8px;
-  font-size:11px; font-weight:600; border:1px solid;
-  font-family:inherit; outline:none; appearance:none; cursor:pointer;
-}
-.pb { background:rgba(120,120,128,.08); border-color:rgba(120,120,128,.18); color:var(--txt2); }
-.pd { background:rgba(255,149,0,.08); border-color:rgba(255,149,0,.2); color:var(--org); pointer-events:none; }
-.dw { position:relative; display:inline-block; }
-.di { position:absolute; inset:0; opacity:0; cursor:pointer; z-index:5; }
-.ca { text-align:right; flex-shrink:0; }
-.ap {
-  font-size:14px; font-weight:600; color:var(--txt);
-  background:transparent; border:none; outline:none;
-  text-align:right; width:86px; font-family:inherit; display:block;
-}
-.aa {
-  font-size:13px; font-weight:600; color:var(--acc);
-  background:transparent; border:none; outline:none;
-  text-align:right; width:86px; font-family:inherit; display:block; margin-top:3px;
-}
-.dh { font-size:21px; color:var(--txt2); padding:10px 5px; display:none; cursor:grab; flex-shrink:0; }
-.edit-mode .dh { display:block; }
-.edit-mode .ca,.edit-mode .cm,.edit-mode .cn { opacity:.2; pointer-events:none; }
-.cw.dragging { z-index:999; }
-.cw.dragging .cc { animation:none !important; transform:scale(1.025); box-shadow:0 10px 24px rgba(0,0,0,.13); border-color:var(--acc); }
-
-/* ── RINGKASAN ── */
-.ring-wrap {
-  display:flex; justify-content:center; align-items:center;
-  padding:22px; margin-bottom:13px; position:relative;
-}
-.rc { position:absolute; text-align:center; pointer-events:none; }
-.rpct { font-size:28px; font-weight:600; letter-spacing:-1px; }
-.rsub { font-size:11px; color:var(--txt2); margin-top:1px; }
-
-.sgrid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:13px; }
-.sc { padding:15px; border-radius:18px; }
-.sl2 { font-size:10px; font-weight:600; color:var(--txt2); text-transform:uppercase; letter-spacing:.5px; margin-bottom:5px; }
-.sv { font-size:15px; font-weight:600; color:var(--txt); }
-.sv.ac { color:var(--acc); }
-.sv.gn { color:var(--grn); }
-.sv.rd { color:var(--red); }
-
-/* ── CHART BARU ── */
-#chart-wrap { padding:18px; margin-bottom:13px; }
-.dw-title { font-size:11px; font-weight:600; color:var(--txt2); text-transform:uppercase; letter-spacing:.6px; margin-bottom:14px; }
-.leg-item { display:flex; align-items:center; padding: 4px 0; }
-
-/* progress bar */
-.pbar-wrap { padding:16px; margin-bottom:13px; }
-.pb-row { display:flex; justify-content:space-between; font-size:12px; margin-bottom:7px; color:var(--txt2); }
-.pb-row strong { color:var(--txt); }
-.pb-bg { height:6px; background:rgba(120,120,128,.1); border-radius:10px; overflow:hidden; }
-#diff-bar { height:100%; width:0; border-radius:10px; transition:width .6s; background:linear-gradient(90deg,var(--acc),var(--grn)); }
-
-/* ── JADWAL ── */
-.bc {
-  display:flex; align-items:center;
-  padding:13px 14px; margin-bottom:10px;
-  border-radius:18px; gap:12px;
-}
-.bi { width:40px; height:40px; border-radius:11px; background:rgba(120,120,128,.1); display:flex; align-items:center; justify-content:center; font-size:19px; flex-shrink:0; }
-.bb { flex:1; min-width:0; }
-.bn { font-size:14px; font-weight:600; color:var(--txt); }
-.ba { font-size:12px; color:var(--txt2); margin-top:1px; }
-.bdg {
-  display:inline-flex; align-items:center; gap:3px;
-  padding:2px 8px; border-radius:100px;
-  font-size:11px; font-weight:600; margin-top:4px; border:1px solid;
-}
-.dg-r { background:rgba(255,59,48,.07);  border-color:rgba(255,59,48,.2);  color:var(--red); }
-.dg-o { background:rgba(255,149,0,.08);  border-color:rgba(255,149,0,.2);  color:var(--org); }
-.dg-g { background:rgba(52,199,89,.07);  border-color:rgba(52,199,89,.2);  color:var(--grn); }
-.cb2 {
-  width:34px; height:34px; border-radius:10px;
-  background:rgba(0,122,255,.09); border:none;
-  color:var(--acc); font-size:15px; cursor:pointer;
-  display:flex; align-items:center; justify-content:center; flex-shrink:0;
-  transition:.15s;
-}
-.cb2:active { transform:scale(.88); }
-
-/* ── USER PROFILE TAB ── */
-#tab-user {
-  display:flex; flex-direction:column; align-items:center;
-  padding:15px 5px; gap:16px;
-}
-.up-avatar {
-  width:72px; height:72px; border-radius:50%;
-  overflow:hidden; display:flex; align-items:center; justify-content:center;
-  font-size:36px; background:rgba(120,120,128,.1);
-  border:3px solid var(--gb2); margin-bottom: 12px;
-}
-.up-avatar img { width:100%; height:100%; object-fit:cover; }
-.up-name { font-size:18px; font-weight:700; margin-bottom:4px; }
-.up-email { font-size:13px; color:var(--txt2); }
-
-.up-btn {
-  width:100%; padding:14px; border-radius:var(--r);
-  font-size:15px; font-weight:600; cursor:pointer;
-  font-family:inherit; border:1px solid var(--gb2);
-  background:var(--gb); color:var(--txt); margin-top:8px;
-  transition:.15s;
-}
-.up-btn:active { transform:scale(.97); }
-.up-btn.danger { color:var(--red); border-color:rgba(255,59,48,.2); background:rgba(255,59,48,.05); }
-
-.lb {
-  padding:14px 28px; border-radius:100px;
-  background:var(--acc); color:#fff; border:none;
-  font-weight:600; font-size:15px; cursor:pointer;
-  width:100%; font-family:inherit;
-  box-shadow:0 7px 20px rgba(0,122,255,.28); transition:.15s;
-}
-.lb:active { transform:scale(.97); }
-
-/* ── BOTTOM NAV ── */
-#nav-bar {
-  flex-shrink:0;
-  padding:8px 12px calc(8px + var(--sb));
-}
-#nav-pill {
-  display:flex; align-items:center; justify-content:space-around;
-  height:60px;
-  background:var(--nb);
-  border:1px solid var(--gb2);
-  border-radius:99px;
-  backdrop-filter:blur(40px) saturate(2);
-  -webkit-backdrop-filter:blur(40px) saturate(2);
-  box-shadow:0 5px 22px rgba(0,0,0,.09);
-  padding:0 4px;
-}
-.nb {
-  flex:1; height:50px; border-radius:50px;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:3px; border:none; background:transparent;
-  cursor:pointer; color:var(--txt2); transition:.2s;
-}
-.nb svg { width:21px; height:21px; transition:transform .2s; }
-.nb .nd { width:4px; height:4px; border-radius:50%; background:var(--acc); opacity:0; transition:.2s; }
-.nb.active { color:var(--txt); background:rgba(120,120,128,.12); }
-.nb.active svg { transform:scale(1.08); }
-.nb.active .nd { opacity:1; }
-.nu-face { width:28px; height:28px; border-radius:50%; overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:18px; }
-.nu-face img { width:100%; height:100%; object-fit:cover; }
-
-.empty { text-align:center; font-size:13px; color:var(--txt2); padding:30px 0; }
+.integrated-add-btn:active { transform: translateX(-50%) scale(0.9); }
 </style>
 </head>
 <body>
-<div id="app">
-  <div id="scroll">
 
-    <div id="topbar">
-      <div class="wm">🦜 Budgy</div>
-      <div style="display:flex;gap:8px;">
-        <div class="ib" id="theme-btn" title="Ganti Tema">🌓</div>
+<div class="phone-wrap">
+  <div class="top-nav">
+    <div class="wm"><span>🦜</span> Budgy</div>
+    <div id="edit-mode-btn" style="cursor:pointer; color: var(--accent); font-weight:600; font-size: 15px; background: rgba(0,122,255,0.1); padding: 5px 12px; border-radius: 100px;">Edit</div>
+  </div>
+
+  <div id="tab-alokasi" class="tab-content active">
+    <div class="glass hero">
+      <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 12px;">Gaji Bulanan</div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;">
+        <span style="font-size:24px; opacity:0.5;">Rp</span>
+        <input class="hero-salary-in" id="salary-in" type="text" inputmode="numeric" />
+      </div>
+    </div>
+    
+    <div style="display:flex; justify-content:space-between; align-items:center; margin: 20px 0 12px; padding: 0 8px;">
+      <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase;">Daftar Kategori</div>
+    </div>
+    <div id="cat-list" class="cat-list"></div>
+  </div>
+
+  <div id="tab-ringkasan" class="tab-content">
+    
+    <div class="glass ring-container">
+      <svg width="200" height="200" viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(120,120,128,0.15)" stroke-width="16"/>
+        <circle id="ring-track" cx="100" cy="100" r="80" fill="none" stroke="url(#ringGrad)" stroke-width="16" stroke-linecap="round" stroke-dasharray="502" stroke-dashoffset="502" transform="rotate(-90 100 100)"/>
+        <defs><linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#007AFF"/><stop offset="100%" stop-color="#34C759"/></linearGradient></defs>
+      </svg>
+      <div class="ring-center" style="position: absolute; text-align: center;"><div class="ring-pct" id="ring-pct">0%</div><div style="font-size:12px; color:var(--txt2);">Terpakai</div></div>
+    </div>
+
+    <div style="margin: 24px 0 10px; font-size: 13px; font-weight: 600; color: var(--txt2); text-transform: uppercase; padding-left: 8px;">Jadwal Tagihan</div>
+    <div id="bill-schedule-list" style="margin-bottom: 15px;"></div>
+
+    <div class="glass insight-card">
+      <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Total Rencana</span><strong id="total-plan-val"></strong></div>
+      <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:10px;"><span>Total Aktual</span><strong id="total-actual-val" style="color:var(--accent);"></strong></div>
+      <div style="margin-top: 15px; border-top:1px solid var(--glass-border); padding-top:15px;">
+        <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Sisa Anggaran</span><strong id="selisih-val"></strong></div>
+        <div style="width:100%; height:8px; background:rgba(120,120,128,0.1); border-radius:10px; margin-top:8px; overflow:hidden;"><div id="diff-bar" style="height:100%; width:0%; transition:0.5s;"></div></div>
+      </div>
+      <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:15px;"><span>Sisa Gaji Bebas</span><strong id="sisa-val" style="color:var(--grn);"></strong></div>
+    </div>
+
+    <div class="glass insight-card">
+      <div style="font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 10px;">Alokasi per Kategori</div>
+      <div id="stacked-bar" style="display:flex; height:12px; border-radius:10px; overflow:hidden; gap:2px; margin-bottom:15px; background:rgba(120,120,128,.1);"></div>
+      <div id="chart-legend" style="display:flex; flex-direction:column; gap:8px;"></div>
+    </div>
+
+    <div class="glass insight-card profile-card">
+      
+      <div id="user-logged-out" style="display:flex; flex-direction:column; width:100%;">
+        <div style="font-size:48px; margin-bottom:10px;">☁️</div>
+        <h3 style="margin-bottom:6px;">Simpan ke Cloud</h3>
+        <p style="font-size:13px; color:var(--txt2); margin-bottom:20px;">Login dengan Google agar data aman & tersinkronisasi antar perangkat.</p>
+        <button class="btn-blue" id="btn-login">Masuk dengan Google</button>
+      </div>
+
+      <div id="user-logged-in" style="display:none; flex-direction:column; width:100%;">
+        <div class="up-avatar" id="up-avatar">👤</div>
+        <div class="up-name" id="up-name">—</div>
+        <div class="up-email" id="up-email"></div>
+        <button class="btn-red" id="up-logout">Keluar Akun</button>
       </div>
     </div>
 
-    <div id="main">
+    <button class="btn-menu" id="theme-toggle">
+      <div style="display:flex; align-items:center; gap:10px;"><span>🌓</span> <span>Tema Tampilan</span></div>
+      <span style="color:var(--txt2); font-size:18px;">›</span>
+    </button>
+    
+  </div>
+</div>
 
-      <div class="tab active" id="tab-ringkasan">
-        <div class="g ring-wrap">
-          <svg width="180" height="180" viewBox="0 0 180 180">
-            <circle cx="90" cy="90" r="72" fill="none" stroke="rgba(120,120,128,0.12)" stroke-width="14"/>
-            <circle id="ring-track" cx="90" cy="90" r="72" fill="none"
-              stroke="url(#rg)" stroke-width="14" stroke-linecap="round"
-              stroke-dasharray="452.4" stroke-dashoffset="452.4"
-              transform="rotate(-90 90 90)"/>
-            <defs>
-              <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#007AFF"/>
-                <stop offset="100%" stop-color="#34C759"/>
-              </linearGradient>
-            </defs>
-          </svg>
-          <div class="rc">
-            <div class="rpct" id="ring-pct">0%</div>
-            <div class="rsub">dari gaji</div>
-          </div>
-        </div>
-
-        <div class="sgrid">
-          <div class="sc g">
-            <div class="sl2">Rencana</div>
-            <div class="sv" id="s-plan">Rp 0</div>
-          </div>
-          <div class="sc g">
-            <div class="sl2">Aktual</div>
-            <div class="sv ac" id="s-actual">Rp 0</div>
-          </div>
-          <div class="sc g">
-            <div class="sl2">Sisa Anggaran</div>
-            <div class="sv" id="s-selisih">Rp 0</div>
-          </div>
-          <div class="sc g">
-            <div class="sl2">Gaji Bebas</div>
-            <div class="sv gn" id="s-sisa">Rp 0</div>
-          </div>
-        </div>
-
-        <div class="g" id="chart-wrap">
-          <div class="dw-title">Alokasi per Kategori</div>
-          <div id="stacked-bar" style="display:flex; height:12px; border-radius:10px; overflow:hidden; gap:2px; margin-bottom:16px; background:rgba(120,120,128,.1);"></div>
-          <div id="chart-legend" style="display:flex; flex-direction:column; gap:8px;"></div>
-        </div>
-
-        <div class="g pbar-wrap">
-          <div class="pb-row">
-            <span>Progres pengeluaran</span>
-            <strong id="s-prog-pct">0%</strong>
-          </div>
-          <div class="pb-bg"><div id="diff-bar"></div></div>
-        </div>
-      </div>
-
-      <div class="tab" id="tab-jadwal">
-        <div class="sh" style="margin-top:4px;">
-          <span class="sl">Tagihan Mendatang</span>
-        </div>
-        <div id="bill-list"></div>
-      </div>
-
-      <div class="tab" id="tab-kategori">
-        <div class="g" id="hero">
-          <div class="hl">Gaji Bulanan</div>
-          <div class="hr">
-            <span class="hrp">Rp</span>
-            <input id="sal" type="text" inputmode="numeric" placeholder="0">
-          </div>
-        </div>
-        <div class="sh">
-          <span class="sl">Kategori</span>
-          <span id="edit-btn">⋯</span>
-        </div>
-        <div id="cat-list"></div>
-        <button id="add-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-          </svg>
-          Tambah Kategori
-        </button>
-      </div>
-
-      <div class="tab" id="tab-user">
-        <div class="g" style="padding:24px 20px; border-radius:24px; width:100%;">
-          
-          <div id="user-logged-out" style="display:flex; flex-direction:column; align-items:center; text-align:center;">
-            <div style="font-size:48px; margin-bottom:12px;">☁️</div>
-            <h3 style="margin-bottom:6px;">Simpan ke Cloud</h3>
-            <p style="font-size:13px; color:var(--txt2); margin-bottom:20px; line-height:1.5;">Login dengan Google agar data anggaran kamu aman dan tersinkronisasi antar perangkat.</p>
-            <button class="lb" id="btn-login" style="margin-top:0;">Masuk dengan Google</button>
-          </div>
-
-          <div id="user-logged-in" style="display:none; flex-direction:column; align-items:center;">
-            <div class="up-avatar" id="up-avatar">👤</div>
-            <div class="up-name" id="up-name">—</div>
-            <div class="up-email" id="up-email"></div>
-            <button class="up-btn danger g" id="up-logout" style="margin-top:20px;">Keluar Akun</button>
-          </div>
-
-        </div>
-
-        <div style="width:100%; margin-top:5px;">
-           <button class="up-btn g" id="up-theme" style="text-align:left; display:flex; justify-content:space-between; align-items:center;">
-             <span>🌓 Tema Tampilan</span>
-             <span style="color:var(--txt2); font-size:18px;">›</span>
-           </button>
-        </div>
-      </div>
-
-    </div></div><div id="nav-bar">
-    <div id="nav-pill">
-
-      <button class="nb active" data-tab="tab-ringkasan">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="9"/>
-          <polyline points="12 7 12 12 15 15"/>
-        </svg>
-        <div class="nd"></div>
-      </button>
-
-      <button class="nb" data-tab="tab-jadwal">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="4" width="18" height="17" rx="3"/>
-          <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
-          <line x1="3" y1="10" x2="21" y2="10"/>
-        </svg>
-        <div class="nd"></div>
-      </button>
-
-      <button class="nb" data-tab="tab-kategori">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/>
-          <rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/>
-          <rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/>
-          <rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/>
-        </svg>
-        <div class="nd"></div>
-      </button>
-
-      <button class="nb" id="nb-user" data-tab="tab-user">
-        <div class="nu-face" id="nu-face">👤</div>
-        <div class="nd"></div>
-      </button>
-
+<div class="bottom-nav-container" id="bottom-nav">
+  <div class="bottom-glass-bar">
+    <button class="tab-btn active" data-tab="tab-alokasi">Alokasi</button>
+    
+    <div class="integrated-add-btn" id="integrated-add-btn">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
     </div>
+    
+    <button class="tab-btn" data-tab="tab-ringkasan">Ringkasan</button>
   </div>
 </div>
 
 <script type="module">
-import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut }
-                           from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc }
-                           from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-const FB = {
-  apiKey:"AIzaSyCudBjzhXcqSWVF4kzakcPomeVj_GcHtys",
-  authDomain:"budgy-7e6e1.firebaseapp.com",
-  projectId:"budgy-7e6e1",
-  storageBucket:"budgy-7e6e1.firebasestorage.app",
-  messagingSenderId:"733464255051",
-  appId:"1:733464255051:web:d30d49716990d3a8a7cbce"
+const firebaseConfig = {
+  apiKey: "AIzaSyCudBjzhXcqSWVF4kzakcPomeVj_GcHtys",
+  authDomain: "budgy-7e6e1.firebaseapp.com",
+  projectId: "budgy-7e6e1",
+  storageBucket: "budgy-7e6e1.firebasestorage.app",
+  messagingSenderId: "733464255051",
+  appId: "1:733464255051:web:d30d49716990d3a8a7cbce"
 };
-const fapp = initializeApp(FB);
-const auth = getAuth(fapp);
-const db   = getFirestore(fapp);
-const prov = new GoogleAuthProvider();
 
-const BANKS   = ['BCA','Mandiri','BNI','BRI','Jago','SeaBank','GoPay','OVO','DANA','Tunai'];
-const EMOJIS  = {makan:'🍔',kopi:'☕',listrik:'⚡',air:'💧',bensin:'⛽',belanja:'🛍️',tabung:'💰',cicilan:'💳'};
-const MONTHS  = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
-// Warna palette untuk Bar Chart
-const PALETTE = ['#007AFF','#34C759','#FF9500','#FF3B30','#AF52DE','#FF2D55','#5AC8FA','#FFCC00','#4CD964','#FF6B35'];
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
 
-let cats=[], salary=0, isEdit=false, user=null;
-let dragEl=null, dragY0=0;
+const BANKS = ['BCA', 'Mandiri', 'BNI', 'BRI', 'Jago', 'SeaBank', 'GoPay', 'OVO', 'DANA', 'Tunai'];
+const EMOJI_MAP = { 'makan': '🍔', 'kopi': '☕', 'listrik': '⚡', 'air': '💧', 'bensin': '⛽', 'belanja': '🛍️', 'tabung': '💰', 'cicilan': '💳', 'skincare': '✨', 'nonton': '🎬', 'game': '🎮' };
+const PALETTE = ['#007AFF','#34C759','#FF9500','#FF3B30','#AF52DE','#FF2D55','#5AC8FA'];
 
-const $  = id => document.getElementById(id);
-const vb = () => navigator.vibrate?.(8);
-const fmt= n => n===0?'0':Math.round(n).toLocaleString('id-ID');
+let cats = [];
+let salary = 0;
+let isEditMode = false;
+let currentUser = null;
+let dragEl = null;
+let startY = 0;
 
-/* ── FIREBASE ── */
-async function saveCloud(){
-  if(!user) return;
-  try{ await setDoc(doc(db,'users',user.uid),{cats,salary}); }catch(e){}
+const $ = id => document.getElementById(id);
+const haptic = () => { if(navigator.vibrate) navigator.vibrate(10); };
+const fmt = (n) => n === 0 ? '0' : Math.round(n).toLocaleString('id-ID');
+
+// Firebase Logic
+async function saveToFirebase() {
+  if (!currentUser) return;
+  try { await setDoc(doc(db, "users", currentUser.uid), { cats: cats, salary: salary }); } 
+  catch (e) { console.error(e); }
 }
-async function loadCloud(){
-  const s = await getDoc(doc(db,'users',user.uid));
-  if(s.exists()){ const d=s.data(); cats=d.cats||[]; salary=d.salary||0; }
-  else { saveCloud(); } // Jika akun baru, kirim data lokal ke cloud
-  $('sal').value = fmt(salary);
-  render();
-}
-const save=()=>{ localStorage.setItem('cats',JSON.stringify(cats)); localStorage.setItem('salary',salary); saveCloud(); };
 
-// Auth State Handle
-onAuthStateChanged(auth, async u=>{
-  if(u){
-    user=u;
-    $('user-logged-out').style.display='none';
-    $('user-logged-in').style.display='flex';
-    $('nu-face').innerHTML=`<img src="${u.photoURL}">`;
-    $('up-avatar').innerHTML=`<img src="${u.photoURL}">`;
-    $('up-name').textContent = u.displayName||'Pengguna';
-    $('up-email').textContent= u.email||'';
-    await loadCloud();
+async function loadFromFirebase() {
+  if (!currentUser) return;
+  const docSnap = await getDoc(doc(db, "users", currentUser.uid));
+  if (docSnap.exists()) {
+    const d = docSnap.data();
+    cats = d.cats || [];
+    salary = d.salary || 0;
   } else {
-    user=null;
-    $('user-logged-out').style.display='flex';
-    $('user-logged-in').style.display='none';
-    $('nu-face').innerHTML='👤';
-    // Load local storage agar app bisa dipakai offline tanpa login
-    cats=JSON.parse(localStorage.getItem('cats')||'[]');
-    salary=+(localStorage.getItem('salary')||0);
-    $('sal').value = fmt(salary);
-    render();
+    saveToFirebase();
+  }
+  $('salary-in').value = fmt(salary);
+  buildList();
+}
+
+const save = () => { 
+  localStorage.setItem('cats', JSON.stringify(cats)); 
+  localStorage.setItem('salary', salary); 
+  saveToFirebase();
+};
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUser = user;
+    $('user-logged-out').style.display = 'none';
+    $('user-logged-in').style.display = 'flex';
+    $('up-avatar').innerHTML = `<img src="${user.photoURL}">`;
+    $('up-name').textContent = user.displayName || 'Pengguna';
+    $('up-email').textContent = user.email || '';
+    await loadFromFirebase();
+  } else {
+    currentUser = null;
+    $('user-logged-out').style.display = 'flex';
+    $('user-logged-in').style.display = 'none';
+    cats = JSON.parse(localStorage.getItem('cats')) || [];
+    salary = +(localStorage.getItem('salary')) || 0;
+    $('salary-in').value = fmt(salary);
+    buildList();
   }
 });
 
-$('btn-login').onclick  = ()=>signInWithPopup(auth,prov);
-$('up-logout').onclick  = ()=>{ if(confirm('Yakin ingin keluar akun?')) signOut(auth); };
-$('up-theme').onclick   = ()=>{ vb(); document.body.classList.toggle('dark'); };
-$('theme-btn').onclick  = ()=>{ vb(); document.body.classList.toggle('dark'); };
+$('btn-login').onclick = () => signInWithPopup(auth, provider);
+$('up-logout').onclick = () => { if(confirm('Yakin ingin keluar akun?')) signOut(auth); };
 
-/* ── GOOGLE CAL ── */
-window.toGcal=idx=>{
-  vb(); const c=cats[idx];
-  const d=c.due.replace(/-/g,'');
-  const t=encodeURIComponent(`Bayar ${c.name} – Rp ${fmt(c.amount-c.actual)}`);
-  const det=encodeURIComponent(`Budgy: ${c.name}\nBank: ${c.bank}`);
-  window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${t}&dates=${d}/${d}&details=${det}&sf=true&output=xml`,'_blank');
+// Google Calendar Integration
+window.addToGoogleCalendar = (idx) => {
+  haptic();
+  const c = cats[idx];
+  const dateStr = c.due.replace(/-/g, '');
+  const title = encodeURIComponent(`Bayar ${c.name} - Rp ${fmt(c.amount - c.actual)}`);
+  const details = encodeURIComponent(`Budgy Reminder: Tagihan ${c.name}\nBank: ${c.bank}`);
+  const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dateStr}/${dateStr}&details=${details}&sf=true&output=xml`;
+  window.open(url, '_blank');
 };
 
-/* ── HELPERS ── */
-const fmtDate=s=>{ if(!s) return '📅 Atur'; const d=new Date(s); return `⏳ ${d.getDate()} ${MONTHS[d.getMonth()]}`; };
+window.hapusKategori = function(id) { cats = cats.filter(c => c.id !== id); save(); buildList(); };
 
-function badgeInfo(s){
-  if(!s) return null;
-  const now=new Date(); now.setHours(0,0,0,0);
-  const due=new Date(s);
-  const days=Math.round((due-now)/86400000);
-  const lbl=`${due.getDate()} ${MONTHS[due.getMonth()]}`;
-  if(days<0)   return {cls:'dg-r',txt:`${lbl} · Lewat`};
-  if(days===0) return {cls:'dg-o',txt:`${lbl} · Hari ini!`};
-  if(days<=3)  return {cls:'dg-o',txt:`${lbl} · ${days} hari lagi`};
-  return           {cls:'dg-g',txt:`${lbl} · ${days} hari lagi`};
+function getDisplayDate(dateStr) {
+  if(!dateStr) return '📅 Atur Tgl';
+  const d = new Date(dateStr);
+  const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
+  return `📅 ${d.getDate()} ${months[d.getMonth()]}`;
 }
 
-/* ── CHART BARU (STACKED BAR) ── */
-function buildChart(){
+function buildChart() {
   const total = cats.reduce((a,c)=>a+c.amount,0);
-  const bar   = $('stacked-bar');
-  const leg   = $('chart-legend');
+  const bar = $('stacked-bar');
+  const leg = $('chart-legend');
   
-  if(!bar) return;
   bar.innerHTML=''; leg.innerHTML='';
 
   if(!total || !cats.length){
     bar.innerHTML='<div style="width:100%; background:rgba(120,120,128,.1);"></div>';
-    leg.innerHTML='<div class="empty" style="padding:10px 0;">Belum ada data alokasi</div>';
+    leg.innerHTML='<div style="text-align:center; font-size:12px; color:var(--txt2); padding:10px 0;">Belum ada data</div>';
     return;
   }
 
-  // Urutkan dari pengeluaran terbesar ke terkecil
   const sortedCats = [...cats].filter(c => c.amount > 0).sort((a,b) => b.amount - a.amount);
 
   sortedCats.forEach((c,i)=>{
-    const pct  = c.amount/total;
-    const color= PALETTE[i%PALETTE.length];
+    const pct = c.amount/total;
+    const color = PALETTE[i%PALETTE.length];
 
-    // Segmen pada Bar
     const seg = document.createElement('div');
     seg.style.width = `${pct*100}%`;
     seg.style.background = color;
     seg.style.height = '100%';
     bar.appendChild(seg);
 
-    // Keterangan Legend (Max 6 teratas)
     if(i<6){
-      const item=document.createElement('div');
-      item.className='leg-item';
+      const item = document.createElement('div');
+      item.style.display = 'flex'; item.style.alignItems = 'center'; item.style.padding = '4px 0';
       item.innerHTML=`
         <div style="background:${color}; width:10px; height:10px; border-radius:50%; flex-shrink:0;"></div>
         <div style="font-size:16px; margin:0 8px;">${c.icon}</div>
@@ -617,153 +347,175 @@ function buildChart(){
   });
 }
 
-/* ── RENDER CATS ── */
-function render(){
-  const list=$('cat-list');
-  list.innerHTML='';
-  list.classList.toggle('edit-mode',isEdit);
-
-  cats.forEach((c,i)=>{
-    const w=document.createElement('div');
-    w.className='cw'; w.dataset.id=c.id;
-    w.innerHTML=`
-      <div class="del" onclick="delCat(${c.id})">−</div>
-      <div class="cc">
-        <div class="cprog" id="prog-${c.id}"></div>
-        <div class="ci">${c.icon}</div>
-        <div class="cb">
-          <input class="cn" type="text" value="${c.name}" placeholder="Nama kategori">
-          <div class="cm">
-            <select class="pill pb">${BANKS.map(b=>`<option ${c.bank===b?'selected':''}>${b}</option>`).join('')}</select>
-            <div class="dw"><div class="pill pd">${fmtDate(c.due)}</div><input type="date" class="di" value="${c.due}"></div>
+function buildList() {
+  const list = $('cat-list');
+  list.innerHTML = '';
+  cats.forEach((c, index) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'cat-wrapper';
+    wrap.dataset.id = c.id;
+    wrap.innerHTML = `
+      <div class="delete-badge" onclick="window.hapusKategori(${c.id})">−</div>
+      <div class="cat-card">
+        <div class="cat-progress-bg" id="prog-${c.id}"></div>
+        <div class="cat-dot">${c.icon}</div>
+        <div class="cat-body">
+          <input class="cat-name-in" type="text" value="${c.name}" placeholder="Kategori">
+          <div style="display:flex; gap:6px;">
+            <select class="bank-tag" data-idx="${index}">${BANKS.map(b => `<option value="${b}" ${c.bank === b ? 'selected' : ''}>${b}</option>`).join('')}</select>
+            <div class="date-container">
+              <div class="date-tag">${getDisplayDate(c.due)}</div>
+              <input type="date" value="${c.due}" data-idx="${index}" class="due-input">
+            </div>
           </div>
         </div>
-        <div class="ca">
-          <input class="ap" type="text" inputmode="numeric" value="${fmt(c.amount)}">
-          <input class="aa" type="text" inputmode="numeric" value="${fmt(c.actual)}">
+        <div style="text-align:right">
+          <div class="amt-row"><input class="amount-in" type="text" inputmode="numeric" value="${fmt(c.amount)}"></div>
+          <div class="amt-row" style="margin-top:5px;"><input class="actual-in" type="text" inputmode="numeric" value="${fmt(c.actual)}"></div>
         </div>
-        <div class="dh">≡</div>
+        <div class="drag-handle">≡</div>
       </div>`;
-    list.appendChild(w);
+    list.appendChild(wrap);
 
-    w.querySelector('.di').onchange   = e=>{ cats[i].due=e.target.value; save(); render(); };
-    w.querySelector('.cn').oninput    = e=>{
-      cats[i].name=e.target.value;
-      const wrd=e.target.value.toLowerCase().split(' ').pop();
-      if(EMOJIS[wrd]){ cats[i].icon=EMOJIS[wrd]; render(); return; }
+    wrap.querySelector('.due-input').onchange = (e) => { cats[index].due = e.target.value; save(); updateSummary(); buildList(); };
+    wrap.querySelector('.cat-name-in').oninput = (e) => {
+      cats[index].name = e.target.value;
+      const word = e.target.value.toLowerCase().split(' ').pop();
+      if(EMOJI_MAP[word]) { cats[index].icon = EMOJI_MAP[word]; buildList(); }
       save();
     };
-    w.querySelector('.pb').onchange   = e=>{ cats[i].bank=e.target.value; save(); updateSummary(); };
-    w.querySelector('.ap').oninput    = e=>numIn(e,i,'amount');
-    w.querySelector('.aa').oninput    = e=>numIn(e,i,'actual');
+    wrap.querySelector('.bank-tag').onchange = (e) => { cats[index].bank = e.target.value; save(); updateSummary(); };
+    wrap.querySelector('.amount-in').oninput = (e) => handleVal(e, index, 'amount');
+    wrap.querySelector('.actual-in').oninput = (e) => handleVal(e, index, 'actual');
 
-    // drag
-    const dh=w.querySelector('.dh');
-    dh.addEventListener('touchstart',e=>{ e.preventDefault(); dragEl=w; w.classList.add('dragging'); dragY0=e.touches[0].clientY; vb(); },{passive:false});
-    dh.addEventListener('touchmove',e=>{
-      if(!dragEl) return; e.preventDefault();
-      const y=e.touches[0].clientY;
-      dragEl.style.transform=`translateY(${y-dragY0}px)`;
-      const sibs=[...document.querySelectorAll('.cw:not(.dragging)')];
-      const over=sibs.find(s=>{ const r=s.getBoundingClientRect(); return y>r.top&&y<r.bottom; });
-      if(over){ const r=over.getBoundingClientRect(); list.insertBefore(dragEl,y>r.top+r.height/2?over.nextSibling:over); dragY0=y; dragEl.style.transform=''; vb(); }
-    },{passive:false});
-    dh.addEventListener('touchend',()=>{
-      if(!dragEl) return; dragEl.classList.remove('dragging'); dragEl.style.transform=''; dragEl=null;
-      const nc=[]; document.querySelectorAll('.cw').forEach(ww=>{ const c=cats.find(c=>c.id===+ww.dataset.id); if(c) nc.push(c); });
-      cats=nc; save(); render();
+    // Drag & Drop
+    const handle = wrap.querySelector('.drag-handle');
+    handle.addEventListener('touchstart', (e) => {
+      e.preventDefault(); dragEl = wrap; dragEl.classList.add('dragging'); startY = e.touches[0].clientY; haptic();
+    }, {passive: false});
+
+    handle.addEventListener('touchmove', (e) => {
+      if(!dragEl) return;
+      e.preventDefault();
+      let y = e.touches[0].clientY;
+      dragEl.style.transform = `translateY(${y - startY}px)`;
+      let siblings = [...document.querySelectorAll('.cat-wrapper:not(.dragging)')];
+      let nextEl = siblings.find(sib => { let rect = sib.getBoundingClientRect(); return y > rect.top && y < rect.bottom; });
+      if(nextEl) {
+          let rect = nextEl.getBoundingClientRect();
+          if(y > rect.top + rect.height / 2) list.insertBefore(dragEl, nextEl.nextSibling);
+          else list.insertBefore(dragEl, nextEl);
+          startY = y; dragEl.style.transform = `translateY(0)`; haptic();
+      }
+    }, {passive: false});
+
+    handle.addEventListener('touchend', () => {
+      if(!dragEl) return;
+      dragEl.classList.remove('dragging'); dragEl.style.transform = ''; dragEl = null;
+      let newCats = [];
+      document.querySelectorAll('.cat-wrapper').forEach(w => {
+          let cat = cats.find(c => c.id === parseInt(w.dataset.id));
+          if(cat) newCats.push(cat);
+      });
+      cats = newCats; save(); buildList();
     });
   });
   updateSummary();
 }
 
-function numIn(e,i,k){
-  const v=parseInt(e.target.value.replace(/\D/g,''))||0;
-  cats[i][k]=v; e.target.value=fmt(v); save(); updateSummary();
+function handleVal(e, idx, key) {
+  let val = parseInt(e.target.value.replace(/\D/g, '')) || 0;
+  cats[idx][key] = val;
+  e.target.value = fmt(val);
+  save(); updateSummary();
 }
-window.delCat=id=>{ cats=cats.filter(c=>c.id!==id); save(); render(); };
 
-/* ── UPDATE SUMMARY ── */
-function updateSummary(){
-  const sal=+salary||0;
-  let tP=0,tA=0; const pending=[];
+function updateSummary() {
+  const sal = parseInt(salary) || 0;
+  let tPlan = 0, tAct = 0;
+  const today = new Date(); today.setHours(0,0,0,0);
+  let pending = [];
 
-  cats.forEach((c,idx)=>{
-    tP+=c.amount; tA+=c.actual;
-    const p=$(`prog-${c.id}`);
-    if(p){ const pct=c.amount>0?(c.actual/c.amount)*100:0; p.style.width=Math.min(pct,100)+'%'; p.style.background=pct>100?'rgba(255,59,48,.11)':'rgba(0,122,255,.065)'; }
-    if(c.due&&c.actual<c.amount) pending.push({...c,idx,dateObj:new Date(c.due)});
+  cats.forEach((c, idx) => {
+    tPlan += c.amount; tAct += c.actual;
+    const prog = $(`prog-${c.id}`);
+    if(prog) {
+      let p = c.amount > 0 ? (c.actual/c.amount)*100 : 0;
+      prog.style.width = Math.min(p, 100) + '%';
+      prog.style.backgroundColor = p > 100 ? 'rgba(255,59,48,0.15)' : 'rgba(0,122,255,0.08)';
+    }
+    if(c.due && c.actual < c.amount) pending.push({ ...c, idx, dateObj: new Date(c.due) });
   });
 
-  // Ring
-  const pct=sal>0?Math.round((tP/sal)*100):0;
-  $('ring-pct').textContent=pct+'%';
-  $('ring-track').style.strokeDashoffset=452.4*(1-pct/100);
+  const billDiv = $('bill-schedule-list');
+  billDiv.innerHTML = '';
+  if(pending.length) {
+    pending.sort((a,b) => a.dateObj - b.dateObj).forEach(b => {
+      let dateDisplay = getDisplayDate(b.due);
+      billDiv.innerHTML += `
+        <div class="bill-item glass">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="font-size:20px;">${b.icon}</div>
+            <div>
+              <div style="font-size:14px; font-weight:600;">${b.name}</div>
+              <div style="font-size:11px; opacity:0.8; margin-top:2px;">
+                <span style="color:#FF9500; font-weight:600;">${dateDisplay}</span> • Rp ${fmt(b.amount - b.actual)}
+              </div>
+            </div>
+          </div>
+          <button class="cal-btn" onclick="window.addToGoogleCalendar(${b.idx})" title="Ingatkan di Google Calendar">🗓️</button>
+        </div>`;
+    });
+  } else billDiv.innerHTML = '<div style="text-align:center; font-size:13px; opacity:0.5; padding:10px;">Semua lunas! 🎉</div>';
 
-  // Stats
-  $('s-plan').textContent   ='Rp '+fmt(tP);
-  $('s-actual').textContent ='Rp '+fmt(tA);
-  const selisih=tP-tA;
-  const sEl=$('s-selisih');
-  sEl.textContent='Rp '+fmt(selisih);
-  sEl.className='sv'+(selisih<0?' rd':'');
-  $('s-sisa').textContent='Rp '+fmt(sal-tP);
+  const pct = sal > 0 ? Math.round((tPlan/sal)*100) : 0;
+  $('ring-pct').textContent = pct + '%';
+  $('ring-track').style.strokeDashoffset = 502 * (1 - pct/100);
+  $('total-plan-val').textContent = 'Rp ' + fmt(tPlan);
+  $('total-actual-val').textContent = 'Rp ' + fmt(tAct);
+  
+  const diff = tPlan - tAct;
+  $('selisih-val').textContent = 'Rp ' + fmt(diff);
+  $('selisih-val').style.color = diff < 0 ? 'var(--red)' : 'var(--txt)';
+  
+  $('diff-bar').style.width = tPlan > 0 ? Math.min((tAct/tPlan)*100, 100)+'%' : '0%';
+  $('sisa-val').textContent = 'Rp ' + fmt(sal - tPlan);
 
-  // Progress bar
-  const bp=tP>0?Math.min((tA/tP)*100,100):0;
-  $('diff-bar').style.width=bp+'%';
-  $('s-prog-pct').textContent=Math.round(bp)+'%';
-
-  // Chart Baru
   buildChart();
-
-  // Bills
-  const bl=$('bill-list');
-  bl.innerHTML='';
-  if(!pending.length){ bl.innerHTML='<div class="empty">Semua tagihan lunas 🎉</div>'; return; }
-  pending.sort((a,b)=>a.dateObj-b.dateObj).forEach(b=>{
-    const bi=badgeInfo(b.due);
-    const card=document.createElement('div');
-    card.className='bc g';
-    card.innerHTML=`
-      <div class="bi">${b.icon}</div>
-      <div class="bb">
-        <div class="bn">${b.name}</div>
-        <div class="ba">Rp ${fmt(b.amount-b.actual)}</div>
-        ${bi?`<div class="bdg ${bi.cls}">📅 ${bi.txt}</div>`:''}
-      </div>
-      <button class="cb2" onclick="toGcal(${b.idx})">🗓️</button>`;
-    bl.appendChild(card);
-  });
 }
 
-/* ── NAV ── */
-function switchTab(id){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.nb[data-tab]').forEach(b=>b.classList.remove('active'));
-  $(id).classList.add('active');
-  const btn=document.querySelector(`.nb[data-tab="${id}"]`);
-  if(btn) btn.classList.add('active');
-  if(isEdit) toggleEdit();
-}
+$('salary-in').oninput = (e) => { salary = parseInt(e.target.value.replace(/\D/g, '')) || 0; e.target.value = fmt(salary); save(); updateSummary(); };
 
-document.querySelectorAll('.nb[data-tab]').forEach(b=>{
-  b.onclick=()=>{ vb(); switchTab(b.dataset.tab); };
-});
-
-/* ── ADD / EDIT ── */
-$('add-btn').onclick=()=>{
-  vb(); if(isEdit) toggleEdit();
-  cats.push({id:Date.now(),name:'',amount:0,actual:0,icon:'📦',bank:'BCA',due:''});
-  save(); render();
-  setTimeout(()=>$('scroll').scrollTo({top:99999,behavior:'smooth'}),60);
+$('edit-mode-btn').onclick = () => { 
+  haptic(); isEditMode = !isEditMode; 
+  $('cat-list').classList.toggle('edit-mode'); 
+  $('edit-mode-btn').textContent = isEditMode ? 'Selesai' : 'Edit'; 
 };
 
-function toggleEdit(){ isEdit=!isEdit; $('cat-list').classList.toggle('edit-mode',isEdit); $('edit-btn').textContent=isEdit?'Selesai':'⋯'; }
-$('edit-btn').onclick=()=>{ vb(); toggleEdit(); };
+document.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => {
+  haptic(); document.querySelectorAll('.tab-btn, .tab-content').forEach(el => el.classList.remove('active'));
+  b.classList.add('active'); $(b.dataset.tab).classList.add('active');
+  if(isEditMode) $('edit-mode-btn').click();
+  
+  // Sembunyikan tombol + jika sedang di tab ringkasan
+  if (b.dataset.tab === 'tab-ringkasan') {
+    $('integrated-add-btn').style.transform = 'translate(-50%, 50px)';
+    $('integrated-add-btn').style.opacity = '0';
+  } else {
+    $('integrated-add-btn').style.transform = 'translateX(-50%)';
+    $('integrated-add-btn').style.opacity = '1';
+  }
+});
 
-/* ── SALARY ── */
-$('sal').oninput=e=>{ salary=parseInt(e.target.value.replace(/\D/g,''))||0; e.target.value=fmt(salary); save(); updateSummary(); };
+$('integrated-add-btn').onclick = () => { 
+  haptic(); if(isEditMode) $('edit-mode-btn').click(); 
+  cats.push({id: Date.now(), name: '', amount: 0, actual: 0, icon: '📦', bank: 'BCA', due:''}); 
+  save(); buildList(); 
+  setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
+};
+
+$('theme-toggle').onclick = () => { haptic(); document.body.classList.toggle('dark'); };
+$('theme-btn').onclick = () => { haptic(); document.body.classList.toggle('dark'); };
 </script>
 </body>
 </html>
