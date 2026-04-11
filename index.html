@@ -29,7 +29,7 @@ body.dark {
 
 *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent;}
 body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; background: radial-gradient(circle at top left, var(--bg1), var(--bg2)); min-height: 100vh; display: flex; justify-content: center; color: var(--txt); transition: background 0.5s ease; overscroll-behavior: none; }
-.phone-wrap { width: 100%; max-width: 420px; padding: 20px 20px 140px; position: relative; overflow-x: hidden; min-height: 100vh;}
+.phone-wrap { width: 100%; max-width: 420px; padding: 20px 20px 0; position: relative; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column;}
 .glass { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); box-shadow: var(--glass-shadow); backdrop-filter: blur(32px) saturate(1.8); -webkit-backdrop-filter: blur(32px) saturate(1.8); }
 
 /* UI Elements */
@@ -135,13 +135,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-se
    BOTTOM NAV — Simetris sempurna, 3 ikon
    ============================================= */
 .bottom-nav-container { 
-  position: fixed; 
-  bottom: max(30px, env(safe-area-inset-bottom)); 
-  left: 50%; 
-  transform: translateX(-50%); 
-  width: calc(min(100vw, 420px) - 40px); 
-  max-width: 380px; 
-  z-index: 100; 
+  position: sticky;
+  bottom: max(20px, env(safe-area-inset-bottom));
+  width: 100%;
+  z-index: 100;
+  padding: 0 0 10px;
+  margin-top: 20px;
 }
 
 .bottom-glass-bar { 
@@ -290,11 +289,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-se
       </div>
     </div>
   </div>
-</div>
 
-<!-- =============================================
-     BOTTOM NAV — 3 ikon simetris
-     ============================================= -->
+
+<!-- BOTTOM NAV -->
 <div class="bottom-nav-container" id="bottom-nav" style="display: none;">
   <div class="bottom-glass-bar">
 
@@ -327,6 +324,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-se
     </button>
 
   </div>
+</div>
 </div>
 
 <script type="module">
