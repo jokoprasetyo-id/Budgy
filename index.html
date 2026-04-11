@@ -66,7 +66,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-se
 .cat-body { flex: 1; min-width: 0; }
 .cat-name-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; width: 100%; margin-bottom: 4px; font-family: inherit;}
 
-/* Date Picker */
 .date-container { position: relative; display: inline-block; vertical-align: middle; }
 .date-tag { appearance: none; background: rgba(255, 149, 0, 0.1); border: 1px solid rgba(255, 149, 0, 0.2); border-radius: 100px; padding: 2px 10px; font-size: 11px; font-weight: 600; color: #FF9500; pointer-events: none; display: flex; align-items: center; gap: 4px; }
 .due-input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 5; }
@@ -79,35 +78,156 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-se
 .ring-container { position: relative; display: flex; justify-content: center; align-items: center; margin: 20px 0; padding: 20px; }
 .ring-pct { font-size: 32px; font-weight: 600; letter-spacing: -1px;}
 .insight-card { padding: 20px; display: flex; flex-direction: column; gap: 15px; margin-top: 15px; }
-.bill-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; background: rgba(120,120,128,0.05); border-radius: 14px; margin-bottom: 10px; transition: 0.2s;}
-.cal-btn { width: 34px; height: 34px; border-radius: 8px; background: rgba(255, 149, 0, 0.15); color: #FF9500; border: 1px solid rgba(255, 149, 0, 0.3); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-.cal-btn:active { transform: scale(0.9); }
 
-/* --- NAVIGATION BAR: DIPAKU MUTLAK DI TENGAH --- */
-.bottom-nav-container { position: fixed; bottom: max(30px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 380px; z-index: 100; }
-.bottom-glass-bar { 
+/* Bill item — updated with date info */
+.bill-item { 
   display: flex; 
-  justify-content: space-between; /* Menjauhkan Alokasi & Ringkasan ke ujung */
   align-items: center; 
-  position: relative; /* KUNCI: Menjadi patokan tengah */
-  background: var(--footer-bg); border: 1px solid var(--glass-border); 
-  border-radius: 99px; padding: 8px 15px; height: 75px; 
-  backdrop-filter: blur(40px) saturate(2); -webkit-backdrop-filter: blur(40px) saturate(2); 
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+  justify-content: space-between; 
+  padding: 14px 16px; 
+  background: var(--glass-bg); 
+  border: 1px solid var(--glass-border);
+  border-radius: 18px; 
+  margin-bottom: 10px; 
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: 0.2s;
 }
-.tab-btn { width: 35%; text-align: center; padding: 12px 0; border: none; background: transparent; color: var(--txt2); font-size: 14px; font-weight: 600; border-radius: 100px; cursor: pointer; transition: 0.3s; }
-.tab-btn.active { color: var(--txt); background: rgba(120,120,128,0.15); }
-.integrated-add-btn { 
-  position: absolute; /* KUNCI: Dipaku murni di tengah bar */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; cursor: pointer; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--accent); z-index: 101; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); 
+.bill-item-left { display: flex; align-items: center; gap: 12px; }
+.bill-item-icon { 
+  width: 42px; height: 42px; 
+  border-radius: 12px; 
+  background: rgba(120,120,128,0.1); 
+  display: flex; align-items: center; justify-content: center; 
+  font-size: 20px; 
+  flex-shrink: 0;
 }
-.integrated-add-btn:active { transform: translateX(-50%) scale(0.9); }
+.bill-item-name { font-size: 14px; font-weight: 600; color: var(--txt); }
+.bill-item-amount { font-size: 12px; color: var(--txt2); margin-top: 2px; }
+.bill-item-date-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 59, 48, 0.08);
+  border: 1px solid rgba(255, 59, 48, 0.15);
+  border-radius: 100px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #FF3B30;
+  margin-top: 4px;
+}
+.bill-item-date-badge.soon {
+  background: rgba(255, 149, 0, 0.1);
+  border-color: rgba(255, 149, 0, 0.2);
+  color: #FF9500;
+}
+.bill-item-date-badge.ok {
+  background: rgba(52, 199, 89, 0.08);
+  border-color: rgba(52, 199, 89, 0.2);
+  color: #34C759;
+}
+.bill-item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.cal-btn { width: 34px; height: 34px; border-radius: 10px; background: rgba(0,122,255,0.12); color: var(--accent); border: none; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+.cal-btn:active { transform: scale(0.92); background: rgba(0,122,255,0.2); }
+
+/* =============================================
+   BOTTOM NAV — Simetris sempurna, 3 ikon
+   ============================================= */
+.bottom-nav-container { 
+  position: fixed; 
+  bottom: max(30px, env(safe-area-inset-bottom)); 
+  left: 50%; 
+  transform: translateX(-50%); 
+  width: calc(100% - 40px); 
+  max-width: 340px; 
+  z-index: 100; 
+}
+
+.bottom-glass-bar { 
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: var(--footer-bg); 
+  border: 1px solid var(--glass-border); 
+  border-radius: 99px; 
+  padding: 8px 12px; 
+  height: 72px; 
+  backdrop-filter: blur(40px) saturate(2); 
+  -webkit-backdrop-filter: blur(40px) saturate(2); 
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12); 
+}
+
+/* Setiap tombol nav — sama persis ukurannya */
+.nav-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  color: var(--txt2);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.nav-btn svg {
+  width: 24px;
+  height: 24px;
+  transition: all 0.25s;
+}
+
+.nav-btn.active {
+  background: rgba(120,120,128,0.15);
+  color: var(--txt);
+}
+
+.nav-btn.active svg {
+  transform: scale(1.1);
+}
+
+/* Tombol tengah (Add) — sedikit lebih besar */
+.nav-btn.add-btn {
+  width: 52px;
+  height: 52px;
+  background: var(--accent);
+  color: white;
+  box-shadow: 0 4px 14px rgba(0,122,255,0.35);
+}
+
+.nav-btn.add-btn:active {
+  transform: scale(0.88);
+}
+
+.nav-btn:not(.add-btn):active {
+  transform: scale(0.88);
+}
+
+/* Active dot indicator */
+.nav-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0;
+  transition: 0.25s;
+  margin-top: 3px;
+}
+.nav-btn.active .nav-dot { opacity: 1; }
+.nav-btn.add-btn .nav-dot { display: none; }
 
 /* Welcome Screen */
 #login-prompt { display: none; text-align: center; padding: 60px 20px; }
 .login-btn { margin-top: 30px; padding: 14px 24px; border-radius: 100px; background: var(--accent); color: white; border: none; font-weight: 600; font-size: 15px; cursor: pointer; width: 100%; box-shadow: 0 8px 20px rgba(0, 122, 255, 0.3); }
+
+/* Ring center absolute overlay */
+.ring-center { position: absolute; text-align: center; }
 </style>
 </head>
 <body>
@@ -171,11 +291,40 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-se
   </div>
 </div>
 
+<!-- =============================================
+     BOTTOM NAV — 3 ikon simetris
+     ============================================= -->
 <div class="bottom-nav-container" id="bottom-nav" style="display: none;">
   <div class="bottom-glass-bar">
-    <button class="tab-btn active" data-tab="tab-alokasi">Alokasi</button>
-    <div class="integrated-add-btn" id="integrated-add-btn">➕</div>
-    <button class="tab-btn" data-tab="tab-ringkasan">Ringkasan</button>
+
+    <!-- Alokasi -->
+    <button class="nav-btn active" data-tab="tab-alokasi" id="btn-alokasi">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+        <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+        <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+        <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+      </svg>
+      <div class="nav-dot"></div>
+    </button>
+
+    <!-- Add (Tengah) -->
+    <button class="nav-btn add-btn" id="integrated-add-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+    </button>
+
+    <!-- Ringkasan -->
+    <button class="nav-btn" data-tab="tab-ringkasan" id="btn-ringkasan">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M12 7v5l3 3"/>
+      </svg>
+      <div class="nav-dot"></div>
+    </button>
+
   </div>
 </div>
 
@@ -199,7 +348,8 @@ const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
 const BANKS = ['BCA', 'Mandiri', 'BNI', 'BRI', 'Jago', 'SeaBank', 'GoPay', 'OVO', 'DANA', 'Tunai'];
-const EMOJI_MAP = { 'makan': '🍔', 'kopi': '☕', 'listrik': '⚡', 'air': '💧', 'bensin': '⛽', 'belanja': '🛍️', 'tabung': '💰', 'cicilan': '💳', 'skincare': '✨', 'nonton': '🎬', 'game': '🎮' };
+const EMOJI_MAP = { 'makan': '🍔', 'kopi': '☕', 'listrik': '⚡', 'air': '💧', 'bensin': '⛽', 'belanja': '🛍️', 'tabung': '💰', 'cicilan': '💳' };
+const MONTHS = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
 
 let cats = [];
 let salary = 0;
@@ -279,12 +429,37 @@ document.getElementById('big-login-btn').onclick = handleAuth;
 
 window.hapusKategori = function(id) { cats = cats.filter(c => c.id !== id); save(); buildList(); };
 
-// FUNGSI UNTUK MENGUBAH FORMAT TANGGAL
+// Format Tanggal untuk Tampilan
 function getDisplayDate(dateStr) {
   if(!dateStr) return '📅 Atur Tgl';
   const d = new Date(dateStr);
-  const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
-  return `⏳ ${d.getDate()} ${months[d.getMonth()]}`;
+  return `⏳ ${d.getDate()} ${MONTHS[d.getMonth()]}`;
+}
+
+// Hitung selisih hari dari hari ini
+function getDaysUntil(dateStr) {
+  if (!dateStr) return null;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const due = new Date(dateStr);
+  const diff = Math.round((due - today) / (1000 * 60 * 60 * 24));
+  return diff;
+}
+
+function getDateBadgeInfo(dateStr) {
+  const days = getDaysUntil(dateStr);
+  if (days === null) return null;
+  const d = new Date(dateStr);
+  const dateLabel = `${d.getDate()} ${MONTHS[d.getMonth()]}`;
+  
+  let cls = 'ok';
+  let label = '';
+  if (days < 0) { cls = ''; label = `${dateLabel} · Sudah lewat`; }
+  else if (days === 0) { cls = 'soon'; label = `${dateLabel} · Hari ini!`; }
+  else if (days <= 3) { cls = 'soon'; label = `${dateLabel} · ${days} hari lagi`; }
+  else if (days <= 7) { cls = 'ok'; label = `${dateLabel} · ${days} hari lagi`; }
+  else { cls = 'ok'; label = `${dateLabel} · ${days} hari lagi`; }
+  
+  return { cls, label };
 }
 
 function buildList() {
@@ -387,27 +562,35 @@ function updateSummary() {
     if(c.due && c.actual < c.amount) pending.push({ ...c, idx, dateObj: new Date(c.due) });
   });
 
+  // Build bill schedule dengan info tanggal
   const billDiv = document.getElementById('bill-schedule-list');
   billDiv.innerHTML = '';
   if(pending.length) {
     pending.sort((a,b) => a.dateObj - b.dateObj).forEach(b => {
-      // TANGGAL DIKEMBALIKAN KE SINI!
-      let dateDisplay = getDisplayDate(b.due);
-      billDiv.innerHTML += `
-        <div class="bill-item glass">
-          <div style="display:flex; align-items:center; gap:10px;">
-            <div style="font-size:20px;">${b.icon}</div>
-            <div>
-              <div style="font-size:14px; font-weight:600;">${b.name}</div>
-              <div style="font-size:11px; opacity:0.8; margin-top:2px;">
-                <span style="color:#FF9500; font-weight:600;">${dateDisplay}</span> • Rp ${fmt(b.amount - b.actual)}
-              </div>
-            </div>
+      const badgeInfo = getDateBadgeInfo(b.due);
+      const badgeHTML = badgeInfo 
+        ? `<div class="bill-item-date-badge ${badgeInfo.cls}">📅 ${badgeInfo.label}</div>`
+        : '';
+      
+      const item = document.createElement('div');
+      item.className = 'bill-item';
+      item.innerHTML = `
+        <div class="bill-item-left">
+          <div class="bill-item-icon">${b.icon}</div>
+          <div>
+            <div class="bill-item-name">${b.name}</div>
+            <div class="bill-item-amount">Rp ${fmt(b.amount - b.actual)}</div>
+            ${badgeHTML}
           </div>
-          <button class="cal-btn" onclick="window.addToGoogleCalendar(${b.idx})" title="Ingatkan di Google Calendar">🗓️</button>
+        </div>
+        <div class="bill-item-right">
+          <button class="cal-btn" onclick="window.addToGoogleCalendar(${b.idx})" title="Tambah ke Google Calendar">🗓️</button>
         </div>`;
+      billDiv.appendChild(item);
     });
-  } else billDiv.innerHTML = '<div style="text-align:center; font-size:13px; opacity:0.5; padding:10px;">Semua lunas! 🎉</div>';
+  } else {
+    billDiv.innerHTML = '<div style="text-align:center; font-size:13px; opacity:0.5; padding:10px;">Semua lunas! 🎉</div>';
+  }
 
   const pct = sal > 0 ? Math.round((tPlan/sal)*100) : 0;
   document.getElementById('ring-pct').textContent = pct + '%';
@@ -427,16 +610,23 @@ document.getElementById('edit-mode-btn').onclick = () => {
   document.getElementById('edit-mode-btn').textContent = isEditMode ? 'Selesai' : '⋯'; 
 };
 
-document.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => {
-  haptic(); document.querySelectorAll('.tab-btn, .tab-content').forEach(el => el.classList.remove('active'));
-  b.classList.add('active'); document.getElementById(b.dataset.tab).classList.add('active');
+// Tab navigation — tombol ikon
+document.querySelectorAll('.nav-btn[data-tab]').forEach(b => b.onclick = () => {
+  haptic(); 
+  document.querySelectorAll('.nav-btn[data-tab]').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  b.classList.add('active'); 
+  document.getElementById(b.dataset.tab).classList.add('active');
   if(isEditMode) document.getElementById('edit-mode-btn').click();
-  document.getElementById('integrated-add-btn').style.opacity = b.dataset.tab === 'tab-ringkasan' ? '0.3' : '1';
-  document.getElementById('integrated-add-btn').style.pointerEvents = b.dataset.tab === 'tab-ringkasan' ? 'none' : 'auto';
+  // Tombol add disable di ringkasan
+  const addBtn = document.getElementById('integrated-add-btn');
+  addBtn.style.opacity = b.dataset.tab === 'tab-ringkasan' ? '0.35' : '1';
+  addBtn.style.pointerEvents = b.dataset.tab === 'tab-ringkasan' ? 'none' : 'auto';
 });
 
 document.getElementById('integrated-add-btn').onclick = () => { 
-  haptic(); if(isEditMode) document.getElementById('edit-mode-btn').click(); 
+  haptic(); 
+  if(isEditMode) document.getElementById('edit-mode-btn').click(); 
   cats.push({id: Date.now(), name: '', amount: 0, actual: 0, icon: '📦', bank: 'BCA', due:''}); 
   save(); buildList(); 
 };
