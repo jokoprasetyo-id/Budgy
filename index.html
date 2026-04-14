@@ -32,11 +32,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-se
 .phone-wrap { width: 100%; max-width: 420px; padding: 20px 20px 140px; position: relative; overflow-x: hidden; min-height: 100vh;}
 .glass { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); box-shadow: var(--glass-shadow); backdrop-filter: blur(32px) saturate(1.8); -webkit-backdrop-filter: blur(32px) saturate(1.8); }
 
-/* UI Elements */
 .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 5px; margin-top: env(safe-area-inset-top, 0px); }
 .wm { font-size: 19px; font-weight: 600; display: flex; align-items: center; gap: 7px; }
 
-/* Filter Bulan */
 .month-selector { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 100px; padding: 6px 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; align-items: center; }
 .month-input { background: transparent; border: none; color: var(--txt); font-size: 14px; font-weight: 600; outline: none; font-family: inherit; }
 ::-webkit-calendar-picker-indicator { cursor: pointer; filter: opacity(0.6); }
@@ -46,11 +44,9 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
 .tab-content.active { display: block; }
 @keyframes slideUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
 
-/* Hero / Gaji */
 .hero { padding: 30px 20px; margin-bottom: 12px; text-align: center; }
 .hero-salary-in { font-size: 38px; font-weight: 300; color: var(--txt); background: transparent; border: none; outline: none; width: 100%; text-align: center; letter-spacing: -1px; }
 
-/* Categories & Drag Handle */
 .cat-list { display: flex; flex-direction: column; gap: 12px; padding-bottom: 20px; }
 .cat-wrapper { position: relative; border-radius: var(--r); }
 .cat-card { padding: 16px; display: flex; align-items: center; gap: 12px; position: relative; overflow: hidden; z-index: 1; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); }
@@ -72,31 +68,45 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
 .cat-body { flex: 1; min-width: 0; }
 .cat-name-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; width: 100%; margin-bottom: 4px; font-family: inherit;}
 
-/* Badges */
 .date-container { position: relative; display: inline-block; vertical-align: middle; }
 .date-tag { appearance: none; background: rgba(255, 149, 0, 0.1); border: 1px solid rgba(255, 149, 0, 0.2); border-radius: 100px; padding: 2px 10px; font-size: 11px; font-weight: 600; color: #FF9500; pointer-events: none; display: flex; align-items: center; gap: 4px; }
 .due-input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 5; }
-
 .bank-tag { appearance: none; background: rgba(120, 120, 128, 0.1); border: 1px solid rgba(120, 120, 128, 0.2); border-radius: 100px; padding: 2px 8px; font-size: 11px; font-weight: 600; color: var(--txt2); font-family: inherit; outline: none; }
 .amount-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; text-align: right; width: 90px; }
 .actual-in { font-size: 14px; font-weight: 600; color: var(--accent); background: transparent; border: none; outline: none; text-align: right; width: 90px; }
 
-/* Ringkasan Elements */
-.ring-container { position: relative; display: flex; justify-content: center; align-items: center; margin: 20px 0; padding: 20px; }
-.ring-pct { font-size: 32px; font-weight: 600; letter-spacing: -1px;}
+/* Summary section in alokasi tab */
 .insight-card { padding: 20px; display: flex; flex-direction: column; gap: 15px; margin-top: 15px; }
+
 .bill-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; background: rgba(120,120,128,0.05); border-radius: 14px; margin-bottom: 10px; transition: 0.2s;}
 .cal-btn { width: 34px; height: 34px; border-radius: 8px; background: rgba(255, 149, 0, 0.15); color: #FF9500; border: 1px solid rgba(255, 149, 0, 0.3); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
 .cal-btn:active { transform: scale(0.9); }
 
-/* --- ASET STYLES --- */
-.asset-item { display: flex; align-items: center; gap: 10px; padding: 12px; background: rgba(120,120,128,0.05); border-radius: 14px; margin-bottom: 10px; }
-.asset-icon { font-size: 24px; flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: rgba(120,120,128,0.1); border-radius: 10px; }
+/* ASET STYLES */
+.asset-item { display: flex; align-items: center; gap: 10px; padding: 12px; background: rgba(120,120,128,0.05); border-radius: 14px; margin-bottom: 8px; }
+.asset-icon { font-size: 20px; flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: rgba(120,120,128,0.1); border-radius: 10px; }
 .asset-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
 .a-name { background: transparent; border: none; outline: none; font-size: 14px; font-weight: 600; color: var(--txt); font-family: inherit; width: 100%; }
 .a-type { background: rgba(120,120,128,0.1); border: 1px solid rgba(120,120,128,0.2); border-radius: 100px; padding: 2px 8px; font-size: 11px; font-weight: 600; color: var(--txt2); outline: none; width: fit-content; font-family: inherit; appearance: none; }
 .a-amt { background: transparent; border: none; outline: none; font-size: 15px; font-weight: 600; color: var(--grn); text-align: right; width: 95px; font-family: inherit; }
 .a-del { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,59,48,0.1); color: var(--red); display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; flex-shrink: 0; margin-left: 2px; }
+
+/* KELOMPOK ASET */
+.group-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); box-shadow: var(--glass-shadow); backdrop-filter: blur(32px) saturate(1.8); -webkit-backdrop-filter: blur(32px) saturate(1.8); margin-bottom: 14px; overflow: hidden; }
+.group-header { display: flex; align-items: center; gap: 10px; padding: 16px 20px; cursor: pointer; user-select: none; }
+.group-icon-wrap { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.group-info { flex: 1; min-width: 0; }
+.group-name-in { background: transparent; border: none; outline: none; font-size: 15px; font-weight: 600; color: var(--txt); font-family: inherit; width: 100%; }
+.group-subtitle { font-size: 12px; color: var(--txt2); margin-top: 2px; }
+.group-total { font-size: 15px; font-weight: 700; color: var(--grn); }
+.group-toggle { font-size: 18px; color: var(--txt2); transition: transform 0.3s; flex-shrink: 0; }
+.group-toggle.open { transform: rotate(90deg); }
+.group-body { padding: 0 16px 16px; border-top: 1px solid var(--glass-border); display: none; }
+.group-body.open { display: block; padding-top: 12px; }
+.group-note-wrap { margin-top: 8px; }
+.group-note { background: rgba(120,120,128,0.06); border: 1px solid rgba(120,120,128,0.15); border-radius: 12px; padding: 10px 14px; font-size: 13px; color: var(--txt); font-family: inherit; outline: none; width: 100%; resize: none; min-height: 60px; }
+.group-note::placeholder { color: var(--txt2); }
+.group-note-label { font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 6px; }
 
 /* GRAFIK ASET BULANAN */
 .asset-chart-container { display: flex; align-items: flex-end; justify-content: space-between; height: 140px; gap: 6px; padding-top: 20px; }
@@ -108,8 +118,8 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
 .ac-val { font-size: 10px; color: var(--txt2); font-weight: 600; margin-bottom: 6px; transition: 0.3s; }
 .ac-bar-wrap.active .ac-val { color: var(--txt); font-weight: 700; }
 
-/* --- PROFILE & LOGIN CARD --- */
-.profile-card { align-items: center; text-align: center; margin-top: 30px; }
+/* PROFILE */
+.profile-card { align-items: center; text-align: center; margin-top: 20px; }
 .up-avatar { width: 72px; height: 72px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 36px; background: rgba(120,120,128,0.1); border: 3px solid var(--glass-border); margin: 0 auto 12px; }
 .up-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .up-name { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
@@ -121,22 +131,21 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
 .btn-menu { width: 100%; padding: 16px 20px; border-radius: var(--r); font-size: 15px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--txt); margin-top: 10px; transition: 0.2s; }
 .btn-menu:active { transform: scale(0.97); }
 
-/* --- NAVIGATION BAR --- */
+/* NAV BAR */
 .bottom-nav-container { position: fixed; bottom: max(30px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 380px; z-index: 100; }
-.bottom-glass-bar { 
-  display: flex; justify-content: space-between; align-items: center; position: relative; 
-  background: var(--footer-bg); border: 1px solid var(--glass-border); 
-  border-radius: 99px; padding: 8px 15px; height: 75px; 
-  backdrop-filter: blur(40px) saturate(2); -webkit-backdrop-filter: blur(40px) saturate(2); 
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
-}
+.bottom-glass-bar { display: flex; justify-content: space-between; align-items: center; position: relative; background: var(--footer-bg); border: 1px solid var(--glass-border); border-radius: 99px; padding: 8px 15px; height: 75px; backdrop-filter: blur(40px) saturate(2); -webkit-backdrop-filter: blur(40px) saturate(2); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
 .tab-btn { width: 35%; text-align: center; padding: 14px 0; border: none; background: transparent; color: var(--txt2); font-size: 14px; font-weight: 600; border-radius: 100px; cursor: pointer; transition: 0.3s; }
 .tab-btn.active { color: var(--txt); background: rgba(120,120,128,0.15); }
-.integrated-add-btn { 
-  position: absolute; left: 50%; transform: translateX(-50%);
-  width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; cursor: pointer; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--accent); z-index: 101; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); 
-}
+.integrated-add-btn { position: absolute; left: 50%; transform: translateX(-50%); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; cursor: pointer; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--accent); z-index: 101; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .integrated-add-btn:active { transform: translateX(-50%) scale(0.9); }
+
+/* GROUP COLOR PRESETS */
+.gc-blue { background: rgba(0,122,255,0.12); }
+.gc-green { background: rgba(52,199,89,0.12); }
+.gc-orange { background: rgba(255,149,0,0.12); }
+.gc-purple { background: rgba(175,82,222,0.12); }
+.gc-red { background: rgba(255,59,48,0.12); }
+.gc-teal { background: rgba(90,200,250,0.12); }
 </style>
 </head>
 <body>
@@ -149,6 +158,7 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
     </div>
   </div>
 
+  <!-- TAB ALOKASI -->
   <div id="tab-alokasi" class="tab-content active">
     <div class="glass hero">
       <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 12px;">Gaji Bulan Ini</div>
@@ -157,6 +167,28 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
         <input class="hero-salary-in" id="salary-in" type="text" inputmode="numeric" />
       </div>
     </div>
+
+    <!-- Ringkasan Budget -->
+    <div class="glass insight-card" style="margin-bottom: 15px;">
+      <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Total Rencana</span><strong id="total-plan-val"></strong></div>
+      <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:4px;"><span>Total Aktual</span><strong id="total-actual-val" style="color:var(--accent);"></strong></div>
+      <div style="margin-top: 12px; border-top:1px solid var(--glass-border); padding-top:12px;">
+        <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Sisa Anggaran</span><strong id="selisih-val"></strong></div>
+        <div style="width:100%; height:8px; background:rgba(120,120,128,0.1); border-radius:10px; margin-top:8px; overflow:hidden;"><div id="diff-bar" style="height:100%; width:0%; transition:0.5s;"></div></div>
+      </div>
+      <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:4px;"><span>Sisa Gaji Bebas</span><strong id="sisa-val" style="color:var(--grn);"></strong></div>
+    </div>
+
+    <!-- Alokasi per kategori -->
+    <div class="glass insight-card" style="margin-bottom: 15px;">
+      <div style="font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 10px;">Alokasi per Kategori</div>
+      <div id="stacked-bar" style="display:flex; height:12px; border-radius:10px; overflow:hidden; gap:2px; margin-bottom:15px; background:rgba(120,120,128,.1);"></div>
+      <div id="chart-legend" style="display:flex; flex-direction:column; gap:8px;"></div>
+    </div>
+
+    <!-- Jadwal Tagihan -->
+    <div style="margin: 4px 0 10px; font-size: 13px; font-weight: 600; color: var(--txt2); text-transform: uppercase; padding-left: 8px;">Jadwal Tagihan</div>
+    <div id="bill-schedule-list" style="margin-bottom: 20px;"></div>
     
     <div style="display:flex; justify-content:space-between; align-items:center; margin: 20px 0 12px; padding: 0 8px;">
       <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase;">Daftar Kategori</div>
@@ -165,52 +197,29 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
     <div id="cat-list" class="cat-list"></div>
   </div>
 
-  <div id="tab-ringkasan" class="tab-content">
-    
-    <div class="glass ring-container">
-      <svg width="200" height="200" viewBox="0 0 200 200">
-        <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(120,120,128,0.15)" stroke-width="16"/>
-        <circle id="ring-track" cx="100" cy="100" r="80" fill="none" stroke="url(#ringGrad)" stroke-width="16" stroke-linecap="round" stroke-dasharray="502" stroke-dashoffset="502" transform="rotate(-90 100 100)"/>
-        <defs><linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#007AFF"/><stop offset="100%" stop-color="#34C759"/></linearGradient></defs>
-      </svg>
-      <div class="ring-center" style="position: absolute; text-align: center;"><div class="ring-pct" id="ring-pct">0%</div><div style="font-size:12px; color:var(--txt2);">Terpakai</div></div>
+  <!-- TAB PORTOFOLIO -->
+  <div id="tab-portofolio" class="tab-content">
+
+    <!-- Total Kekayaan -->
+    <div class="glass" style="padding: 24px 20px; margin-bottom: 14px; text-align:center;">
+      <div style="font-size:12px; font-weight:600; color:var(--txt2); text-transform:uppercase; margin-bottom:8px;">Total Kekayaan</div>
+      <div style="font-size:34px; font-weight:700; letter-spacing:-1px; color:var(--grn);" id="total-asset-val">Rp 0</div>
     </div>
 
-    <div class="glass insight-card">
-      <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Total Rencana</span><strong id="total-plan-val"></strong></div>
-      <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:10px;"><span>Total Aktual</span><strong id="total-actual-val" style="color:var(--accent);"></strong></div>
-      <div style="margin-top: 15px; border-top:1px solid var(--glass-border); padding-top:15px;">
-        <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Sisa Anggaran</span><strong id="selisih-val"></strong></div>
-        <div style="width:100%; height:8px; background:rgba(120,120,128,0.1); border-radius:10px; margin-top:8px; overflow:hidden;"><div id="diff-bar" style="height:100%; width:0%; transition:0.5s;"></div></div>
-      </div>
-      <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:15px;"><span>Sisa Gaji Bebas</span><strong id="sisa-val" style="color:var(--grn);"></strong></div>
-    </div>
-
-    <div class="glass insight-card">
-      <div style="font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 10px;">Alokasi per Kategori</div>
-      <div id="stacked-bar" style="display:flex; height:12px; border-radius:10px; overflow:hidden; gap:2px; margin-bottom:15px; background:rgba(120,120,128,.1);"></div>
-      <div id="chart-legend" style="display:flex; flex-direction:column; gap:8px;"></div>
-    </div>
-
-    <div style="margin: 24px 0 10px; font-size: 13px; font-weight: 600; color: var(--txt2); text-transform: uppercase; padding-left: 8px;">Jadwal Tagihan</div>
-    <div id="bill-schedule-list" style="margin-bottom: 15px;"></div>
-
-    <div class="glass insight-card" style="margin-bottom: 15px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
-        <div style="font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase;">Portofolio Aset</div>
-        <div id="add-asset-btn" style="cursor:pointer; color: var(--accent); font-weight:600; font-size: 13px; background: rgba(0,122,255,0.1); padding: 4px 12px; border-radius: 100px;">+ Aset</div>
-      </div>
-      <div style="font-size:13px; color:var(--txt2);">Total Kekayaan</div>
-      <div style="font-size:26px; font-weight:700; margin-bottom: 15px; letter-spacing: -0.5px; color:var(--grn);" id="total-asset-val">Rp 0</div>
-      
-      <div id="asset-list" style="display:flex; flex-direction:column;"></div>
-    </div>
-
-    <div class="glass insight-card" style="margin-bottom: 20px;">
-      <div style="font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 5px;">Grafik Kekayaan</div>
+    <!-- Grafik Kekayaan -->
+    <div class="glass insight-card" style="margin-bottom: 14px;">
+      <div style="font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 5px;">Riwayat Kekayaan</div>
       <div id="asset-chart-container" class="asset-chart-container"></div>
     </div>
 
+    <!-- Kelompok Aset -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin: 10px 0 12px; padding: 0 8px;">
+      <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase;">Kelompok Aset</div>
+      <div id="add-group-btn" style="cursor:pointer; color: var(--accent); font-weight:600; font-size: 13px; background: rgba(0,122,255,0.1); padding: 4px 12px; border-radius: 100px;">+ Kelompok</div>
+    </div>
+    <div id="group-list"></div>
+
+    <!-- Login / Profile -->
     <div class="glass insight-card profile-card">
       <div id="user-logged-out" style="display:flex; flex-direction:column; width:100%;">
         <div style="font-size:48px; margin-bottom:10px;">☁️</div>
@@ -218,7 +227,6 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
         <p style="font-size:13px; color:var(--txt2); margin-bottom:20px;">Login dengan Google agar data aman & tersinkronisasi antar perangkat.</p>
         <button class="btn-blue" id="btn-login">Masuk dengan Google</button>
       </div>
-
       <div id="user-logged-in" style="display:none; flex-direction:column; width:100%;">
         <div class="up-avatar" id="up-avatar">👤</div>
         <div class="up-name" id="up-name">—</div>
@@ -231,7 +239,6 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
       <div style="display:flex; align-items:center; gap:10px;"><span>🌓</span> <span>Tema Tampilan</span></div>
       <span style="color:var(--txt2); font-size:18px;">›</span>
     </button>
-    
   </div>
 </div>
 
@@ -241,7 +248,7 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
     <div class="integrated-add-btn" id="integrated-add-btn">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
     </div>
-    <button class="tab-btn" data-tab="tab-ringkasan">Ringkasan</button>
+    <button class="tab-btn" data-tab="tab-portofolio">Portofolio</button>
   </div>
 </div>
 
@@ -271,13 +278,22 @@ const ASSET_TYPES = ['Tabungan', 'Emas', 'Saham', 'Reksadana', 'Obligasi', 'Krip
 const ASSET_EMOJIS = { 'Tabungan':'🏦', 'Emas':'🥇', 'Saham':'📈', 'Reksadana':'📊', 'Obligasi':'📜', 'Kripto':'🪙', 'Properti':'🏠', 'Lainnya':'💎' };
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
 
-// State Management Bulanan
-let currentMonth = new Date().toISOString().slice(0, 7); // Format: "YYYY-MM"
-let allMonthsData = {}; 
-let globalAssets = []; 
+// Kelompok Aset Presets
+const GROUP_PRESETS = [
+  { name: 'Dana Darurat', icon: '🛡️', color: 'gc-blue', note: '' },
+  { name: 'Dana Pensiun', icon: '🌅', color: 'gc-green', note: '' },
+  { name: 'Dana Investasi', icon: '📈', color: 'gc-purple', note: '' },
+  { name: 'Dana Liburan', icon: '✈️', color: 'gc-orange', note: '' },
+];
+const GROUP_COLORS = ['gc-blue','gc-green','gc-orange','gc-purple','gc-red','gc-teal'];
+const GROUP_ICONS_DEFAULT = ['🛡️','🌅','📈','✈️','🏡','🎓','💊','🚗','💍','🌱'];
+
+let currentMonth = new Date().toISOString().slice(0, 7);
+let allMonthsData = {};
+let globalAssets = [];
 
 let cats = [];
-let assets = []; 
+let assetGroups = []; // [{id, name, icon, color, note, assets:[{id,name,type,amount}]}]
 let salary = 0;
 
 let isEditMode = false;
@@ -289,7 +305,6 @@ const $ = id => document.getElementById(id);
 const haptic = () => { if(navigator.vibrate) navigator.vibrate(10); };
 const fmt = (n) => n === 0 ? '0' : Math.round(n).toLocaleString('id-ID');
 
-// Memformat nominal untuk Grafik Bar
 function formatShort(num) {
   if(num >= 1000000000) return (num/1000000000).toFixed(1).replace('.0','') + 'M';
   if(num >= 1000000) return (num/1000000).toFixed(1).replace('.0','') + 'Jt';
@@ -298,43 +313,35 @@ function formatShort(num) {
 }
 
 $('month-picker').value = currentMonth;
-$('month-picker').onchange = (e) => {
-  currentMonth = e.target.value;
-  haptic();
-  applyMonthData();
-};
+$('month-picker').onchange = (e) => { currentMonth = e.target.value; haptic(); applyMonthData(); };
 
 function applyMonthData() {
   if (!allMonthsData[currentMonth]) {
     let prevMonths = Object.keys(allMonthsData).filter(m => m < currentMonth).sort().reverse();
-    let prevAssets = [];
+    let prevGroups = [];
     let prevSalary = 0;
-    
     if (prevMonths.length > 0) {
-       let lastMonthData = allMonthsData[prevMonths[0]];
-       if (lastMonthData.assets) prevAssets = JSON.parse(JSON.stringify(lastMonthData.assets));
-       if (lastMonthData.salary) prevSalary = lastMonthData.salary;
-    } else if (globalAssets.length > 0) {
-       prevAssets = JSON.parse(JSON.stringify(globalAssets));
+      let last = allMonthsData[prevMonths[0]];
+      if (last.assetGroups) prevGroups = JSON.parse(JSON.stringify(last.assetGroups));
+      if (last.salary) prevSalary = last.salary;
     }
-    allMonthsData[currentMonth] = { cats: [], salary: prevSalary, assets: prevAssets };
+    allMonthsData[currentMonth] = { cats: [], salary: prevSalary, assetGroups: prevGroups };
   }
-  
   const monthData = allMonthsData[currentMonth];
   cats = monthData.cats || [];
   salary = monthData.salary || 0;
-  assets = monthData.assets || [];
-  
+  assetGroups = monthData.assetGroups || [];
+
   $('salary-in').value = fmt(salary);
   buildList();
-  buildAssetList();
+  buildGroupList();
   buildAssetChart();
 }
 
 async function saveToFirebase() {
-  allMonthsData[currentMonth] = { cats: cats, salary: salary, assets: assets };
+  allMonthsData[currentMonth] = { cats, salary, assetGroups };
   if (!currentUser) return;
-  try { await setDoc(doc(db, "users", currentUser.uid), { months: allMonthsData }, { merge: true }); } 
+  try { await setDoc(doc(db, "users", currentUser.uid), { months: allMonthsData }, { merge: true }); }
   catch (e) { console.error(e); }
 }
 
@@ -343,19 +350,14 @@ async function loadFromFirebase() {
   const docSnap = await getDoc(doc(db, "users", currentUser.uid));
   if (docSnap.exists()) {
     const d = docSnap.data();
-    globalAssets = d.assets || []; 
     allMonthsData = d.months || {};
-    
-    if (d.cats && Object.keys(allMonthsData).length === 0) {
-      allMonthsData[currentMonth] = { cats: d.cats, salary: d.salary || 0, assets: globalAssets };
-    }
   }
   applyMonthData();
 }
 
-const save = () => { 
-  allMonthsData[currentMonth] = { cats: cats, salary: salary, assets: assets };
-  localStorage.setItem('budgy_months', JSON.stringify(allMonthsData)); 
+const save = () => {
+  allMonthsData[currentMonth] = { cats, salary, assetGroups };
+  localStorage.setItem('budgy_months', JSON.stringify(allMonthsData));
   saveToFirebase();
 };
 
@@ -372,15 +374,12 @@ onAuthStateChanged(auth, async (user) => {
     currentUser = null;
     $('user-logged-out').style.display = 'flex';
     $('user-logged-in').style.display = 'none';
-    
     allMonthsData = JSON.parse(localStorage.getItem('budgy_months')) || {};
-    globalAssets = JSON.parse(localStorage.getItem('assets')) || [];
-    
     if (Object.keys(allMonthsData).length === 0 && localStorage.getItem('cats')) {
       allMonthsData[currentMonth] = {
         cats: JSON.parse(localStorage.getItem('cats')),
         salary: +(localStorage.getItem('salary')) || 0,
-        assets: globalAssets
+        assetGroups: []
       };
     }
     applyMonthData();
@@ -401,7 +400,6 @@ window.addToGoogleCalendar = (idx) => {
 };
 
 window.hapusKategori = function(id) { cats = cats.filter(c => c.id !== id); save(); buildList(); };
-window.hapusAset = function(id) { assets = assets.filter(a => a.id !== id); save(); buildAssetList(); };
 
 function getDisplayDate(dateStr) {
   if(!dateStr) return '📅 Atur Tgl';
@@ -409,48 +407,210 @@ function getDisplayDate(dateStr) {
   return `📅 ${d.getDate()} ${MONTH_NAMES[d.getMonth()]}`;
 }
 
-// Fitur Aset & Grafik Bulanan
-function updateAssetSummary() {
-  let totalAsset = assets.reduce((sum, a) => sum + a.amount, 0);
-  $('total-asset-val').textContent = 'Rp ' + fmt(totalAsset);
-  buildAssetChart(); // Animasi update chart ketika nominal berubah
+// ========== KELOMPOK ASET ==========
+function getTotalAsset() {
+  return assetGroups.reduce((sum, g) => sum + (g.assets || []).reduce((s, a) => s + a.amount, 0), 0);
 }
 
-function buildAssetChart() {
-  const container = $('asset-chart-container');
-  if(!container) return;
-  
-  // Update data sementara di allMonthsData agar grafiknya ikut up to date saat diketik
-  allMonthsData[currentMonth] = { cats: cats, salary: salary, assets: assets };
+function updateTotalAsset() {
+  $('total-asset-val').textContent = 'Rp ' + fmt(getTotalAsset());
+  buildAssetChart();
+}
 
-  const months = Object.keys(allMonthsData).sort();
-  if(months.length === 0) {
-    container.innerHTML = '<div style="text-align:center;font-size:12px;color:var(--txt2);width:100%;">Belum ada riwayat</div>';
+function buildGroupList() {
+  const list = $('group-list');
+  list.innerHTML = '';
+
+  if (assetGroups.length === 0) {
+    list.innerHTML = `<div style="text-align:center; font-size:13px; color:var(--txt2); padding: 20px 0;">Belum ada kelompok aset. Klik <strong>+ Kelompok</strong> untuk membuat.</div>`;
+    updateTotalAsset();
     return;
   }
 
-  // Tampilkan max 6 bulan terakhir
+  assetGroups.forEach((group, gi) => {
+    const groupTotal = (group.assets || []).reduce((s, a) => s + a.amount, 0);
+    const itemCount = (group.assets || []).length;
+
+    const card = document.createElement('div');
+    card.className = 'group-card';
+    card.dataset.gid = group.id;
+
+    const assetOptionsHtml = ASSET_TYPES.map(t => `<option value="${t}">${t}</option>`).join('');
+
+    const assetsHtml = (group.assets || []).map((a, ai) => `
+      <div class="asset-item" data-aid="${a.id}">
+        <div class="asset-icon" id="aicon-${a.id}">${ASSET_EMOJIS[a.type] || '💎'}</div>
+        <div class="asset-info">
+          <input class="a-name" type="text" value="${a.name}" placeholder="Nama aset" data-gi="${gi}" data-ai="${ai}">
+          <select class="a-type" data-gi="${gi}" data-ai="${ai}">
+            ${ASSET_TYPES.map(t => `<option value="${t}" ${a.type === t ? 'selected' : ''}>${t}</option>`).join('')}
+          </select>
+        </div>
+        <div style="text-align:right;">
+          <input class="a-amt" type="text" inputmode="numeric" value="${fmt(a.amount)}" data-gi="${gi}" data-ai="${ai}">
+        </div>
+        <div class="a-del" data-gi="${gi}" data-ai="${ai}">−</div>
+      </div>
+    `).join('');
+
+    card.innerHTML = `
+      <div class="group-header" data-gid="${group.id}">
+        <div class="group-icon-wrap ${group.color || 'gc-blue'}">${group.icon || '📦'}</div>
+        <div class="group-info">
+          <input class="group-name-in" type="text" value="${group.name}" placeholder="Nama kelompok" data-gi="${gi}">
+          <div class="group-subtitle">${itemCount} aset · Rp ${fmt(groupTotal)}</div>
+        </div>
+        <div class="group-total">Rp ${fmt(groupTotal)}</div>
+        <div class="group-toggle ${group.open ? 'open' : ''}">›</div>
+        <div style="margin-left:4px; cursor:pointer; font-size:18px; color:var(--red); padding:4px 2px;" data-del-gi="${gi}">🗑</div>
+      </div>
+      <div class="group-body ${group.open ? 'open' : ''}">
+        <div id="assets-of-${group.id}">${assetsHtml}</div>
+        <button style="width:100%; padding:10px; border-radius:12px; background:rgba(0,122,255,0.08); color:var(--accent); border:1px solid rgba(0,122,255,0.18); font-size:13px; font-weight:600; cursor:pointer; margin-top:4px;" data-add-asset-gi="${gi}">+ Tambah Aset</button>
+        <div class="group-note-wrap" style="margin-top:12px;">
+          <div class="group-note-label">📝 Catatan</div>
+          <textarea class="group-note" placeholder="Misal: Dana darurat 6 bulan, target Rp 30jt. Isi: emas antam 5gr, RDPU Schroder..." data-gi="${gi}">${group.note || ''}</textarea>
+        </div>
+      </div>
+    `;
+    list.appendChild(card);
+
+    // Toggle buka/tutup
+    card.querySelector('.group-header').addEventListener('click', (e) => {
+      if (e.target.closest('[data-del-gi]') || e.target.closest('.group-name-in') || e.target.closest('[data-add-asset-gi]')) return;
+      haptic();
+      assetGroups[gi].open = !assetGroups[gi].open;
+      save();
+      buildGroupList();
+    });
+
+    // Hapus kelompok
+    card.querySelector('[data-del-gi]').addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (confirm(`Hapus kelompok "${group.name}"?`)) {
+        haptic();
+        assetGroups.splice(gi, 1);
+        save();
+        buildGroupList();
+      }
+    });
+
+    // Nama kelompok
+    card.querySelector(`[data-gi="${gi}"].group-name-in`).addEventListener('input', (e) => {
+      assetGroups[gi].name = e.target.value;
+      save();
+    });
+
+    // Catatan
+    card.querySelector(`.group-note[data-gi="${gi}"]`).addEventListener('input', (e) => {
+      assetGroups[gi].note = e.target.value;
+      save();
+    });
+
+    // Tambah aset ke kelompok
+    card.querySelector(`[data-add-asset-gi="${gi}"]`).addEventListener('click', (e) => {
+      e.stopPropagation();
+      haptic();
+      if (!assetGroups[gi].assets) assetGroups[gi].assets = [];
+      assetGroups[gi].assets.push({ id: Date.now(), name: '', type: 'Tabungan', amount: 0 });
+      save();
+      buildGroupList();
+    });
+
+    // Input nama aset
+    card.querySelectorAll('.a-name').forEach(el => {
+      el.addEventListener('input', (e) => {
+        const g = +e.target.dataset.gi, a = +e.target.dataset.ai;
+        assetGroups[g].assets[a].name = e.target.value;
+        save();
+      });
+    });
+
+    // Select tipe aset
+    card.querySelectorAll('.a-type').forEach(el => {
+      el.addEventListener('change', (e) => {
+        const g = +e.target.dataset.gi, a = +e.target.dataset.ai;
+        assetGroups[g].assets[a].type = e.target.value;
+        const icon = card.querySelector(`#aicon-${assetGroups[g].assets[a].id}`);
+        if (icon) icon.textContent = ASSET_EMOJIS[e.target.value] || '💎';
+        save();
+      });
+    });
+
+    // Input jumlah aset
+    card.querySelectorAll('.a-amt').forEach(el => {
+      el.addEventListener('input', (e) => {
+        const g = +e.target.dataset.gi, a = +e.target.dataset.ai;
+        let val = parseInt(e.target.value.replace(/\D/g, '')) || 0;
+        assetGroups[g].assets[a].amount = val;
+        e.target.value = fmt(val);
+        save();
+        updateTotalAsset();
+      });
+    });
+
+    // Hapus aset
+    card.querySelectorAll('.a-del').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const g = +e.target.dataset.gi, a = +e.target.dataset.ai;
+        haptic();
+        assetGroups[g].assets.splice(a, 1);
+        save();
+        buildGroupList();
+      });
+    });
+  });
+
+  updateTotalAsset();
+}
+
+$('add-group-btn').onclick = () => {
+  haptic();
+  const colorIdx = assetGroups.length % GROUP_COLORS.length;
+  const iconIdx = assetGroups.length % GROUP_ICONS_DEFAULT.length;
+  assetGroups.push({
+    id: Date.now(),
+    name: '',
+    icon: GROUP_ICONS_DEFAULT[iconIdx],
+    color: GROUP_COLORS[colorIdx],
+    note: '',
+    open: true,
+    assets: []
+  });
+  save();
+  buildGroupList();
+  setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
+};
+
+// ========== GRAFIK ==========
+function buildAssetChart() {
+  const container = $('asset-chart-container');
+  if(!container) return;
+  allMonthsData[currentMonth] = { cats, salary, assetGroups };
+
+  const months = Object.keys(allMonthsData).sort();
   const recentMonths = months.slice(-6);
 
   let maxVal = 0;
   const chartData = recentMonths.map(m => {
-    const t = (allMonthsData[m].assets || []).reduce((sum, a) => sum + a.amount, 0);
+    const groups = allMonthsData[m].assetGroups || [];
+    const t = groups.reduce((sum, g) => sum + (g.assets || []).reduce((s, a) => s + a.amount, 0), 0);
     if(t > maxVal) maxVal = t;
     return { month: m, total: t };
   });
 
   if(maxVal === 0) {
-    container.innerHTML = '<div style="text-align:center;font-size:12px;color:var(--txt2);width:100%; align-self:center;">Aset masih Rp 0</div>';
+    container.innerHTML = '<div style="text-align:center;font-size:12px;color:var(--txt2);width:100%; align-self:center;">Belum ada data aset</div>';
     return;
   }
 
   container.innerHTML = '';
   chartData.forEach(d => {
     const isCurrent = d.month === currentMonth;
-    const heightPct = Math.max((d.total / maxVal) * 100, 5); // min 5% height agar bar kelihatan
+    const heightPct = Math.max((d.total / maxVal) * 100, 5);
     const dObj = new Date(d.month + '-01');
     const mName = MONTH_NAMES[dObj.getMonth()];
-
     const wrap = document.createElement('div');
     wrap.className = `ac-bar-wrap ${isCurrent ? 'active' : ''}`;
     wrap.innerHTML = `
@@ -462,65 +622,11 @@ function buildAssetChart() {
   });
 }
 
-function buildAssetList() {
-  const list = $('asset-list');
-  list.innerHTML = '';
-
-  if (assets.length === 0) {
-    list.innerHTML = '<div style="text-align:center; font-size:12px; color:var(--txt2); padding:10px 0;">Belum ada aset bulan ini. Klik + Aset untuk menambah.</div>';
-    updateAssetSummary();
-    return;
-  }
-
-  assets.forEach((a, index) => {
-    const item = document.createElement('div');
-    item.className = 'asset-item';
-    item.innerHTML = `
-      <div class="asset-icon" id="asset-icon-${a.id}">${ASSET_EMOJIS[a.type] || '💎'}</div>
-      <div class="asset-info">
-        <input class="a-name" type="text" value="${a.name}" placeholder="Nama Aset">
-        <select class="a-type" data-idx="${index}">
-          ${ASSET_TYPES.map(t => `<option value="${t}" ${a.type === t ? 'selected' : ''}>${t}</option>`).join('')}
-        </select>
-      </div>
-      <div style="text-align:right;">
-        <input class="a-amt" type="text" inputmode="numeric" value="${fmt(a.amount)}">
-      </div>
-      <div class="a-del" onclick="hapusAset(${a.id})">−</div>
-    `;
-    list.appendChild(item);
-
-    item.querySelector('.a-name').oninput = (e) => { assets[index].name = e.target.value; save(); };
-    item.querySelector('.a-type').onchange = (e) => { 
-      assets[index].type = e.target.value; 
-      $(`asset-icon-${a.id}`).textContent = ASSET_EMOJIS[e.target.value];
-      save(); 
-    };
-    
-    item.querySelector('.a-amt').oninput = (e) => {
-      let val = parseInt(e.target.value.replace(/\D/g, '')) || 0;
-      assets[index].amount = val;
-      e.target.value = fmt(val);
-      save();
-      updateAssetSummary(); 
-    };
-  });
-
-  updateAssetSummary();
-}
-
-$('add-asset-btn').onclick = () => {
-  haptic();
-  assets.push({ id: Date.now(), name: '', type: 'Tabungan', amount: 0 });
-  save();
-  buildAssetList();
-};
-
+// ========== CHART ALOKASI ==========
 function buildChart() {
   const total = cats.reduce((a,c)=>a+c.amount,0);
   const bar = $('stacked-bar');
   const leg = $('chart-legend');
-  
   bar.innerHTML=''; leg.innerHTML='';
 
   if(!total || !cats.length){
@@ -530,17 +636,14 @@ function buildChart() {
   }
 
   const sortedCats = [...cats].filter(c => c.amount > 0).sort((a,b) => b.amount - a.amount);
-
   sortedCats.forEach((c,i)=>{
     const pct = c.amount/total;
     const color = PALETTE[i%PALETTE.length];
-
     const seg = document.createElement('div');
     seg.style.width = `${pct*100}%`;
     seg.style.background = color;
     seg.style.height = '100%';
     bar.appendChild(seg);
-
     if(i<6){
       const item = document.createElement('div');
       item.style.display = 'flex'; item.style.alignItems = 'center'; item.style.padding = '4px 0';
@@ -555,6 +658,7 @@ function buildChart() {
   });
 }
 
+// ========== DAFTAR KATEGORI ==========
 function buildList() {
   const list = $('cat-list');
   list.innerHTML = '';
@@ -586,18 +690,12 @@ function buildList() {
     list.appendChild(wrap);
 
     wrap.querySelector('.due-input').onchange = (e) => { cats[index].due = e.target.value; save(); updateSummary(); buildList(); };
-    
     wrap.querySelector('.cat-name-in').oninput = (e) => {
       cats[index].name = e.target.value;
       const word = e.target.value.toLowerCase().split(' ').pop();
-      if(EMOJI_MAP[word]) { 
-        cats[index].icon = EMOJI_MAP[word]; 
-        wrap.querySelector('.cat-dot').textContent = EMOJI_MAP[word];
-        updateSummary(); 
-      }
+      if(EMOJI_MAP[word]) { cats[index].icon = EMOJI_MAP[word]; wrap.querySelector('.cat-dot').textContent = EMOJI_MAP[word]; updateSummary(); }
       save();
     };
-    
     wrap.querySelector('.bank-tag').onchange = (e) => { cats[index].bank = e.target.value; save(); updateSummary(); };
     wrap.querySelector('.amount-in').oninput = (e) => handleVal(e, index, 'amount');
     wrap.querySelector('.actual-in').oninput = (e) => handleVal(e, index, 'actual');
@@ -606,7 +704,6 @@ function buildList() {
     handle.addEventListener('touchstart', (e) => {
       e.preventDefault(); dragEl = wrap; dragEl.classList.add('dragging'); startY = e.touches[0].clientY; haptic();
     }, {passive: false});
-
     handle.addEventListener('touchmove', (e) => {
       if(!dragEl) return;
       e.preventDefault();
@@ -615,20 +712,19 @@ function buildList() {
       let siblings = [...document.querySelectorAll('.cat-wrapper:not(.dragging)')];
       let nextEl = siblings.find(sib => { let rect = sib.getBoundingClientRect(); return y > rect.top && y < rect.bottom; });
       if(nextEl) {
-          let rect = nextEl.getBoundingClientRect();
-          if(y > rect.top + rect.height / 2) list.insertBefore(dragEl, nextEl.nextSibling);
-          else list.insertBefore(dragEl, nextEl);
-          startY = y; dragEl.style.transform = `translateY(0)`; haptic();
+        let rect = nextEl.getBoundingClientRect();
+        if(y > rect.top + rect.height / 2) list.insertBefore(dragEl, nextEl.nextSibling);
+        else list.insertBefore(dragEl, nextEl);
+        startY = y; dragEl.style.transform = `translateY(0)`; haptic();
       }
     }, {passive: false});
-
     handle.addEventListener('touchend', () => {
       if(!dragEl) return;
       dragEl.classList.remove('dragging'); dragEl.style.transform = ''; dragEl = null;
       let newCats = [];
       document.querySelectorAll('.cat-wrapper').forEach(w => {
-          let cat = cats.find(c => c.id === parseInt(w.dataset.id));
-          if(cat) newCats.push(cat);
+        let cat = cats.find(c => c.id === parseInt(w.dataset.id));
+        if(cat) newCats.push(cat);
       });
       cats = newCats; save(); buildList();
     });
@@ -646,7 +742,6 @@ function handleVal(e, idx, key) {
 function updateSummary() {
   const sal = parseInt(salary) || 0;
   let tPlan = 0, tAct = 0;
-  const today = new Date(); today.setHours(0,0,0,0);
   let pending = [];
 
   cats.forEach((c, idx) => {
@@ -664,7 +759,6 @@ function updateSummary() {
   billDiv.innerHTML = '';
   if(pending.length) {
     pending.sort((a,b) => a.dateObj - b.dateObj).forEach(b => {
-      let dateDisplay = getDisplayDate(b.due);
       billDiv.innerHTML += `
         <div class="bill-item glass">
           <div style="display:flex; align-items:center; gap:10px;">
@@ -672,25 +766,22 @@ function updateSummary() {
             <div>
               <div style="font-size:14px; font-weight:600;">${b.name}</div>
               <div style="font-size:11px; opacity:0.8; margin-top:2px;">
-                <span style="color:#FF9500; font-weight:600;">${dateDisplay}</span> • Rp ${fmt(b.amount - b.actual)}
+                <span style="color:#FF9500; font-weight:600;">${getDisplayDate(b.due)}</span> · Rp ${fmt(b.amount - b.actual)}
               </div>
             </div>
           </div>
           <button class="cal-btn" onclick="window.addToGoogleCalendar(${b.idx})" title="Ingatkan di Google Calendar">🗓️</button>
         </div>`;
     });
-  } else billDiv.innerHTML = '<div style="text-align:center; font-size:13px; opacity:0.5; padding:10px;">Semua lunas! 🎉</div>';
+  } else {
+    billDiv.innerHTML = '<div style="text-align:center; font-size:13px; opacity:0.5; padding:10px; background:var(--glass-bg); border-radius:16px; border:1px solid var(--glass-border);">Semua lunas! 🎉</div>';
+  }
 
-  const pct = sal > 0 ? Math.round((tPlan/sal)*100) : 0;
-  $('ring-pct').textContent = pct + '%';
-  $('ring-track').style.strokeDashoffset = 502 * (1 - pct/100);
   $('total-plan-val').textContent = 'Rp ' + fmt(tPlan);
   $('total-actual-val').textContent = 'Rp ' + fmt(tAct);
-  
   const diff = tPlan - tAct;
   $('selisih-val').textContent = 'Rp ' + fmt(diff);
   $('selisih-val').style.color = diff < 0 ? 'var(--red)' : 'var(--txt)';
-  
   $('diff-bar').style.width = tPlan > 0 ? Math.min((tAct/tPlan)*100, 100)+'%' : '0%';
   $('sisa-val').textContent = 'Rp ' + fmt(sal - tPlan);
 
@@ -699,10 +790,9 @@ function updateSummary() {
 
 $('salary-in').oninput = (e) => { salary = parseInt(e.target.value.replace(/\D/g, '')) || 0; e.target.value = fmt(salary); save(); updateSummary(); };
 
-$('edit-mode-btn').onclick = () => { 
-  haptic(); isEditMode = !isEditMode; 
-  $('cat-list').classList.toggle('edit-mode'); 
-  
+$('edit-mode-btn').onclick = () => {
+  haptic(); isEditMode = !isEditMode;
+  $('cat-list').classList.toggle('edit-mode');
   if (isEditMode) {
     $('edit-mode-btn').textContent = 'Selesai';
     $('edit-mode-btn').style.fontSize = '14px';
@@ -715,23 +805,26 @@ $('edit-mode-btn').onclick = () => {
 };
 
 document.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => {
-  haptic(); document.querySelectorAll('.tab-btn, .tab-content').forEach(el => el.classList.remove('active'));
+  haptic();
+  document.querySelectorAll('.tab-btn, .tab-content').forEach(el => el.classList.remove('active'));
   b.classList.add('active'); $(b.dataset.tab).classList.add('active');
   if(isEditMode) $('edit-mode-btn').click();
-  
-  if (b.dataset.tab === 'tab-ringkasan') {
+
+  if (b.dataset.tab === 'tab-portofolio') {
     $('integrated-add-btn').style.transform = 'translate(-50%, 50px)';
     $('integrated-add-btn').style.opacity = '0';
+    $('integrated-add-btn').style.pointerEvents = 'none';
   } else {
     $('integrated-add-btn').style.transform = 'translateX(-50%)';
     $('integrated-add-btn').style.opacity = '1';
+    $('integrated-add-btn').style.pointerEvents = 'auto';
   }
 });
 
-$('integrated-add-btn').onclick = () => { 
-  haptic(); if(isEditMode) $('edit-mode-btn').click(); 
-  cats.push({id: Date.now(), name: '', amount: 0, actual: 0, icon: '📦', bank: 'BCA', due:''}); 
-  save(); buildList(); 
+$('integrated-add-btn').onclick = () => {
+  haptic(); if(isEditMode) $('edit-mode-btn').click();
+  cats.push({id: Date.now(), name: '', amount: 0, actual: 0, icon: '📦', bank: 'BCA', due:''});
+  save(); buildList();
   setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
 };
 
