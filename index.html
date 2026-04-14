@@ -32,57 +32,81 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-se
 .phone-wrap { width: 100%; max-width: 420px; padding: 20px 20px 140px; position: relative; overflow-x: hidden; min-height: 100vh;}
 .glass { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); box-shadow: var(--glass-shadow); backdrop-filter: blur(32px) saturate(1.8); -webkit-backdrop-filter: blur(32px) saturate(1.8); }
 
-.top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 5px; margin-top: env(safe-area-inset-top, 0px); }
+/* TOP NAV */
+.top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; margin-top: env(safe-area-inset-top, 0px); padding: 0 5px; }
 .wm { font-size: 19px; font-weight: 600; display: flex; align-items: center; gap: 7px; }
-
-.month-selector { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 100px; padding: 6px 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; align-items: center; }
+.month-selector { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 100px; padding: 6px 14px; display: flex; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 .month-input { background: transparent; border: none; color: var(--txt); font-size: 14px; font-weight: 600; outline: none; font-family: inherit; }
 ::-webkit-calendar-picker-indicator { cursor: pointer; filter: opacity(0.6); }
 body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
 
+/* TABS */
 .tab-content { display: none; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
 .tab-content.active { display: block; }
 @keyframes slideUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
 
+/* HERO & SUMMARY */
 .hero { padding: 30px 20px; margin-bottom: 12px; text-align: center; }
 .hero-salary-in { font-size: 38px; font-weight: 300; color: var(--txt); background: transparent; border: none; outline: none; width: 100%; text-align: center; letter-spacing: -1px; }
 
-.cat-list { display: flex; flex-direction: column; gap: 12px; padding-bottom: 20px; }
+/* QUICK INPUT MINIMALIST */
+.qi-minimal-row { display: flex; gap: 8px; margin-bottom: 20px; padding: 0 5px; }
+.qi-field { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 12px; color: var(--txt); font-size: 14px; outline: none; font-family: inherit; box-shadow: 0 2px 10px rgba(0,0,0,0.02); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+.qi-select-subtle { flex: 1.2; appearance: none; }
+.qi-input-subtle { flex: 1; font-weight: 600; }
+.qi-btn-subtle { width: 46px; background: var(--accent); color: white; border: none; border-radius: 16px; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,122,255,0.2); }
+.qi-btn-subtle:active { transform: scale(0.9); opacity: 0.8; }
+
+/* EDIT BUTTON MINIMAL */
+.edit-btn-subtle { font-size: 13px; font-weight: 500; color: var(--txt2); background: rgba(120,120,128,0.1); padding: 4px 12px; border-radius: 100px; cursor: pointer; transition: 0.2s; }
+.edit-btn-subtle.active { color: var(--accent); background: rgba(0,122,255,0.1); font-weight: 600; }
+
+/* KATEGORI LIST */
+.cat-list { display: flex; flex-direction: column; gap: 10px; padding-bottom: 20px; }
 .cat-wrapper { position: relative; border-radius: var(--r); }
 .cat-card { padding: 16px; display: flex; align-items: center; gap: 12px; position: relative; overflow: hidden; z-index: 1; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); }
+.cat-progress-bg { position: absolute; top: 0; left: 0; height: 100%; background: rgba(0, 122, 255, 0.06); z-index: -1; transition: width 0.8s; }
+.cat-dot { width: 40px; height: 40px; border-radius: 12px; background: rgba(120,120,128,0.12); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.cat-body { flex: 1; min-width: 0; }
+.cat-name-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; width: 100%; font-family: inherit;}
+.cat-sub-info { font-size: 11px; color: var(--txt2); margin-top: 2px; }
+.date-container { position: relative; display: inline-block; vertical-align: middle; margin-top: 4px;}
+.date-tag { appearance: none; background: rgba(255, 149, 0, 0.1); border: 1px solid rgba(255, 149, 0, 0.2); border-radius: 100px; padding: 2px 10px; font-size: 11px; font-weight: 600; color: #FF9500; pointer-events: none; display: flex; align-items: center; gap: 4px; }
+.due-input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 5; }
+.bank-tag { appearance: none; background: rgba(120, 120, 128, 0.1); border: 1px solid rgba(120, 120, 128, 0.2); border-radius: 100px; padding: 2px 8px; font-size: 11px; font-weight: 600; color: var(--txt2); font-family: inherit; outline: none; }
+.amount-in, .actual-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; text-align: right; width: 85px; font-family: inherit; }
+.actual-in { font-size: 13px; color: var(--accent); margin-top: 2px; }
 
-@keyframes jiggle { 0% { transform: rotate(-0.8deg); } 50% { transform: rotate(0.8deg); } 100% { transform: rotate(-0.8deg); } }
+/* EDIT MODE & DRAG */
+@keyframes jiggle { 0% { transform: rotate(-0.5deg); } 50% { transform: rotate(0.5deg); } 100% { transform: rotate(-0.5deg); } }
 .edit-mode .cat-card { animation: jiggle 0.3s infinite ease-in-out; }
-.delete-badge { position: absolute; top: -4px; left: -4px; width: 26px; height: 26px; background: #FF3B30; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 18px; opacity: 0; transform: scale(0); transition: all 0.25s; z-index: 10; cursor:pointer; pointer-events: none; }
+.delete-badge { position: absolute; top: -4px; left: -4px; width: 24px; height: 24px; background: var(--red); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; opacity: 0; transform: scale(0); transition: 0.2s; z-index: 10; cursor:pointer; pointer-events: none; }
 .edit-mode .delete-badge { opacity: 1; transform: scale(1); pointer-events: auto; }
-
 .drag-handle { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 24px; color: var(--txt2); padding: 15px; display: none; cursor: grab; z-index: 20; }
 .edit-mode .drag-handle { display: block; }
-.edit-mode .amt-row, .edit-mode .date-container, .edit-mode .bank-tag { opacity: 0.2; pointer-events: none; transition: 0.3s; }
+.edit-mode .amount-in, .edit-mode .actual-in, .edit-mode .date-container, .edit-mode .bank-tag { opacity: 0.2; pointer-events: none; transition: 0.3s; }
 .edit-mode .cat-name-in { pointer-events: none; }
 .cat-wrapper.dragging { z-index: 999; }
 .cat-wrapper.dragging .cat-card { animation: none !important; transform: scale(1.03); box-shadow: 0 15px 30px rgba(0,0,0,0.15); border: 1px solid var(--accent); }
 
-.cat-progress-bg { position: absolute; top: 0; left: 0; height: 100%; background: rgba(0, 122, 255, 0.08); z-index: -1; transition: width 0.8s; }
-.cat-dot { width: 40px; height: 40px; border-radius: 12px; background: rgba(120,120,128,0.15); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-.cat-body { flex: 1; min-width: 0; }
-.cat-name-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; width: 100%; margin-bottom: 4px; font-family: inherit;}
-
-.date-container { position: relative; display: inline-block; vertical-align: middle; }
-.date-tag { appearance: none; background: rgba(255, 149, 0, 0.1); border: 1px solid rgba(255, 149, 0, 0.2); border-radius: 100px; padding: 2px 10px; font-size: 11px; font-weight: 600; color: #FF9500; pointer-events: none; display: flex; align-items: center; gap: 4px; }
-.due-input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 5; }
-.bank-tag { appearance: none; background: rgba(120, 120, 128, 0.1); border: 1px solid rgba(120, 120, 128, 0.2); border-radius: 100px; padding: 2px 8px; font-size: 11px; font-weight: 600; color: var(--txt2); font-family: inherit; outline: none; }
-.amount-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; text-align: right; width: 90px; }
-.actual-in { font-size: 14px; font-weight: 600; color: var(--accent); background: transparent; border: none; outline: none; text-align: right; width: 90px; }
-
-/* Summary section in alokasi tab */
+/* LOGS & CHARTS */
 .insight-card { padding: 20px; display: flex; flex-direction: column; gap: 15px; margin-top: 15px; }
+.log-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--glass-border); }
+.log-item:last-child { border-bottom: none; padding-bottom: 0;}
+.log-info { flex: 1; }
+.log-name { font-size: 13px; font-weight: 600; }
+.log-date { font-size: 11px; color: var(--txt2); }
+.log-amt { font-size: 13px; font-weight: 700; color: var(--red); }
+.var-chart-container { display: flex; align-items: flex-end; justify-content: space-between; height: 80px; gap: 8px; padding-top: 15px; }
+.var-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+.var-bar { width: 100%; max-width: 18px; border-radius: 4px; transition: height 0.6s ease; }
 
+/* JADWAL TAGIHAN */
 .bill-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; background: rgba(120,120,128,0.05); border-radius: 14px; margin-bottom: 10px; transition: 0.2s;}
 .cal-btn { width: 34px; height: 34px; border-radius: 8px; background: rgba(255, 149, 0, 0.15); color: #FF9500; border: 1px solid rgba(255, 149, 0, 0.3); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
 .cal-btn:active { transform: scale(0.9); }
 
-/* ASET STYLES */
+/* PORTOFOLIO / ASET STYLES */
 .asset-item { display: flex; align-items: center; gap: 10px; padding: 12px; background: rgba(120,120,128,0.05); border-radius: 14px; margin-bottom: 8px; }
 .asset-icon { font-size: 20px; flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: rgba(120,120,128,0.1); border-radius: 10px; }
 .asset-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
@@ -92,7 +116,7 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
 .a-del { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,59,48,0.1); color: var(--red); display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; flex-shrink: 0; margin-left: 2px; }
 
 /* KELOMPOK ASET */
-.group-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); box-shadow: var(--glass-shadow); backdrop-filter: blur(32px) saturate(1.8); -webkit-backdrop-filter: blur(32px) saturate(1.8); margin-bottom: 14px; overflow: hidden; }
+.group-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); box-shadow: var(--glass-shadow); backdrop-filter: blur(32px) saturate(1.8); margin-bottom: 14px; overflow: hidden; }
 .group-header { display: flex; align-items: center; gap: 10px; padding: 16px 20px; cursor: pointer; user-select: none; }
 .group-icon-wrap { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
 .group-info { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
@@ -108,11 +132,11 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
 .group-note::placeholder { color: var(--txt2); }
 .group-note-label { font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 6px; }
 
-/* TARGET PROGRESS BAR */
+/* TARGET PROGRESS BAR (ASET) */
 .group-prog-container { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
-.group-prog-track { flex: 1; height: 6px; background: rgba(120,120,128,0.15); border-radius: 10px; overflow: hidden; }
+.group-prog-track { flex: 1; height: 5px; background: rgba(120,120,128,0.1); border-radius: 10px; overflow: hidden; }
 .group-prog-fill { height: 100%; background: var(--accent); transition: width 0.4s ease, background 0.4s ease; }
-.group-prog-pct { font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums; transition: color 0.4s ease; }
+.group-prog-pct { font-size: 10px; font-weight: 700; color: var(--txt2); font-variant-numeric: tabular-nums; transition: color 0.4s ease; }
 
 /* GRAFIK ASET BULANAN */
 .asset-chart-container { display: flex; align-items: flex-end; justify-content: space-between; height: 140px; gap: 6px; padding-top: 20px; }
@@ -124,7 +148,7 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
 .ac-val { font-size: 10px; color: var(--txt2); font-weight: 600; margin-bottom: 6px; transition: 0.3s; }
 .ac-bar-wrap.active .ac-val { color: var(--txt); font-weight: 700; }
 
-/* PROFILE */
+/* PROFILE & BUTTONS */
 .profile-card { align-items: center; text-align: center; margin-top: 20px; }
 .up-avatar { width: 72px; height: 72px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 36px; background: rgba(120,120,128,0.1); border: 3px solid var(--glass-border); margin: 0 auto 12px; }
 .up-avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -137,12 +161,12 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
 .btn-menu { width: 100%; padding: 16px 20px; border-radius: var(--r); font-size: 15px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--txt); margin-top: 10px; transition: 0.2s; }
 .btn-menu:active { transform: scale(0.97); }
 
-/* NAV BAR */
+/* NAVIGATION */
 .bottom-nav-container { position: fixed; bottom: max(30px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 380px; z-index: 100; }
-.bottom-glass-bar { display: flex; justify-content: space-between; align-items: center; position: relative; background: var(--footer-bg); border: 1px solid var(--glass-border); border-radius: 99px; padding: 8px 15px; height: 75px; backdrop-filter: blur(40px) saturate(2); -webkit-backdrop-filter: blur(40px) saturate(2); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-.tab-btn { width: 35%; text-align: center; padding: 14px 0; border: none; background: transparent; color: var(--txt2); font-size: 14px; font-weight: 600; border-radius: 100px; cursor: pointer; transition: 0.3s; }
-.tab-btn.active { color: var(--txt); background: rgba(120,120,128,0.15); }
-.integrated-add-btn { position: absolute; left: 50%; transform: translateX(-50%); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; cursor: pointer; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--accent); z-index: 101; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.bottom-glass-bar { display: flex; justify-content: space-between; align-items: center; background: var(--footer-bg); border: 1px solid var(--glass-border); border-radius: 99px; padding: 8px 15px; height: 72px; backdrop-filter: blur(40px) saturate(2); -webkit-backdrop-filter: blur(40px) saturate(2); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+.tab-btn { width: 35%; text-align: center; border: none; background: transparent; color: var(--txt2); font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+.tab-btn.active { color: var(--txt); }
+.integrated-add-btn { position: absolute; left: 50%; transform: translateX(-50%); width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--accent); z-index: 101; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .integrated-add-btn:active { transform: translateX(-50%) scale(0.9); }
 
 /* GROUP COLOR PRESETS */
@@ -167,39 +191,54 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
   <div id="tab-alokasi" class="tab-content active">
     
     <div class="glass hero">
-      <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 12px;">Gaji Bulan Ini</div>
-      <div style="display:flex;align-items:center;justify-content:center;gap:12px;">
-        <span style="font-size:24px; opacity:0.5;">Rp</span>
+      <div style="font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 10px;">Gaji Bulan Ini</div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
+        <span style="font-size:20px; opacity:0.4;">Rp</span>
         <input class="hero-salary-in" id="salary-in" type="text" inputmode="numeric" />
       </div>
     </div>
 
-    <div style="display:flex; justify-content:space-between; align-items:center; margin: 20px 0 12px; padding: 0 8px;">
-      <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase;">Daftar Kategori</div>
-      <div id="edit-mode-btn" style="cursor:pointer; color: var(--txt2); font-weight:bold; font-size: 22px;">⋯</div>
+    <div class="qi-minimal-row">
+      <select id="qi-cat-select" class="qi-field qi-select-subtle"><option value="">Kategori</option></select>
+      <input id="qi-amt-input" class="qi-field qi-input-subtle" type="text" inputmode="numeric" placeholder="Nominal Rp">
+      <button id="qi-add-btn" class="qi-btn-subtle">+</button>
     </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px; padding: 0 5px;">
+      <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase;">Alokasi</div>
+      <div id="edit-mode-btn" class="edit-btn-subtle">Edit</div>
+    </div>
+    
     <div id="cat-list" class="cat-list"></div>
 
-    <div class="glass insight-card" style="margin-bottom: 15px; margin-top: 5px;">
-      <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Total Rencana</span><strong id="total-plan-val"></strong></div>
-      <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:4px;"><span>Total Aktual</span><strong id="total-actual-val" style="color:var(--accent);"></strong></div>
-      <div style="margin-top: 12px; border-top:1px solid var(--glass-border); padding-top:12px;">
-        <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Sisa Anggaran</span><strong id="selisih-val"></strong></div>
-        <div style="width:100%; height:8px; background:rgba(120,120,128,0.1); border-radius:10px; margin-top:8px; overflow:hidden;"><div id="diff-bar" style="height:100%; width:0%; transition:0.5s;"></div></div>
+    <div class="glass insight-card">
+      <div style="font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase;">Log Terakhir</div>
+      <div id="transaction-log-list"></div>
+    </div>
+
+    <div class="glass insight-card" style="margin-bottom: 20px;">
+      <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Rencana</span><strong id="total-plan-val"></strong></div>
+      <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:4px;"><span>Aktual</span><strong id="total-actual-val" style="color:var(--accent);"></strong></div>
+      <div style="margin-top: 10px; border-top:1px solid var(--glass-border); padding-top:12px;">
+        <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Sisa Budget</span><strong id="selisih-val"></strong></div>
+        <div style="width:100%; height:6px; background:rgba(120,120,128,0.1); border-radius:10px; margin-top:8px; overflow:hidden;"><div id="diff-bar" style="height:100%; width:0%; transition:0.5s;"></div></div>
       </div>
-      <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:4px;"><span>Sisa Gaji Bebas</span><strong id="sisa-val" style="color:var(--grn);"></strong></div>
+      <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:12px;"><span>Sisa Gaji Bebas</span><strong id="sisa-val" style="color:var(--grn);"></strong></div>
+      
+      <div style="margin-top: 15px; border-top:1px solid var(--glass-border); padding-top:15px;">
+        <div style="font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase;">Tren Bulanan</div>
+        <div id="variance-chart-container" class="var-chart-container"></div>
+      </div>
     </div>
 
     <div style="margin: 20px 0 10px; font-size: 13px; font-weight: 600; color: var(--txt2); text-transform: uppercase; padding-left: 8px;">Jadwal Tagihan</div>
     <div id="bill-schedule-list" style="margin-bottom: 20px;"></div>
-    
   </div>
 
   <div id="tab-portofolio" class="tab-content">
-
-    <div class="glass" style="padding: 24px 20px; margin-bottom: 14px; text-align:center;">
-      <div style="font-size:12px; font-weight:600; color:var(--txt2); text-transform:uppercase; margin-bottom:8px;">Total Kekayaan</div>
-      <div style="font-size:34px; font-weight:700; letter-spacing:-1px; color:var(--grn);" id="total-asset-val">Rp 0</div>
+    <div class="glass" style="padding: 30px 20px; margin-bottom: 14px; text-align:center;">
+      <div style="font-size:11px; font-weight:600; color:var(--txt2); text-transform:uppercase; margin-bottom:8px;">Total Kekayaan</div>
+      <div style="font-size:32px; font-weight:700; color:var(--grn); letter-spacing:-1px;" id="total-asset-val">Rp 0</div>
     </div>
 
     <div class="glass insight-card" style="margin-bottom: 14px;">
@@ -207,7 +246,7 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
       <div id="asset-chart-container" class="asset-chart-container"></div>
     </div>
 
-    <div style="display:flex; justify-content:space-between; align-items:center; margin: 10px 0 12px; padding: 0 8px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin: 10px 0 12px; padding: 0 5px;">
       <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase;">Kelompok Aset</div>
       <div id="add-group-btn" style="cursor:pointer; color: var(--accent); font-weight:600; font-size: 13px; background: rgba(0,122,255,0.1); padding: 4px 12px; border-radius: 100px;">+ Kelompok</div>
     </div>
@@ -235,12 +274,10 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
   </div>
 </div>
 
-<div class="bottom-nav-container" id="bottom-nav">
+<div class="bottom-nav-container">
   <div class="bottom-glass-bar">
     <button class="tab-btn active" data-tab="tab-alokasi">Alokasi</button>
-    <div class="integrated-add-btn" id="integrated-add-btn">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    </div>
+    <div class="integrated-add-btn" id="integrated-add-btn">+</div>
     <button class="tab-btn" data-tab="tab-portofolio">Portofolio</button>
   </div>
 </div>
@@ -250,6 +287,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+// FIREBASE CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyCudBjzhXcqSWVF4kzakcPomeVj_GcHtys",
   authDomain: "budgy-7e6e1.firebaseapp.com",
@@ -264,68 +302,61 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
+// CONSTANTS
 const BANKS = ['BCA', 'Mandiri', 'BNI', 'BRI', 'Jago', 'SeaBank', 'GoPay', 'OVO', 'DANA', 'Tunai'];
 const EMOJI_MAP = { 'makan': '🍔', 'kopi': '☕', 'listrik': '⚡', 'air': '💧', 'bensin': '⛽', 'belanja': '🛍️', 'tabung': '💰', 'cicilan': '💳', 'skincare': '✨', 'nonton': '🎬', 'game': '🎮' };
 const ASSET_TYPES = ['Tabungan', 'Emas', 'Saham', 'Reksadana', 'Obligasi', 'Kripto', 'Properti', 'Lainnya'];
 const ASSET_EMOJIS = { 'Tabungan':'🏦', 'Emas':'🥇', 'Saham':'📈', 'Reksadana':'📊', 'Obligasi':'📜', 'Kripto':'🪙', 'Properti':'🏠', 'Lainnya':'💎' };
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
-
-// Kelompok Aset Presets
+const MONTH_SHORT = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEP','OKT','NOV','DES'];
 const GROUP_COLORS = ['gc-blue','gc-green','gc-orange','gc-purple','gc-red','gc-teal'];
 const GROUP_ICONS_DEFAULT = ['🛡️','🌅','📈','✈️','🏡','🎓','💊','🚗','💍','🌱'];
 
+// STATE
 let currentMonth = new Date().toISOString().slice(0, 7);
-let allMonthsData = {};
-let globalAssets = [];
-
-let cats = [];
-let assetGroups = []; 
-let salary = 0;
-
+let allMonthsData = JSON.parse(localStorage.getItem('budgy_months')) || {};
+let cats = [], assetGroups = [], transactions = [], salary = 0;
 let isEditMode = false;
 let currentUser = null;
-let dragEl = null;
-let startY = 0;
+let dragEl = null, startY = 0;
 
+// HELPERS
 const $ = id => document.getElementById(id);
 const haptic = () => { if(navigator.vibrate) navigator.vibrate(10); };
 const fmt = (n) => n === 0 ? '0' : Math.round(n).toLocaleString('id-ID');
 
 function formatShort(num) {
-  if(num >= 1000000000) return (num/1000000000).toFixed(1).replace('.0','') + 'M';
-  if(num >= 1000000) return (num/1000000).toFixed(1).replace('.0','') + 'Jt';
-  if(num >= 1000) return (num/1000).toFixed(0) + 'K';
+  const abs = Math.abs(num);
+  if(abs >= 1000000000) return (num/1000000000).toFixed(1).replace('.0','') + 'M';
+  if(abs >= 1000000) return (num/1000000).toFixed(1).replace('.0','') + 'Jt';
+  if(abs >= 1000) return (num/1000).toFixed(0) + 'K';
   return num;
 }
 
 $('month-picker').value = currentMonth;
 $('month-picker').onchange = (e) => { currentMonth = e.target.value; haptic(); applyMonthData(); };
 
+// DATA MANAGEMENT
 function applyMonthData() {
   if (!allMonthsData[currentMonth]) {
     let prevMonths = Object.keys(allMonthsData).filter(m => m < currentMonth).sort().reverse();
-    let prevGroups = [];
-    let prevSalary = 0;
+    let prevGroups = [], prevSalary = 0;
     if (prevMonths.length > 0) {
       let last = allMonthsData[prevMonths[0]];
       if (last.assetGroups) prevGroups = JSON.parse(JSON.stringify(last.assetGroups));
       if (last.salary) prevSalary = last.salary;
     }
-    allMonthsData[currentMonth] = { cats: [], salary: prevSalary, assetGroups: prevGroups };
+    allMonthsData[currentMonth] = { cats: [], salary: prevSalary, assetGroups: prevGroups, transactions: [] };
   }
-  const monthData = allMonthsData[currentMonth];
-  cats = monthData.cats || [];
-  salary = monthData.salary || 0;
-  assetGroups = monthData.assetGroups || [];
+  const d = allMonthsData[currentMonth];
+  cats = d.cats || []; salary = d.salary || 0; assetGroups = d.assetGroups || []; transactions = d.transactions || [];
 
   $('salary-in').value = fmt(salary);
-  buildList();
-  buildGroupList();
-  buildAssetChart();
+  buildList(); buildGroupList(); buildAssetChart(); buildTransactionLog();
 }
 
 async function saveToFirebase() {
-  allMonthsData[currentMonth] = { cats, salary, assetGroups };
+  allMonthsData[currentMonth] = { cats, salary, assetGroups, transactions };
   if (!currentUser) return;
   try { await setDoc(doc(db, "users", currentUser.uid), { months: allMonthsData }, { merge: true }); }
   catch (e) { console.error(e); }
@@ -335,39 +366,29 @@ async function loadFromFirebase() {
   if (!currentUser) return;
   const docSnap = await getDoc(doc(db, "users", currentUser.uid));
   if (docSnap.exists()) {
-    const d = docSnap.data();
-    allMonthsData = d.months || {};
+    allMonthsData = docSnap.data().months || {};
   }
   applyMonthData();
 }
 
 const save = () => {
-  allMonthsData[currentMonth] = { cats, salary, assetGroups };
+  allMonthsData[currentMonth] = { cats, salary, assetGroups, transactions };
   localStorage.setItem('budgy_months', JSON.stringify(allMonthsData));
   saveToFirebase();
 };
 
+// AUTH
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     currentUser = user;
-    $('user-logged-out').style.display = 'none';
-    $('user-logged-in').style.display = 'flex';
+    $('user-logged-out').style.display = 'none'; $('user-logged-in').style.display = 'flex';
     $('up-avatar').innerHTML = `<img src="${user.photoURL}">`;
     $('up-name').textContent = user.displayName || 'Pengguna';
     $('up-email').textContent = user.email || '';
     await loadFromFirebase();
   } else {
     currentUser = null;
-    $('user-logged-out').style.display = 'flex';
-    $('user-logged-in').style.display = 'none';
-    allMonthsData = JSON.parse(localStorage.getItem('budgy_months')) || {};
-    if (Object.keys(allMonthsData).length === 0 && localStorage.getItem('cats')) {
-      allMonthsData[currentMonth] = {
-        cats: JSON.parse(localStorage.getItem('cats')),
-        salary: +(localStorage.getItem('salary')) || 0,
-        assetGroups: []
-      };
-    }
+    $('user-logged-out').style.display = 'flex'; $('user-logged-in').style.display = 'none';
     applyMonthData();
   }
 });
@@ -375,6 +396,7 @@ onAuthStateChanged(auth, async (user) => {
 $('btn-login').onclick = () => signInWithPopup(auth, provider);
 $('up-logout').onclick = () => { if(confirm('Yakin ingin keluar akun?')) signOut(auth); };
 
+// ALOKASI - CALENDAR & UTIL
 window.addToGoogleCalendar = (idx) => {
   haptic();
   const c = cats[idx];
@@ -385,15 +407,231 @@ window.addToGoogleCalendar = (idx) => {
   window.open(url, '_blank');
 };
 
-window.hapusKategori = function(id) { cats = cats.filter(c => c.id !== id); save(); buildList(); };
-
+window.hapusKategori = function(id) { cats = cats.filter(c => c.id !== id); save(); buildList(); buildTransactionLog(); };
 function getDisplayDate(dateStr) {
   if(!dateStr) return '📅 Atur Tgl';
   const d = new Date(dateStr);
   return `📅 ${d.getDate()} ${MONTH_NAMES[d.getMonth()]}`;
 }
 
-// ========== KELOMPOK ASET ==========
+// QUICK INPUT LOGIC
+$('qi-amt-input').oninput = (e) => {
+  let val = parseInt(e.target.value.replace(/\D/g, '')) || 0;
+  e.target.value = val === 0 ? '' : fmt(val);
+};
+
+$('qi-add-btn').onclick = () => {
+  const catId = $('qi-cat-select').value;
+  const amt = parseInt($('qi-amt-input').value.replace(/\D/g, '')) || 0;
+  if (!catId || amt <= 0) return;
+
+  haptic();
+  const catIdx = cats.findIndex(c => c.id == catId);
+  if (catIdx !== -1) {
+    cats[catIdx].actual += amt;
+    transactions.unshift({
+      id: Date.now(),
+      catName: cats[catIdx].name,
+      catIcon: cats[catIdx].icon,
+      amount: amt,
+      time: new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'})
+    });
+    if(transactions.length > 5) transactions.pop(); // Keep last 5
+    
+    $('qi-amt-input').value = '';
+    save(); buildList(); buildTransactionLog();
+  }
+};
+
+function buildTransactionLog() {
+  const logDiv = $('transaction-log-list');
+  logDiv.innerHTML = transactions.length ? '' : '<div style="font-size:12px; color:var(--txt2); text-align:center;">Belum ada riwayat</div>';
+  transactions.forEach(t => {
+    logDiv.innerHTML += `<div class="log-item">
+      <div style="font-size:16px;">${t.catIcon}</div>
+      <div class="log-info"><div class="log-name">${t.catName}</div><div class="log-date">${t.time}</div></div>
+      <div class="log-amt">- Rp ${fmt(t.amount)}</div>
+    </div>`;
+  });
+
+  const sel = $('qi-cat-select');
+  sel.innerHTML = '<option value="">Pilih Kategori</option>' + cats.map(c => `<option value="${c.id}">${c.icon} ${c.name}</option>`).join('');
+}
+
+// VARIANCE CHART LOGIC
+function buildVarianceChart() {
+  const container = $('variance-chart-container');
+  const months = Object.keys(allMonthsData).sort().slice(-6);
+  if (!months.length) return;
+
+  container.innerHTML = '';
+  let maxVar = 0;
+  const data = months.map(m => {
+    const d = allMonthsData[m];
+    const planned = (d.cats || []).reduce((a,c) => a+c.amount, 0);
+    const actual = (d.cats || []).reduce((a,c) => a+c.actual, 0);
+    const v = planned - actual; // Positive = savings
+    if (Math.abs(v) > maxVar) maxVar = Math.abs(v);
+    return { month: m.split('-')[1], val: v };
+  });
+
+  data.forEach(d => {
+    const h = maxVar > 0 ? (Math.abs(d.val) / maxVar) * 100 : 5;
+    const isSaving = d.val >= 0;
+    const bar = document.createElement('div');
+    bar.className = 'var-bar';
+    bar.style.height = h + '%';
+    bar.style.background = isSaving ? 'var(--grn)' : 'var(--red)';
+    bar.style.opacity = d.month == currentMonth.split('-')[1] ? '1' : '0.3';
+    const wrap = document.createElement('div');
+    wrap.className = 'var-bar-wrap';
+    wrap.appendChild(bar);
+    container.appendChild(wrap);
+  });
+}
+
+// DAFTAR KATEGORI
+function buildList() {
+  const list = $('cat-list');
+  list.innerHTML = '';
+  cats.forEach((c, index) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'cat-wrapper';
+    wrap.dataset.id = c.id;
+    wrap.innerHTML = `
+      <div class="delete-badge" onclick="window.hapusKategori(${c.id})">×</div>
+      <div class="cat-card">
+        <div class="cat-progress-bg" id="prog-${c.id}"></div>
+        <div class="cat-dot">${c.icon}</div>
+        <div class="cat-body">
+          <input class="cat-name-in" type="text" value="${c.name}" placeholder="Kategori">
+          <div class="cat-sub-info">Rp ${fmt(c.actual)} / Rp ${fmt(c.amount)}</div>
+          <div class="date-container" style="${isEditMode ? 'display:inline-block;' : 'display:none;'}">
+            <select class="bank-tag" data-idx="${index}">${BANKS.map(b => `<option value="${b}" ${c.bank === b ? 'selected' : ''}>${b}</option>`).join('')}</select>
+            <div class="date-tag">${getDisplayDate(c.due)}</div>
+            <input type="date" value="${c.due}" data-idx="${index}" class="due-input">
+          </div>
+        </div>
+        <div style="text-align:right">
+          <input class="amount-in" type="text" inputmode="numeric" value="${fmt(c.amount)}">
+          <input class="actual-in" type="text" inputmode="numeric" value="${fmt(c.actual)}">
+        </div>
+        <div class="drag-handle">≡</div>
+      </div>`;
+    list.appendChild(wrap);
+
+    wrap.querySelector('.due-input').onchange = (e) => { cats[index].due = e.target.value; save(); updateSummary(); buildList(); };
+    wrap.querySelector('.cat-name-in').oninput = (e) => {
+      cats[index].name = e.target.value;
+      const word = e.target.value.toLowerCase().split(' ').pop();
+      if(EMOJI_MAP[word]) { cats[index].icon = EMOJI_MAP[word]; wrap.querySelector('.cat-dot').textContent = EMOJI_MAP[word]; updateSummary(); }
+      save(); buildTransactionLog();
+    };
+    wrap.querySelector('.bank-tag').onchange = (e) => { cats[index].bank = e.target.value; save(); updateSummary(); };
+    wrap.querySelector('.amount-in').oninput = (e) => handleVal(e, index, 'amount');
+    wrap.querySelector('.actual-in').oninput = (e) => handleVal(e, index, 'actual');
+
+    const handle = wrap.querySelector('.drag-handle');
+    handle.addEventListener('touchstart', (e) => { e.preventDefault(); dragEl = wrap; dragEl.classList.add('dragging'); startY = e.touches[0].clientY; haptic(); }, {passive: false});
+    handle.addEventListener('touchmove', (e) => {
+      if(!dragEl) return; e.preventDefault();
+      let y = e.touches[0].clientY; dragEl.style.transform = `translateY(${y - startY}px)`;
+      let siblings = [...document.querySelectorAll('.cat-wrapper:not(.dragging)')];
+      let nextEl = siblings.find(sib => { let rect = sib.getBoundingClientRect(); return y > rect.top && y < rect.bottom; });
+      if(nextEl) {
+        let rect = nextEl.getBoundingClientRect();
+        if(y > rect.top + rect.height / 2) list.insertBefore(dragEl, nextEl.nextSibling);
+        else list.insertBefore(dragEl, nextEl);
+        startY = y; dragEl.style.transform = `translateY(0)`; haptic();
+      }
+    }, {passive: false});
+    handle.addEventListener('touchend', () => {
+      if(!dragEl) return;
+      dragEl.classList.remove('dragging'); dragEl.style.transform = ''; dragEl = null;
+      let newCats = [];
+      document.querySelectorAll('.cat-wrapper').forEach(w => {
+        let cat = cats.find(c => c.id === parseInt(w.dataset.id));
+        if(cat) newCats.push(cat);
+      });
+      cats = newCats; save(); buildList();
+    });
+  });
+  updateSummary();
+}
+
+function handleVal(e, idx, key) {
+  let val = parseInt(e.target.value.replace(/\D/g, '')) || 0;
+  cats[idx][key] = val;
+  e.target.value = fmt(val);
+  save(); updateSummary();
+}
+
+function updateSummary() {
+  const sal = parseInt(salary) || 0;
+  let tPlan = 0, tAct = 0, pending = [];
+
+  cats.forEach((c, idx) => {
+    tPlan += c.amount; tAct += c.actual;
+    const prog = $(`prog-${c.id}`);
+    if(prog) {
+      let p = c.amount > 0 ? (c.actual/c.amount)*100 : 0;
+      prog.style.width = Math.min(p, 100) + '%';
+      prog.style.backgroundColor = p > 100 ? 'rgba(255,59,48,0.15)' : 'rgba(0,122,255,0.06)';
+    }
+    if(c.due && c.actual < c.amount) pending.push({ ...c, idx, dateObj: new Date(c.due) });
+  });
+
+  const billDiv = $('bill-schedule-list');
+  billDiv.innerHTML = '';
+  if(pending.length) {
+    pending.sort((a,b) => a.dateObj - b.dateObj).forEach(b => {
+      billDiv.innerHTML += `
+        <div class="bill-item glass">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="font-size:20px;">${b.icon}</div>
+            <div>
+              <div style="font-size:14px; font-weight:600;">${b.name}</div>
+              <div style="font-size:11px; opacity:0.8; margin-top:2px;">
+                <span style="color:#FF9500; font-weight:600;">${getDisplayDate(b.due)}</span> · Rp ${fmt(b.amount - b.actual)}
+              </div>
+            </div>
+          </div>
+          <button class="cal-btn" onclick="window.addToGoogleCalendar(${b.idx})">🗓️</button>
+        </div>`;
+    });
+  } else {
+    billDiv.innerHTML = '<div style="text-align:center; font-size:13px; opacity:0.5; padding:10px; background:var(--glass-bg); border-radius:16px; border:1px solid var(--glass-border);">Semua lunas! 🎉</div>';
+  }
+
+  $('total-plan-val').textContent = 'Rp ' + fmt(tPlan);
+  $('total-actual-val').textContent = 'Rp ' + fmt(tAct);
+  const diff = tPlan - tAct;
+  $('selisih-val').textContent = 'Rp ' + fmt(diff);
+  $('selisih-val').style.color = diff < 0 ? 'var(--red)' : 'var(--txt)';
+  $('diff-bar').style.width = tPlan > 0 ? Math.min((tAct/tPlan)*100, 100)+'%' : '0%';
+  if($('sisa-val')) $('sisa-val').textContent = 'Rp ' + fmt(sal - tPlan);
+
+  buildVarianceChart();
+}
+
+$('salary-in').oninput = (e) => { salary = parseInt(e.target.value.replace(/\D/g, '')) || 0; e.target.value = fmt(salary); save(); updateSummary(); };
+
+$('edit-mode-btn').onclick = () => {
+  haptic(); isEditMode = !isEditMode;
+  $('cat-list').classList.toggle('edit-mode');
+  
+  const btn = $('edit-mode-btn');
+  if (isEditMode) {
+    btn.textContent = '✓';
+    btn.classList.add('active');
+  } else {
+    btn.textContent = 'Edit';
+    btn.classList.remove('active');
+  }
+  buildList(); // re-render to show/hide date tags
+};
+
+// ========== PORTOFOLIO / KELOMPOK ASET ==========
 function getTotalAsset() {
   return assetGroups.reduce((sum, g) => sum + (g.assets || []).reduce((s, a) => s + a.amount, 0), 0);
 }
@@ -472,144 +710,76 @@ function buildGroupList() {
     `;
     list.appendChild(card);
 
-    // Toggle buka/tutup
     card.querySelector('.group-header').addEventListener('click', (e) => {
       if (e.target.closest('[data-del-gi]') || e.target.closest('.group-name-in') || e.target.closest('[data-add-asset-gi]')) return;
-      haptic();
-      assetGroups[gi].open = !assetGroups[gi].open;
-      save();
-      buildGroupList();
+      haptic(); assetGroups[gi].open = !assetGroups[gi].open; save(); buildGroupList();
     });
 
-    // Hapus kelompok
     card.querySelector('[data-del-gi]').addEventListener('click', (e) => {
       e.stopPropagation();
-      if (confirm(`Hapus kelompok "${group.name}"?`)) {
-        haptic();
-        assetGroups.splice(gi, 1);
-        save();
-        buildGroupList();
-      }
+      if (confirm(`Hapus kelompok "${group.name}"?`)) { haptic(); assetGroups.splice(gi, 1); save(); buildGroupList(); }
     });
 
-    // Nama kelompok
-    card.querySelector(`[data-gi="${gi}"].group-name-in`).addEventListener('input', (e) => {
-      assetGroups[gi].name = e.target.value;
-      save();
-    });
+    card.querySelector(`[data-gi="${gi}"].group-name-in`).addEventListener('input', (e) => { assetGroups[gi].name = e.target.value; save(); });
 
-    // Input Target
     card.querySelector(`.group-target-in[data-gi="${gi}"]`).addEventListener('input', (e) => {
       let val = parseInt(e.target.value.replace(/\D/g, '')) || 0;
-      assetGroups[gi].target = val;
-      e.target.value = val === 0 ? '' : fmt(val);
-      save();
+      assetGroups[gi].target = val; e.target.value = val === 0 ? '' : fmt(val); save();
 
-      // Update real-time progress bar & text (tanpa re-render full list)
       const currentAssetTotal = (assetGroups[gi].assets || []).reduce((s, a) => s + a.amount, 0);
       let cPct = val > 0 ? Math.min((currentAssetTotal / val) * 100, 100) : 0;
-      
       const fill = card.querySelector(`.group-prog-fill[data-gi="${gi}"]`);
-      if (fill) {
-        fill.style.width = cPct + '%';
-        fill.style.background = cPct >= 100 ? 'var(--grn)' : 'var(--accent)';
-      }
-      
+      if (fill) { fill.style.width = cPct + '%'; fill.style.background = cPct >= 100 ? 'var(--grn)' : 'var(--accent)'; }
       const pctText = card.querySelector(`.group-prog-pct[data-gi="${gi}"]`);
-      if (pctText) {
-        pctText.textContent = Math.round(cPct) + '%';
-        pctText.style.color = cPct >= 100 ? 'var(--grn)' : 'var(--txt2)';
-      }
-
+      if (pctText) { pctText.textContent = Math.round(cPct) + '%'; pctText.style.color = cPct >= 100 ? 'var(--grn)' : 'var(--txt2)'; }
       const subtitle = card.querySelector(`.group-subtitle-text[data-gi="${gi}"]`);
-      if (subtitle) {
-        subtitle.textContent = `${(assetGroups[gi].assets || []).length} aset · Rp ${fmt(currentAssetTotal)} ${val > 0 ? `/ Rp ${fmt(val)}` : ''}`;
-      }
+      if (subtitle) { subtitle.textContent = `${(assetGroups[gi].assets || []).length} aset · Rp ${fmt(currentAssetTotal)} ${val > 0 ? `/ Rp ${fmt(val)}` : ''}`; }
     });
 
-    // Catatan
-    card.querySelector(`.group-note[data-gi="${gi}"]`).addEventListener('input', (e) => {
-      assetGroups[gi].note = e.target.value;
-      save();
-    });
+    card.querySelector(`.group-note[data-gi="${gi}"]`).addEventListener('input', (e) => { assetGroups[gi].note = e.target.value; save(); });
 
-    // Tambah aset ke kelompok
     card.querySelector(`[data-add-asset-gi="${gi}"]`).addEventListener('click', (e) => {
-      e.stopPropagation();
-      haptic();
+      e.stopPropagation(); haptic();
       if (!assetGroups[gi].assets) assetGroups[gi].assets = [];
       assetGroups[gi].assets.push({ id: Date.now(), name: '', type: 'Tabungan', amount: 0 });
+      save(); buildGroupList();
+    });
+
+    card.querySelectorAll('.a-name').forEach(el => el.addEventListener('input', (e) => {
+      const g = +e.target.dataset.gi, a = +e.target.dataset.ai;
+      assetGroups[g].assets[a].name = e.target.value; save();
+    }));
+
+    card.querySelectorAll('.a-type').forEach(el => el.addEventListener('change', (e) => {
+      const g = +e.target.dataset.gi, a = +e.target.dataset.ai;
+      assetGroups[g].assets[a].type = e.target.value;
+      const icon = card.querySelector(`#aicon-${assetGroups[g].assets[a].id}`);
+      if (icon) icon.textContent = ASSET_EMOJIS[e.target.value] || '💎';
       save();
-      buildGroupList();
-    });
+    }));
 
-    // Input nama aset
-    card.querySelectorAll('.a-name').forEach(el => {
-      el.addEventListener('input', (e) => {
-        const g = +e.target.dataset.gi, a = +e.target.dataset.ai;
-        assetGroups[g].assets[a].name = e.target.value;
-        save();
-      });
-    });
+    card.querySelectorAll('.a-amt').forEach(el => el.addEventListener('input', (e) => {
+      const g = +e.target.dataset.gi, a = +e.target.dataset.ai;
+      let val = parseInt(e.target.value.replace(/\D/g, '')) || 0;
+      assetGroups[g].assets[a].amount = val; e.target.value = val === 0 ? '' : fmt(val); save(); updateTotalAsset();
 
-    // Select tipe aset
-    card.querySelectorAll('.a-type').forEach(el => {
-      el.addEventListener('change', (e) => {
-        const g = +e.target.dataset.gi, a = +e.target.dataset.ai;
-        assetGroups[g].assets[a].type = e.target.value;
-        const icon = card.querySelector(`#aicon-${assetGroups[g].assets[a].id}`);
-        if (icon) icon.textContent = ASSET_EMOJIS[e.target.value] || '💎';
-        save();
-      });
-    });
+      const currentGroupTotal = assetGroups[g].assets.reduce((sum, ast) => sum + ast.amount, 0);
+      card.querySelector(`.group-total[data-gi="${g}"]`).textContent = 'Rp ' + fmt(currentGroupTotal);
+      const currentTarget = assetGroups[g].target || 0;
+      const sub = card.querySelector(`.group-subtitle-text[data-gi="${g}"]`);
+      if (sub) sub.textContent = `${assetGroups[g].assets.length} aset · Rp ${fmt(currentGroupTotal)} ${currentTarget > 0 ? `/ Rp ${fmt(currentTarget)}` : ''}`;
 
-    // Input jumlah aset
-    card.querySelectorAll('.a-amt').forEach(el => {
-      el.addEventListener('input', (e) => {
-        const g = +e.target.dataset.gi, a = +e.target.dataset.ai;
-        let val = parseInt(e.target.value.replace(/\D/g, '')) || 0;
-        assetGroups[g].assets[a].amount = val;
-        e.target.value = val === 0 ? '' : fmt(val);
-        save();
-        updateTotalAsset();
+      let cPct = currentTarget > 0 ? Math.min((currentGroupTotal / currentTarget) * 100, 100) : 0;
+      const fill = card.querySelector(`.group-prog-fill[data-gi="${g}"]`);
+      if (fill) { fill.style.width = cPct + '%'; fill.style.background = cPct >= 100 ? 'var(--grn)' : 'var(--accent)'; }
+      const pctText = card.querySelector(`.group-prog-pct[data-gi="${g}"]`);
+      if (pctText) { pctText.textContent = Math.round(cPct) + '%'; pctText.style.color = cPct >= 100 ? 'var(--grn)' : 'var(--txt2)'; }
+    }));
 
-        // Dynamically update total asset kelompok & progress bar
-        const currentGroupTotal = assetGroups[g].assets.reduce((sum, ast) => sum + ast.amount, 0);
-        card.querySelector(`.group-total[data-gi="${g}"]`).textContent = 'Rp ' + fmt(currentGroupTotal);
-
-        const currentTarget = assetGroups[g].target || 0;
-        const sub = card.querySelector(`.group-subtitle-text[data-gi="${g}"]`);
-        if (sub) sub.textContent = `${assetGroups[g].assets.length} aset · Rp ${fmt(currentGroupTotal)} ${currentTarget > 0 ? `/ Rp ${fmt(currentTarget)}` : ''}`;
-
-        let cPct = currentTarget > 0 ? Math.min((currentGroupTotal / currentTarget) * 100, 100) : 0;
-        
-        const fill = card.querySelector(`.group-prog-fill[data-gi="${g}"]`);
-        if (fill) {
-           fill.style.width = cPct + '%';
-           fill.style.background = cPct >= 100 ? 'var(--grn)' : 'var(--accent)';
-        }
-
-        const pctText = card.querySelector(`.group-prog-pct[data-gi="${g}"]`);
-        if (pctText) {
-           pctText.textContent = Math.round(cPct) + '%';
-           pctText.style.color = cPct >= 100 ? 'var(--grn)' : 'var(--txt2)';
-        }
-      });
-    });
-
-    // Hapus aset
-    card.querySelectorAll('.a-del').forEach(el => {
-      el.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const g = +e.target.dataset.gi, a = +e.target.dataset.ai;
-        haptic();
-        assetGroups[g].assets.splice(a, 1);
-        save();
-        buildGroupList();
-      });
-    });
+    card.querySelectorAll('.a-del').forEach(el => el.addEventListener('click', (e) => {
+      e.stopPropagation(); haptic(); assetGroups[+e.target.dataset.gi].assets.splice(+e.target.dataset.ai, 1); save(); buildGroupList();
+    }));
   });
-
   updateTotalAsset();
 }
 
@@ -617,32 +787,16 @@ $('add-group-btn').onclick = () => {
   haptic();
   const colorIdx = assetGroups.length % GROUP_COLORS.length;
   const iconIdx = assetGroups.length % GROUP_ICONS_DEFAULT.length;
-  assetGroups.push({
-    id: Date.now(),
-    name: '',
-    icon: GROUP_ICONS_DEFAULT[iconIdx],
-    color: GROUP_COLORS[colorIdx],
-    note: '',
-    target: 0,
-    open: true,
-    assets: []
-  });
-  save();
-  buildGroupList();
-  setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
+  assetGroups.push({ id: Date.now(), name: '', icon: GROUP_ICONS_DEFAULT[iconIdx], color: GROUP_COLORS[colorIdx], note: '', target: 0, open: true, assets: [] });
+  save(); buildGroupList(); setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
 };
 
-// ========== GRAFIK ==========
 function buildAssetChart() {
   const container = $('asset-chart-container');
   if(!container) return;
-  allMonthsData[currentMonth] = { cats, salary, assetGroups };
-
-  const months = Object.keys(allMonthsData).sort();
-  const recentMonths = months.slice(-6);
-
+  const months = Object.keys(allMonthsData).sort().slice(-6);
   let maxVal = 0;
-  const chartData = recentMonths.map(m => {
+  const chartData = months.map(m => {
     const groups = allMonthsData[m].assetGroups || [];
     const t = groups.reduce((sum, g) => sum + (g.assets || []).reduce((s, a) => s + a.amount, 0), 0);
     if(t > maxVal) maxVal = t;
@@ -671,150 +825,7 @@ function buildAssetChart() {
   });
 }
 
-// ========== DAFTAR KATEGORI ==========
-function buildList() {
-  const list = $('cat-list');
-  list.innerHTML = '';
-  cats.forEach((c, index) => {
-    const wrap = document.createElement('div');
-    wrap.className = 'cat-wrapper';
-    wrap.dataset.id = c.id;
-    wrap.innerHTML = `
-      <div class="delete-badge" onclick="window.hapusKategori(${c.id})">−</div>
-      <div class="cat-card">
-        <div class="cat-progress-bg" id="prog-${c.id}"></div>
-        <div class="cat-dot">${c.icon}</div>
-        <div class="cat-body">
-          <input class="cat-name-in" type="text" value="${c.name}" placeholder="Kategori">
-          <div style="display:flex; gap:6px;">
-            <select class="bank-tag" data-idx="${index}">${BANKS.map(b => `<option value="${b}" ${c.bank === b ? 'selected' : ''}>${b}</option>`).join('')}</select>
-            <div class="date-container">
-              <div class="date-tag">${getDisplayDate(c.due)}</div>
-              <input type="date" value="${c.due}" data-idx="${index}" class="due-input">
-            </div>
-          </div>
-        </div>
-        <div style="text-align:right">
-          <div class="amt-row"><input class="amount-in" type="text" inputmode="numeric" value="${fmt(c.amount)}"></div>
-          <div class="amt-row" style="margin-top:5px;"><input class="actual-in" type="text" inputmode="numeric" value="${fmt(c.actual)}"></div>
-        </div>
-        <div class="drag-handle">≡</div>
-      </div>`;
-    list.appendChild(wrap);
-
-    wrap.querySelector('.due-input').onchange = (e) => { cats[index].due = e.target.value; save(); updateSummary(); buildList(); };
-    wrap.querySelector('.cat-name-in').oninput = (e) => {
-      cats[index].name = e.target.value;
-      const word = e.target.value.toLowerCase().split(' ').pop();
-      if(EMOJI_MAP[word]) { cats[index].icon = EMOJI_MAP[word]; wrap.querySelector('.cat-dot').textContent = EMOJI_MAP[word]; updateSummary(); }
-      save();
-    };
-    wrap.querySelector('.bank-tag').onchange = (e) => { cats[index].bank = e.target.value; save(); updateSummary(); };
-    wrap.querySelector('.amount-in').oninput = (e) => handleVal(e, index, 'amount');
-    wrap.querySelector('.actual-in').oninput = (e) => handleVal(e, index, 'actual');
-
-    const handle = wrap.querySelector('.drag-handle');
-    handle.addEventListener('touchstart', (e) => {
-      e.preventDefault(); dragEl = wrap; dragEl.classList.add('dragging'); startY = e.touches[0].clientY; haptic();
-    }, {passive: false});
-    handle.addEventListener('touchmove', (e) => {
-      if(!dragEl) return;
-      e.preventDefault();
-      let y = e.touches[0].clientY;
-      dragEl.style.transform = `translateY(${y - startY}px)`;
-      let siblings = [...document.querySelectorAll('.cat-wrapper:not(.dragging)')];
-      let nextEl = siblings.find(sib => { let rect = sib.getBoundingClientRect(); return y > rect.top && y < rect.bottom; });
-      if(nextEl) {
-        let rect = nextEl.getBoundingClientRect();
-        if(y > rect.top + rect.height / 2) list.insertBefore(dragEl, nextEl.nextSibling);
-        else list.insertBefore(dragEl, nextEl);
-        startY = y; dragEl.style.transform = `translateY(0)`; haptic();
-      }
-    }, {passive: false});
-    handle.addEventListener('touchend', () => {
-      if(!dragEl) return;
-      dragEl.classList.remove('dragging'); dragEl.style.transform = ''; dragEl = null;
-      let newCats = [];
-      document.querySelectorAll('.cat-wrapper').forEach(w => {
-        let cat = cats.find(c => c.id === parseInt(w.dataset.id));
-        if(cat) newCats.push(cat);
-      });
-      cats = newCats; save(); buildList();
-    });
-  });
-  updateSummary();
-}
-
-function handleVal(e, idx, key) {
-  let val = parseInt(e.target.value.replace(/\D/g, '')) || 0;
-  cats[idx][key] = val;
-  e.target.value = fmt(val);
-  save(); updateSummary();
-}
-
-function updateSummary() {
-  const sal = parseInt(salary) || 0;
-  let tPlan = 0, tAct = 0;
-  let pending = [];
-
-  cats.forEach((c, idx) => {
-    tPlan += c.amount; tAct += c.actual;
-    const prog = $(`prog-${c.id}`);
-    if(prog) {
-      let p = c.amount > 0 ? (c.actual/c.amount)*100 : 0;
-      prog.style.width = Math.min(p, 100) + '%';
-      prog.style.backgroundColor = p > 100 ? 'rgba(255,59,48,0.15)' : 'rgba(0,122,255,0.08)';
-    }
-    if(c.due && c.actual < c.amount) pending.push({ ...c, idx, dateObj: new Date(c.due) });
-  });
-
-  const billDiv = $('bill-schedule-list');
-  billDiv.innerHTML = '';
-  if(pending.length) {
-    pending.sort((a,b) => a.dateObj - b.dateObj).forEach(b => {
-      billDiv.innerHTML += `
-        <div class="bill-item glass">
-          <div style="display:flex; align-items:center; gap:10px;">
-            <div style="font-size:20px;">${b.icon}</div>
-            <div>
-              <div style="font-size:14px; font-weight:600;">${b.name}</div>
-              <div style="font-size:11px; opacity:0.8; margin-top:2px;">
-                <span style="color:#FF9500; font-weight:600;">${getDisplayDate(b.due)}</span> · Rp ${fmt(b.amount - b.actual)}
-              </div>
-            </div>
-          </div>
-          <button class="cal-btn" onclick="window.addToGoogleCalendar(${b.idx})" title="Ingatkan di Google Calendar">🗓️</button>
-        </div>`;
-    });
-  } else {
-    billDiv.innerHTML = '<div style="text-align:center; font-size:13px; opacity:0.5; padding:10px; background:var(--glass-bg); border-radius:16px; border:1px solid var(--glass-border);">Semua lunas! 🎉</div>';
-  }
-
-  $('total-plan-val').textContent = 'Rp ' + fmt(tPlan);
-  $('total-actual-val').textContent = 'Rp ' + fmt(tAct);
-  const diff = tPlan - tAct;
-  $('selisih-val').textContent = 'Rp ' + fmt(diff);
-  $('selisih-val').style.color = diff < 0 ? 'var(--red)' : 'var(--txt)';
-  $('diff-bar').style.width = tPlan > 0 ? Math.min((tAct/tPlan)*100, 100)+'%' : '0%';
-  $('sisa-val').textContent = 'Rp ' + fmt(sal - tPlan);
-}
-
-$('salary-in').oninput = (e) => { salary = parseInt(e.target.value.replace(/\D/g, '')) || 0; e.target.value = fmt(salary); save(); updateSummary(); };
-
-$('edit-mode-btn').onclick = () => {
-  haptic(); isEditMode = !isEditMode;
-  $('cat-list').classList.toggle('edit-mode');
-  if (isEditMode) {
-    $('edit-mode-btn').textContent = 'Selesai';
-    $('edit-mode-btn').style.fontSize = '14px';
-    $('edit-mode-btn').style.color = 'var(--accent)';
-  } else {
-    $('edit-mode-btn').textContent = '⋯';
-    $('edit-mode-btn').style.fontSize = '22px';
-    $('edit-mode-btn').style.color = 'var(--txt2)';
-  }
-};
-
+// UI INTERACTIONS
 document.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => {
   haptic();
   document.querySelectorAll('.tab-btn, .tab-content').forEach(el => el.classList.remove('active'));
@@ -835,7 +846,7 @@ document.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => {
 $('integrated-add-btn').onclick = () => {
   haptic(); if(isEditMode) $('edit-mode-btn').click();
   cats.push({id: Date.now(), name: '', amount: 0, actual: 0, icon: '📦', bank: 'BCA', due:''});
-  save(); buildList();
+  save(); buildList(); buildTransactionLog();
   setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
 };
 
