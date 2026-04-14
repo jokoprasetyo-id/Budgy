@@ -109,8 +109,10 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
 .group-note-label { font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 6px; }
 
 /* TARGET PROGRESS BAR */
-.group-prog-track { width: 100%; height: 6px; background: rgba(120,120,128,0.15); border-radius: 10px; margin-top: 6px; overflow: hidden; }
+.group-prog-container { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.group-prog-track { flex: 1; height: 6px; background: rgba(120,120,128,0.15); border-radius: 10px; overflow: hidden; }
 .group-prog-fill { height: 100%; background: var(--accent); transition: width 0.4s ease, background 0.4s ease; }
+.group-prog-pct { font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums; transition: color 0.4s ease; }
 
 /* GRAFIK ASET BULANAN */
 .asset-chart-container { display: flex; align-items: flex-end; justify-content: space-between; height: 140px; gap: 6px; padding-top: 20px; }
@@ -416,6 +418,7 @@ function buildGroupList() {
     const itemCount = (group.assets || []).length;
     const targetVal = group.target || 0;
     const pct = targetVal > 0 ? Math.min((groupTotal / targetVal) * 100, 100) : 0;
+    const pctColor = pct >= 100 ? 'var(--grn)' : 'var(--txt2)';
 
     const card = document.createElement('div');
     card.className = 'group-card';
@@ -443,9 +446,14 @@ function buildGroupList() {
         <div class="group-info">
           <input class="group-name-in" type="text" value="${group.name}" placeholder="Nama kelompok" data-gi="${gi}">
           <div class="group-subtitle group-subtitle-text" data-gi="${gi}">${itemCount} aset · Rp ${fmt(groupTotal)} ${targetVal > 0 ? `/ Rp ${fmt(targetVal)}` : ''}</div>
-          <div class="group-prog-track">
-            <div class="group-prog-fill" data-gi="${gi}" style="width:${pct}%; background:${pct >= 100 ? 'var(--grn)' : 'var(--accent)'};"></div>
+          
+          <div class="group-prog-container">
+            <div class="group-prog-track">
+              <div class="group-prog-fill" data-gi="${gi}" style="width:${pct}%; background:${pct >= 100 ? 'var(--grn)' : 'var(--accent)'};"></div>
+            </div>
+            <div class="group-prog-pct" data-gi="${gi}" style="color:${pctColor};">${Math.round(pct)}%</div>
           </div>
+          
         </div>
         <div class="group-total" data-gi="${gi}">Rp ${fmt(groupTotal)}</div>
         <div class="group-toggle ${group.open ? 'open' : ''}">›</div>
@@ -497,7 +505,7 @@ function buildGroupList() {
       e.target.value = val === 0 ? '' : fmt(val);
       save();
 
-      // Update real-time bar progress tanpa re-render keseluruhan agar kursor input tidak hilang
+      // Update real-time progress bar & text (tanpa re-render full list)
       const currentAssetTotal = (assetGroups[gi].assets || []).reduce((s, a) => s + a.amount, 0);
       let cPct = val > 0 ? Math.min((currentAssetTotal / val) * 100, 100) : 0;
       
@@ -506,6 +514,13 @@ function buildGroupList() {
         fill.style.width = cPct + '%';
         fill.style.background = cPct >= 100 ? 'var(--grn)' : 'var(--accent)';
       }
+      
+      const pctText = card.querySelector(`.group-prog-pct[data-gi="${gi}"]`);
+      if (pctText) {
+        pctText.textContent = Math.round(cPct) + '%';
+        pctText.style.color = cPct >= 100 ? 'var(--grn)' : 'var(--txt2)';
+      }
+
       const subtitle = card.querySelector(`.group-subtitle-text[data-gi="${gi}"]`);
       if (subtitle) {
         subtitle.textContent = `${(assetGroups[gi].assets || []).length} aset · Rp ${fmt(currentAssetTotal)} ${val > 0 ? `/ Rp ${fmt(val)}` : ''}`;
@@ -566,11 +581,18 @@ function buildGroupList() {
         const sub = card.querySelector(`.group-subtitle-text[data-gi="${g}"]`);
         if (sub) sub.textContent = `${assetGroups[g].assets.length} aset · Rp ${fmt(currentGroupTotal)} ${currentTarget > 0 ? `/ Rp ${fmt(currentTarget)}` : ''}`;
 
+        let cPct = currentTarget > 0 ? Math.min((currentGroupTotal / currentTarget) * 100, 100) : 0;
+        
         const fill = card.querySelector(`.group-prog-fill[data-gi="${g}"]`);
         if (fill) {
-           let cPct = currentTarget > 0 ? Math.min((currentGroupTotal / currentTarget) * 100, 100) : 0;
            fill.style.width = cPct + '%';
            fill.style.background = cPct >= 100 ? 'var(--grn)' : 'var(--accent)';
+        }
+
+        const pctText = card.querySelector(`.group-prog-pct[data-gi="${g}"]`);
+        if (pctText) {
+           pctText.textContent = Math.round(cPct) + '%';
+           pctText.style.color = cPct >= 100 ? 'var(--grn)' : 'var(--txt2)';
         }
       });
     });
