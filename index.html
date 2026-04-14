@@ -95,7 +95,7 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
 .group-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); box-shadow: var(--glass-shadow); backdrop-filter: blur(32px) saturate(1.8); -webkit-backdrop-filter: blur(32px) saturate(1.8); margin-bottom: 14px; overflow: hidden; }
 .group-header { display: flex; align-items: center; gap: 10px; padding: 16px 20px; cursor: pointer; user-select: none; }
 .group-icon-wrap { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-.group-info { flex: 1; min-width: 0; }
+.group-info { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
 .group-name-in { background: transparent; border: none; outline: none; font-size: 15px; font-weight: 600; color: var(--txt); font-family: inherit; width: 100%; }
 .group-subtitle { font-size: 12px; color: var(--txt2); margin-top: 2px; }
 .group-total { font-size: 15px; font-weight: 700; color: var(--grn); }
@@ -107,6 +107,10 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
 .group-note { background: rgba(120,120,128,0.06); border: 1px solid rgba(120,120,128,0.15); border-radius: 12px; padding: 10px 14px; font-size: 13px; color: var(--txt); font-family: inherit; outline: none; width: 100%; resize: none; min-height: 60px; }
 .group-note::placeholder { color: var(--txt2); }
 .group-note-label { font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 6px; }
+
+/* TARGET PROGRESS BAR */
+.group-prog-track { width: 100%; height: 6px; background: rgba(120,120,128,0.15); border-radius: 10px; margin-top: 6px; overflow: hidden; }
+.group-prog-fill { height: 100%; background: var(--accent); transition: width 0.4s ease, background 0.4s ease; }
 
 /* GRAFIK ASET BULANAN */
 .asset-chart-container { display: flex; align-items: flex-end; justify-content: space-between; height: 140px; gap: 6px; padding-top: 20px; }
@@ -158,8 +162,8 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
     </div>
   </div>
 
-  <!-- TAB ALOKASI -->
   <div id="tab-alokasi" class="tab-content active">
+    
     <div class="glass hero">
       <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 12px;">Gaji Bulan Ini</div>
       <div style="display:flex;align-items:center;justify-content:center;gap:12px;">
@@ -168,8 +172,13 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
       </div>
     </div>
 
-    <!-- Ringkasan Budget -->
-    <div class="glass insight-card" style="margin-bottom: 15px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin: 20px 0 12px; padding: 0 8px;">
+      <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase;">Daftar Kategori</div>
+      <div id="edit-mode-btn" style="cursor:pointer; color: var(--txt2); font-weight:bold; font-size: 22px;">⋯</div>
+    </div>
+    <div id="cat-list" class="cat-list"></div>
+
+    <div class="glass insight-card" style="margin-bottom: 15px; margin-top: 5px;">
       <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Total Rencana</span><strong id="total-plan-val"></strong></div>
       <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:4px;"><span>Total Aktual</span><strong id="total-actual-val" style="color:var(--accent);"></strong></div>
       <div style="margin-top: 12px; border-top:1px solid var(--glass-border); padding-top:12px;">
@@ -179,47 +188,29 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
       <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:4px;"><span>Sisa Gaji Bebas</span><strong id="sisa-val" style="color:var(--grn);"></strong></div>
     </div>
 
-    <!-- Alokasi per kategori -->
-    <div class="glass insight-card" style="margin-bottom: 15px;">
-      <div style="font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 10px;">Alokasi per Kategori</div>
-      <div id="stacked-bar" style="display:flex; height:12px; border-radius:10px; overflow:hidden; gap:2px; margin-bottom:15px; background:rgba(120,120,128,.1);"></div>
-      <div id="chart-legend" style="display:flex; flex-direction:column; gap:8px;"></div>
-    </div>
-
-    <!-- Jadwal Tagihan -->
-    <div style="margin: 4px 0 10px; font-size: 13px; font-weight: 600; color: var(--txt2); text-transform: uppercase; padding-left: 8px;">Jadwal Tagihan</div>
+    <div style="margin: 20px 0 10px; font-size: 13px; font-weight: 600; color: var(--txt2); text-transform: uppercase; padding-left: 8px;">Jadwal Tagihan</div>
     <div id="bill-schedule-list" style="margin-bottom: 20px;"></div>
     
-    <div style="display:flex; justify-content:space-between; align-items:center; margin: 20px 0 12px; padding: 0 8px;">
-      <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase;">Daftar Kategori</div>
-      <div id="edit-mode-btn" style="cursor:pointer; color: var(--txt2); font-weight:bold; font-size: 22px;">⋯</div>
-    </div>
-    <div id="cat-list" class="cat-list"></div>
   </div>
 
-  <!-- TAB PORTOFOLIO -->
   <div id="tab-portofolio" class="tab-content">
 
-    <!-- Total Kekayaan -->
     <div class="glass" style="padding: 24px 20px; margin-bottom: 14px; text-align:center;">
       <div style="font-size:12px; font-weight:600; color:var(--txt2); text-transform:uppercase; margin-bottom:8px;">Total Kekayaan</div>
       <div style="font-size:34px; font-weight:700; letter-spacing:-1px; color:var(--grn);" id="total-asset-val">Rp 0</div>
     </div>
 
-    <!-- Grafik Kekayaan -->
     <div class="glass insight-card" style="margin-bottom: 14px;">
       <div style="font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 5px;">Riwayat Kekayaan</div>
       <div id="asset-chart-container" class="asset-chart-container"></div>
     </div>
 
-    <!-- Kelompok Aset -->
     <div style="display:flex; justify-content:space-between; align-items:center; margin: 10px 0 12px; padding: 0 8px;">
       <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase;">Kelompok Aset</div>
       <div id="add-group-btn" style="cursor:pointer; color: var(--accent); font-weight:600; font-size: 13px; background: rgba(0,122,255,0.1); padding: 4px 12px; border-radius: 100px;">+ Kelompok</div>
     </div>
     <div id="group-list"></div>
 
-    <!-- Login / Profile -->
     <div class="glass insight-card profile-card">
       <div id="user-logged-out" style="display:flex; flex-direction:column; width:100%;">
         <div style="font-size:48px; margin-bottom:10px;">☁️</div>
@@ -273,18 +264,11 @@ const provider = new GoogleAuthProvider();
 
 const BANKS = ['BCA', 'Mandiri', 'BNI', 'BRI', 'Jago', 'SeaBank', 'GoPay', 'OVO', 'DANA', 'Tunai'];
 const EMOJI_MAP = { 'makan': '🍔', 'kopi': '☕', 'listrik': '⚡', 'air': '💧', 'bensin': '⛽', 'belanja': '🛍️', 'tabung': '💰', 'cicilan': '💳', 'skincare': '✨', 'nonton': '🎬', 'game': '🎮' };
-const PALETTE = ['#007AFF','#34C759','#FF9500','#FF3B30','#AF52DE','#FF2D55','#5AC8FA'];
 const ASSET_TYPES = ['Tabungan', 'Emas', 'Saham', 'Reksadana', 'Obligasi', 'Kripto', 'Properti', 'Lainnya'];
 const ASSET_EMOJIS = { 'Tabungan':'🏦', 'Emas':'🥇', 'Saham':'📈', 'Reksadana':'📊', 'Obligasi':'📜', 'Kripto':'🪙', 'Properti':'🏠', 'Lainnya':'💎' };
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
 
 // Kelompok Aset Presets
-const GROUP_PRESETS = [
-  { name: 'Dana Darurat', icon: '🛡️', color: 'gc-blue', note: '' },
-  { name: 'Dana Pensiun', icon: '🌅', color: 'gc-green', note: '' },
-  { name: 'Dana Investasi', icon: '📈', color: 'gc-purple', note: '' },
-  { name: 'Dana Liburan', icon: '✈️', color: 'gc-orange', note: '' },
-];
 const GROUP_COLORS = ['gc-blue','gc-green','gc-orange','gc-purple','gc-red','gc-teal'];
 const GROUP_ICONS_DEFAULT = ['🛡️','🌅','📈','✈️','🏡','🎓','💊','🚗','💍','🌱'];
 
@@ -293,7 +277,7 @@ let allMonthsData = {};
 let globalAssets = [];
 
 let cats = [];
-let assetGroups = []; // [{id, name, icon, color, note, assets:[{id,name,type,amount}]}]
+let assetGroups = []; 
 let salary = 0;
 
 let isEditMode = false;
@@ -430,12 +414,12 @@ function buildGroupList() {
   assetGroups.forEach((group, gi) => {
     const groupTotal = (group.assets || []).reduce((s, a) => s + a.amount, 0);
     const itemCount = (group.assets || []).length;
+    const targetVal = group.target || 0;
+    const pct = targetVal > 0 ? Math.min((groupTotal / targetVal) * 100, 100) : 0;
 
     const card = document.createElement('div');
     card.className = 'group-card';
     card.dataset.gid = group.id;
-
-    const assetOptionsHtml = ASSET_TYPES.map(t => `<option value="${t}">${t}</option>`).join('');
 
     const assetsHtml = (group.assets || []).map((a, ai) => `
       <div class="asset-item" data-aid="${a.id}">
@@ -458,9 +442,12 @@ function buildGroupList() {
         <div class="group-icon-wrap ${group.color || 'gc-blue'}">${group.icon || '📦'}</div>
         <div class="group-info">
           <input class="group-name-in" type="text" value="${group.name}" placeholder="Nama kelompok" data-gi="${gi}">
-          <div class="group-subtitle">${itemCount} aset · Rp ${fmt(groupTotal)}</div>
+          <div class="group-subtitle group-subtitle-text" data-gi="${gi}">${itemCount} aset · Rp ${fmt(groupTotal)} ${targetVal > 0 ? `/ Rp ${fmt(targetVal)}` : ''}</div>
+          <div class="group-prog-track">
+            <div class="group-prog-fill" data-gi="${gi}" style="width:${pct}%; background:${pct >= 100 ? 'var(--grn)' : 'var(--accent)'};"></div>
+          </div>
         </div>
-        <div class="group-total">Rp ${fmt(groupTotal)}</div>
+        <div class="group-total" data-gi="${gi}">Rp ${fmt(groupTotal)}</div>
         <div class="group-toggle ${group.open ? 'open' : ''}">›</div>
         <div style="margin-left:4px; cursor:pointer; font-size:18px; color:var(--red); padding:4px 2px;" data-del-gi="${gi}">🗑</div>
       </div>
@@ -468,8 +455,10 @@ function buildGroupList() {
         <div id="assets-of-${group.id}">${assetsHtml}</div>
         <button style="width:100%; padding:10px; border-radius:12px; background:rgba(0,122,255,0.08); color:var(--accent); border:1px solid rgba(0,122,255,0.18); font-size:13px; font-weight:600; cursor:pointer; margin-top:4px;" data-add-asset-gi="${gi}">+ Tambah Aset</button>
         <div class="group-note-wrap" style="margin-top:12px;">
+          <div class="group-note-label">🎯 Target Dana</div>
+          <input type="text" class="group-note group-target-in" placeholder="0" data-gi="${gi}" value="${targetVal === 0 ? '' : fmt(targetVal)}" inputmode="numeric" style="min-height:unset; padding:8px 14px; margin-bottom:10px;">
           <div class="group-note-label">📝 Catatan</div>
-          <textarea class="group-note" placeholder="Misal: Dana darurat 6 bulan, target Rp 30jt. Isi: emas antam 5gr, RDPU Schroder..." data-gi="${gi}">${group.note || ''}</textarea>
+          <textarea class="group-note" placeholder="Misal: Dana darurat 6 bulan..." data-gi="${gi}">${group.note || ''}</textarea>
         </div>
       </div>
     `;
@@ -499,6 +488,28 @@ function buildGroupList() {
     card.querySelector(`[data-gi="${gi}"].group-name-in`).addEventListener('input', (e) => {
       assetGroups[gi].name = e.target.value;
       save();
+    });
+
+    // Input Target
+    card.querySelector(`.group-target-in[data-gi="${gi}"]`).addEventListener('input', (e) => {
+      let val = parseInt(e.target.value.replace(/\D/g, '')) || 0;
+      assetGroups[gi].target = val;
+      e.target.value = val === 0 ? '' : fmt(val);
+      save();
+
+      // Update real-time bar progress tanpa re-render keseluruhan agar kursor input tidak hilang
+      const currentAssetTotal = (assetGroups[gi].assets || []).reduce((s, a) => s + a.amount, 0);
+      let cPct = val > 0 ? Math.min((currentAssetTotal / val) * 100, 100) : 0;
+      
+      const fill = card.querySelector(`.group-prog-fill[data-gi="${gi}"]`);
+      if (fill) {
+        fill.style.width = cPct + '%';
+        fill.style.background = cPct >= 100 ? 'var(--grn)' : 'var(--accent)';
+      }
+      const subtitle = card.querySelector(`.group-subtitle-text[data-gi="${gi}"]`);
+      if (subtitle) {
+        subtitle.textContent = `${(assetGroups[gi].assets || []).length} aset · Rp ${fmt(currentAssetTotal)} ${val > 0 ? `/ Rp ${fmt(val)}` : ''}`;
+      }
     });
 
     // Catatan
@@ -543,9 +554,24 @@ function buildGroupList() {
         const g = +e.target.dataset.gi, a = +e.target.dataset.ai;
         let val = parseInt(e.target.value.replace(/\D/g, '')) || 0;
         assetGroups[g].assets[a].amount = val;
-        e.target.value = fmt(val);
+        e.target.value = val === 0 ? '' : fmt(val);
         save();
         updateTotalAsset();
+
+        // Dynamically update total asset kelompok & progress bar
+        const currentGroupTotal = assetGroups[g].assets.reduce((sum, ast) => sum + ast.amount, 0);
+        card.querySelector(`.group-total[data-gi="${g}"]`).textContent = 'Rp ' + fmt(currentGroupTotal);
+
+        const currentTarget = assetGroups[g].target || 0;
+        const sub = card.querySelector(`.group-subtitle-text[data-gi="${g}"]`);
+        if (sub) sub.textContent = `${assetGroups[g].assets.length} aset · Rp ${fmt(currentGroupTotal)} ${currentTarget > 0 ? `/ Rp ${fmt(currentTarget)}` : ''}`;
+
+        const fill = card.querySelector(`.group-prog-fill[data-gi="${g}"]`);
+        if (fill) {
+           let cPct = currentTarget > 0 ? Math.min((currentGroupTotal / currentTarget) * 100, 100) : 0;
+           fill.style.width = cPct + '%';
+           fill.style.background = cPct >= 100 ? 'var(--grn)' : 'var(--accent)';
+        }
       });
     });
 
@@ -575,6 +601,7 @@ $('add-group-btn').onclick = () => {
     icon: GROUP_ICONS_DEFAULT[iconIdx],
     color: GROUP_COLORS[colorIdx],
     note: '',
+    target: 0,
     open: true,
     assets: []
   });
@@ -619,42 +646,6 @@ function buildAssetChart() {
       <div class="ac-month">${mName}</div>
     `;
     container.appendChild(wrap);
-  });
-}
-
-// ========== CHART ALOKASI ==========
-function buildChart() {
-  const total = cats.reduce((a,c)=>a+c.amount,0);
-  const bar = $('stacked-bar');
-  const leg = $('chart-legend');
-  bar.innerHTML=''; leg.innerHTML='';
-
-  if(!total || !cats.length){
-    bar.innerHTML='<div style="width:100%; background:rgba(120,120,128,.1);"></div>';
-    leg.innerHTML='<div style="text-align:center; font-size:12px; color:var(--txt2); padding:10px 0;">Belum ada data</div>';
-    return;
-  }
-
-  const sortedCats = [...cats].filter(c => c.amount > 0).sort((a,b) => b.amount - a.amount);
-  sortedCats.forEach((c,i)=>{
-    const pct = c.amount/total;
-    const color = PALETTE[i%PALETTE.length];
-    const seg = document.createElement('div');
-    seg.style.width = `${pct*100}%`;
-    seg.style.background = color;
-    seg.style.height = '100%';
-    bar.appendChild(seg);
-    if(i<6){
-      const item = document.createElement('div');
-      item.style.display = 'flex'; item.style.alignItems = 'center'; item.style.padding = '4px 0';
-      item.innerHTML=`
-        <div style="background:${color}; width:10px; height:10px; border-radius:50%; flex-shrink:0;"></div>
-        <div style="font-size:16px; margin:0 8px;">${c.icon}</div>
-        <div style="flex:1; font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${c.name||'—'}</div>
-        <div style="font-size:13px; font-weight:600; color:var(--txt2); margin-right:8px;">Rp ${fmt(c.amount)}</div>
-        <div style="font-size:13px; font-weight:700; color:var(--txt); width:35px; text-align:right;">${Math.round(pct*100)}%</div>`;
-      leg.appendChild(item);
-    }
   });
 }
 
@@ -784,8 +775,6 @@ function updateSummary() {
   $('selisih-val').style.color = diff < 0 ? 'var(--red)' : 'var(--txt)';
   $('diff-bar').style.width = tPlan > 0 ? Math.min((tAct/tPlan)*100, 100)+'%' : '0%';
   $('sisa-val').textContent = 'Rp ' + fmt(sal - tPlan);
-
-  buildChart();
 }
 
 $('salary-in').oninput = (e) => { salary = parseInt(e.target.value.replace(/\D/g, '')) || 0; e.target.value = fmt(salary); save(); updateSummary(); };
