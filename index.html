@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#fef0e7">
 <title>Budgy</title>
+<script src="https://unpkg.com/lucide@latest"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap');
 
@@ -58,14 +59,15 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
 .cat-wrapper { position: relative; border-radius: var(--r); }
 .cat-card { padding: 16px; display: flex; align-items: center; gap: 12px; position: relative; overflow: hidden; z-index: 1; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); }
 .cat-progress-bg { position: absolute; top: 0; left: 0; height: 100%; background: rgba(0, 122, 255, 0.06); z-index: -1; transition: width 0.8s; }
-.cat-dot { width: 40px; height: 40px; border-radius: 12px; background: rgba(120,120,128,0.12); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.cat-dot { width: 40px; height: 40px; border-radius: 12px; background: rgba(120,120,128,0.12); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--txt); }
+.cat-dot i { width: 22px; height: 22px; }
 .cat-body { flex: 1; min-width: 0; }
 .cat-name-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; width: 100%; font-family: inherit;}
 .cat-sub-info { font-size: 11px; color: var(--txt2); margin-top: 2px; }
 .date-container { position: relative; display: inline-block; vertical-align: middle; margin-top: 4px;}
 .date-tag { appearance: none; background: rgba(255, 149, 0, 0.1); border: 1px solid rgba(255, 149, 0, 0.2); border-radius: 100px; padding: 2px 10px; font-size: 11px; font-weight: 600; color: #FF9500; pointer-events: none; display: flex; align-items: center; gap: 4px; }
 .due-input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 5; }
-.bank-tag { appearance: none; background: rgba(120, 120, 128, 0.1); border: 1px solid rgba(120, 120, 128, 0.2); border-radius: 100px; padding: 2px 8px; font-size: 11px; font-weight: 600; color: var(--txt2); font-family: inherit; outline: none; }
+.bank-tag { appearance: none; background: rgba(120, 120, 128, 0.1); border: 1px solid rgba(120, 120, 128, 0.2); border-radius: 100px; padding: 2px 8px; font-size: 11px; font-weight: 600; color: var(--txt2); font-family: inherit; outline: none; cursor: pointer; }
 .amount-in, .actual-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; text-align: right; width: 85px; font-family: inherit; }
 .actual-in { font-size: 13px; color: var(--accent); margin-top: 2px; }
 
@@ -91,25 +93,30 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
 .bill-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; background: rgba(120,120,128,0.05); border-radius: 14px; margin-bottom: 10px; transition: 0.2s;}
 .cal-btn { width: 34px; height: 34px; border-radius: 8px; background: rgba(255, 149, 0, 0.15); color: #FF9500; border: 1px solid rgba(255, 149, 0, 0.3); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
 .cal-btn:active { transform: scale(0.9); }
+.cal-btn i { width: 18px; height: 18px; }
 
 /* PORTOFOLIO / ASET STYLES */
 .asset-item { display: flex; align-items: center; gap: 10px; padding: 12px; background: rgba(120,120,128,0.05); border-radius: 14px; margin-bottom: 8px; }
-.asset-icon { font-size: 20px; flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: rgba(120,120,128,0.1); border-radius: 10px; }
+.asset-icon { flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: rgba(120,120,128,0.1); border-radius: 10px; color: var(--txt); }
+.asset-icon i { width: 18px; height: 18px; }
 .asset-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
 .a-name { background: transparent; border: none; outline: none; font-size: 14px; font-weight: 600; color: var(--txt); font-family: inherit; width: 100%; }
 .a-type { background: rgba(120,120,128,0.1); border: 1px solid rgba(120,120,128,0.2); border-radius: 100px; padding: 2px 8px; font-size: 11px; font-weight: 600; color: var(--txt2); outline: none; width: fit-content; font-family: inherit; appearance: none; }
 .a-amt { background: transparent; border: none; outline: none; font-size: 15px; font-weight: 600; color: var(--grn); text-align: right; width: 95px; font-family: inherit; }
 .a-del { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,59,48,0.1); color: var(--red); display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; flex-shrink: 0; margin-left: 2px; }
+.a-del i { width: 14px; height: 14px; }
 
 /* KELOMPOK ASET */
 .group-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); box-shadow: var(--glass-shadow); backdrop-filter: blur(32px) saturate(1.8); margin-bottom: 14px; overflow: hidden; }
 .group-header { display: flex; align-items: center; gap: 10px; padding: 16px 20px; cursor: pointer; user-select: none; }
-.group-icon-wrap { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.group-icon-wrap { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--txt); }
+.group-icon-wrap i { width: 20px; height: 20px; }
 .group-info { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
 .group-name-in { background: transparent; border: none; outline: none; font-size: 15px; font-weight: 600; color: var(--txt); font-family: inherit; width: 100%; }
 .group-subtitle { font-size: 12px; color: var(--txt2); margin-top: 2px; }
 .group-total { font-size: 15px; font-weight: 700; color: var(--grn); }
-.group-toggle { font-size: 18px; color: var(--txt2); transition: transform 0.3s; flex-shrink: 0; }
+.group-toggle { font-size: 18px; color: var(--txt2); transition: transform 0.3s; flex-shrink: 0; display:flex; align-items:center; justify-content:center;}
+.group-toggle i { width: 20px; height: 20px; }
 .group-toggle.open { transform: rotate(90deg); }
 .group-body { padding: 0 16px 16px; border-top: 1px solid var(--glass-border); display: none; }
 .group-body.open { display: block; padding-top: 12px; }
@@ -136,7 +143,8 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
 
 /* PROFILE & BUTTONS */
 .profile-card { align-items: center; text-align: center; margin-top: 20px; }
-.up-avatar { width: 72px; height: 72px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 36px; background: rgba(120,120,128,0.1); border: 3px solid var(--glass-border); margin: 0 auto 12px; }
+.up-avatar { width: 72px; height: 72px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; color: var(--txt); background: rgba(120,120,128,0.1); border: 3px solid var(--glass-border); margin: 0 auto 12px; }
+.up-avatar i { width: 32px; height: 32px; }
 .up-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .up-name { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
 .up-email { font-size: 13px; color: var(--txt2); margin-bottom: 20px; }
@@ -150,8 +158,10 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
 /* NAVIGATION */
 .bottom-nav-container { position: fixed; bottom: max(30px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 380px; z-index: 100; }
 .bottom-glass-bar { display: flex; justify-content: space-between; align-items: center; background: var(--footer-bg); border: 1px solid var(--glass-border); border-radius: 99px; padding: 8px 15px; height: 72px; backdrop-filter: blur(40px) saturate(2); -webkit-backdrop-filter: blur(40px) saturate(2); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-.tab-btn { width: 35%; text-align: center; border: none; background: transparent; color: var(--txt2); font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+.tab-btn { width: 35%; text-align: center; border: none; background: transparent; color: var(--txt2); font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;}
+.tab-btn i { width: 22px; height: 22px; transition: 0.3s; }
 .tab-btn.active { color: var(--txt); }
+.tab-btn.active i { color: var(--accent); }
 .integrated-add-btn { position: absolute; left: 50%; transform: translateX(-50%); width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 300; cursor: pointer; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--accent); z-index: 101; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .integrated-add-btn:active { transform: translateX(-50%) scale(0.9); }
 
@@ -161,9 +171,10 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
 .drag-pill { width: 40px; height: 5px; background: rgba(120,120,128,0.3); border-radius: 10px; align-self: center; margin-bottom: 20px; }
 .sheet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .sheet-title { font-size: 18px; font-weight: 700; color: var(--txt); }
-.sheet-close { width: 32px; height: 32px; border-radius: 50%; background: rgba(120,120,128,0.1); border: none; font-size: 14px; font-weight: bold; color: var(--txt2); cursor: pointer; }
+.sheet-close { width: 32px; height: 32px; border-radius: 50%; background: rgba(120,120,128,0.1); border: none; font-size: 14px; font-weight: bold; color: var(--txt2); cursor: pointer; display:flex; align-items:center; justify-content:center;}
+.sheet-close i { width: 18px; height: 18px; }
 
-/* MODAL QUICK INPUT (FIXED FOR MOBILE VIEW) */
+/* MODAL QUICK INPUT */
 .qi-minimal-row { display: flex; gap: 8px; margin-bottom: 24px; align-items: stretch; width: 100%; box-sizing: border-box; }
 .qi-field { min-width: 0; background: rgba(120,120,128,0.08); border: 1px solid var(--glass-border); border-radius: 16px; padding: 12px 10px; color: var(--txt); font-size: 14px; outline: none; font-family: inherit; }
 .qi-select-subtle { flex: 1.2; appearance: none; }
@@ -195,7 +206,7 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
 
 <div class="phone-wrap">
   <div class="top-nav">
-    <div class="wm"><span>🦜</span> Budgy</div>
+    <div class="wm"><i data-lucide="feather" style="color:var(--accent); width:20px; height:20px;"></i> Budgy</div>
     <div class="month-selector">
       <input type="month" id="month-picker" class="month-input">
     </div>
@@ -217,6 +228,11 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
     </div>
     
     <div id="cat-list" class="cat-list"></div>
+
+    <div class="glass insight-card" id="bank-summary-card" style="display:none; margin-bottom: 20px;">
+      <div style="font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 5px;">Ringkasan Saldo Bank</div>
+      <div id="bank-summary-list"></div>
+    </div>
 
     <div class="glass insight-card">
       <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Rencana</span><strong id="total-plan-val"></strong></div>
@@ -255,14 +271,14 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
     <div id="group-list"></div>
 
     <div class="glass insight-card profile-card">
-      <div id="user-logged-out" style="display:flex; flex-direction:column; width:100%;">
-        <div style="font-size:48px; margin-bottom:10px;">☁️</div>
+      <div id="user-logged-out" style="display:flex; flex-direction:column; width:100%; align-items:center;">
+        <div style="margin-bottom:10px; color:var(--txt2);"><i data-lucide="cloud" style="width:48px;height:48px;"></i></div>
         <h3 style="margin-bottom:6px;">Simpan ke Cloud</h3>
         <p style="font-size:13px; color:var(--txt2); margin-bottom:20px;">Login dengan Google agar data aman & tersinkronisasi antar perangkat.</p>
         <button class="btn-blue" id="btn-login">Masuk dengan Google</button>
       </div>
-      <div id="user-logged-in" style="display:none; flex-direction:column; width:100%;">
-        <div class="up-avatar" id="up-avatar">👤</div>
+      <div id="user-logged-in" style="display:none; flex-direction:column; width:100%; align-items:center;">
+        <div class="up-avatar" id="up-avatar"><i data-lucide="user"></i></div>
         <div class="up-name" id="up-name">—</div>
         <div class="up-email" id="up-email"></div>
         <button class="btn-red" id="up-logout">Keluar Akun</button>
@@ -270,17 +286,21 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
     </div>
 
     <button class="btn-menu" id="theme-toggle" style="margin-bottom: 10px;">
-      <div style="display:flex; align-items:center; gap:10px;"><span>🌓</span> <span>Tema Tampilan</span></div>
-      <span style="color:var(--txt2); font-size:18px;">›</span>
+      <div style="display:flex; align-items:center; gap:10px;"><i data-lucide="moon" style="width:18px;height:18px;"></i> <span>Tema Tampilan</span></div>
+      <i data-lucide="chevron-right" style="color:var(--txt2); width:18px;height:18px;"></i>
     </button>
   </div>
 </div>
 
 <div class="bottom-nav-container">
   <div class="bottom-glass-bar">
-    <button class="tab-btn active" data-tab="tab-alokasi">Alokasi</button>
-    <div class="integrated-add-btn" id="integrated-add-btn">+</div>
-    <button class="tab-btn" data-tab="tab-portofolio">Portofolio</button>
+    <button class="tab-btn active" data-tab="tab-alokasi">
+      <i data-lucide="wallet"></i>Alokasi
+    </button>
+    <div class="integrated-add-btn" id="integrated-add-btn"><i data-lucide="plus" style="width:28px;height:28px;"></i></div>
+    <button class="tab-btn" data-tab="tab-portofolio">
+      <i data-lucide="briefcase"></i>Portofolio
+    </button>
   </div>
 </div>
 
@@ -289,13 +309,13 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
     <div class="drag-pill"></div>
     <div class="sheet-header">
       <div class="sheet-title">Catat Transaksi</div>
-      <button class="sheet-close" id="close-tx-modal">✕</button>
+      <button class="sheet-close" id="close-tx-modal"><i data-lucide="x"></i></button>
     </div>
 
     <div class="qi-minimal-row">
       <select id="qi-cat-select" class="qi-field qi-select-subtle"><option value="">Kategori</option></select>
       <input id="qi-amt-input" class="qi-field qi-input-subtle" type="text" inputmode="numeric" placeholder="Nominal Rp">
-      <button id="qi-add-btn" class="qi-btn-subtle">+</button>
+      <button id="qi-add-btn" class="qi-btn-subtle"><i data-lucide="plus" style="width:24px;height:24px;"></i></button>
     </div>
 
     <div style="font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 10px;">Log Transaksi Terakhir</div>
@@ -325,15 +345,21 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-// CONSTANTS
+// CONSTANTS - UPDATED TO LUCIDE ICONS (Minimalist & Single Tone)
 const BANKS = ['BCA', 'Mandiri', 'BNI', 'BRI', 'Jago', 'SeaBank', 'GoPay', 'OVO', 'DANA', 'Tunai'];
-const EMOJI_MAP = { 'makan': '🍔', 'kopi': '☕', 'listrik': '⚡', 'air': '💧', 'bensin': '⛽', 'belanja': '🛍️', 'tabung': '💰', 'cicilan': '💳', 'skincare': '✨', 'nonton': '🎬', 'game': '🎮' };
+const ICON_MAP = { 'makan': 'utensils', 'kopi': 'coffee', 'listrik': 'zap', 'air': 'droplets', 'bensin': 'fuel', 'belanja': 'shopping-bag', 'tabung': 'piggy-bank', 'cicilan': 'credit-card', 'skincare': 'sparkles', 'nonton': 'film', 'game': 'gamepad-2' };
 const ASSET_TYPES = ['Tabungan', 'Emas', 'Saham', 'Reksadana', 'Obligasi', 'Kripto', 'Properti', 'Lainnya'];
-const ASSET_EMOJIS = { 'Tabungan':'🏦', 'Emas':'🥇', 'Saham':'📈', 'Reksadana':'📊', 'Obligasi':'📜', 'Kripto':'🪙', 'Properti':'🏠', 'Lainnya':'💎' };
+const ASSET_ICONS = { 'Tabungan':'landmark', 'Emas':'coins', 'Saham':'trending-up', 'Reksadana':'pie-chart', 'Obligasi':'scroll-text', 'Kripto':'bitcoin', 'Properti':'home', 'Lainnya':'gem' };
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
-const MONTH_SHORT = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEP','OKT','NOV','DES'];
 const GROUP_COLORS = ['gc-blue','gc-green','gc-orange','gc-purple','gc-red','gc-teal'];
-const GROUP_ICONS_DEFAULT = ['🛡️','🌅','📈','✈️','🏡','🎓','💊','🚗','💍','🌱'];
+const GROUP_ICONS_DEFAULT = ['shield','sun','line-chart','plane','home','graduation-cap','pill','car','ring','leaf'];
+
+// MIGRATION MAP (Jika sebelumnya user pakai emoji, kita konversi otomatis ke icon lucide saat memuat)
+const EMOJI_TO_LUCIDE = {
+    '🍔': 'utensils', '☕': 'coffee', '⚡': 'zap', '💧': 'droplets', '⛽': 'fuel', '🛍️': 'shopping-bag', '💰': 'piggy-bank', '💳': 'credit-card', '✨': 'sparkles', '🎬': 'film', '🎮': 'gamepad-2', '📦': 'package',
+    '🏦':'landmark', '🥇':'coins', '📈':'trending-up', '📊':'pie-chart', '📜':'scroll-text', '🪙':'bitcoin', '🏠':'home', '💎':'gem',
+    '🛡️':'shield', '🌅':'sun', '✈️':'plane', '🎓':'graduation-cap', '💊':'pill', '🚗':'car', '💍':'ring', '🌱':'leaf'
+};
 
 // STATE
 let currentMonth = new Date().toISOString().slice(0, 7);
@@ -373,6 +399,11 @@ function applyMonthData() {
   }
   const d = allMonthsData[currentMonth];
   cats = d.cats || []; salary = d.salary || 0; assetGroups = d.assetGroups || []; transactions = d.transactions || [];
+
+  // MIGRATION: Convert old emojis to minimal icons
+  cats.forEach(c => { if(EMOJI_TO_LUCIDE[c.icon]) c.icon = EMOJI_TO_LUCIDE[c.icon]; });
+  assetGroups.forEach(g => { if(EMOJI_TO_LUCIDE[g.icon]) g.icon = EMOJI_TO_LUCIDE[g.icon]; });
+  transactions.forEach(t => { if(EMOJI_TO_LUCIDE[t.catIcon]) t.catIcon = EMOJI_TO_LUCIDE[t.catIcon]; });
 
   $('salary-in').value = fmt(salary);
   buildList(); buildGroupList(); buildAssetChart(); buildTransactionLog();
@@ -432,9 +463,9 @@ window.addToGoogleCalendar = (idx) => {
 
 window.hapusKategori = function(id) { cats = cats.filter(c => c.id !== id); save(); buildList(); buildTransactionLog(); };
 function getDisplayDate(dateStr) {
-  if(!dateStr) return '📅 Atur Tgl';
+  if(!dateStr) return 'Atur Tgl';
   const d = new Date(dateStr);
-  return `📅 ${d.getDate()} ${MONTH_NAMES[d.getMonth()]}`;
+  return `${d.getDate()} ${MONTH_NAMES[d.getMonth()]}`;
 }
 
 // ================= MODAL LOGIC =================
@@ -464,7 +495,7 @@ txModal.onclick = (e) => { if(e.target === txModal) closeTxModal(); };
 // Add New Category via Modal
 $('add-new-cat-btn').onclick = () => {
   haptic();
-  cats.push({id: Date.now(), name: '', amount: 0, actual: 0, icon: '📦', bank: 'BCA', due:''});
+  cats.push({id: Date.now(), name: '', amount: 0, actual: 0, icon: 'package', bank: 'BCA', due:''});
   save(); buildList(); buildTransactionLog();
   closeTxModal();
   setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 300);
@@ -488,7 +519,7 @@ $('qi-add-btn').onclick = () => {
     transactions.unshift({
       id: Date.now(),
       catName: cats[catIdx].name,
-      catIcon: cats[catIdx].icon,
+      catIcon: cats[catIdx].icon || 'package',
       amount: amt,
       time: new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'})
     });
@@ -504,14 +535,17 @@ function buildTransactionLog() {
   logDiv.innerHTML = transactions.length ? '' : '<div style="font-size:12px; color:var(--txt2); text-align:center; padding: 10px;">Belum ada riwayat transaksi.</div>';
   transactions.forEach(t => {
     logDiv.innerHTML += `<div class="log-item">
-      <div style="font-size:20px;">${t.catIcon}</div>
+      <div style="width:36px; height:36px; border-radius:10px; background:rgba(120,120,128,0.1); display:flex; align-items:center; justify-content:center; color:var(--txt);">
+        <i data-lucide="${t.catIcon}"></i>
+      </div>
       <div class="log-info"><div class="log-name">${t.catName}</div><div class="log-date">${t.time}</div></div>
       <div class="log-amt">- Rp ${fmt(t.amount)}</div>
     </div>`;
   });
 
   const sel = $('qi-cat-select');
-  sel.innerHTML = '<option value="">Pilih Kategori</option>' + cats.map(c => `<option value="${c.id}">${c.icon} ${c.name}</option>`).join('');
+  sel.innerHTML = '<option value="">Pilih Kategori</option>' + cats.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+  lucide.createIcons();
 }
 
 // ================= VARIANCE CHART =================
@@ -555,16 +589,16 @@ function buildList() {
     wrap.className = 'cat-wrapper';
     wrap.dataset.id = c.id;
     wrap.innerHTML = `
-      <div class="delete-badge" onclick="window.hapusKategori(${c.id})">×</div>
+      <div class="delete-badge" onclick="window.hapusKategori(${c.id})"><i data-lucide="x" style="width:14px; height:14px;"></i></div>
       <div class="cat-card">
         <div class="cat-progress-bg" id="prog-${c.id}"></div>
-        <div class="cat-dot">${c.icon}</div>
+        <div class="cat-dot"><i data-lucide="${c.icon || 'package'}"></i></div>
         <div class="cat-body">
           <input class="cat-name-in" type="text" value="${c.name}" placeholder="Kategori">
           <div class="cat-sub-info">Rp ${fmt(c.actual)} / Rp ${fmt(c.amount)}</div>
-          <div class="date-container" style="${isEditMode ? 'display:inline-block;' : 'display:none;'}">
+          <div class="date-container" style="display:inline-block; margin-top: 4px;">
             <select class="bank-tag" data-idx="${index}">${BANKS.map(b => `<option value="${b}" ${c.bank === b ? 'selected' : ''}>${b}</option>`).join('')}</select>
-            <div class="date-tag">${getDisplayDate(c.due)}</div>
+            <div class="date-tag"><i data-lucide="calendar" style="width:10px;height:10px;"></i> ${getDisplayDate(c.due)}</div>
             <input type="date" value="${c.due}" data-idx="${index}" class="due-input">
           </div>
         </div>
@@ -572,7 +606,7 @@ function buildList() {
           <input class="amount-in" type="text" inputmode="numeric" value="${fmt(c.amount)}">
           <input class="actual-in" type="text" inputmode="numeric" value="${fmt(c.actual)}">
         </div>
-        <div class="drag-handle">≡</div>
+        <div class="drag-handle"><i data-lucide="grip-vertical"></i></div>
       </div>`;
     list.appendChild(wrap);
 
@@ -580,7 +614,12 @@ function buildList() {
     wrap.querySelector('.cat-name-in').oninput = (e) => {
       cats[index].name = e.target.value;
       const word = e.target.value.toLowerCase().split(' ').pop();
-      if(EMOJI_MAP[word]) { cats[index].icon = EMOJI_MAP[word]; wrap.querySelector('.cat-dot').textContent = EMOJI_MAP[word]; updateSummary(); }
+      if(ICON_MAP[word]) { 
+        cats[index].icon = ICON_MAP[word]; 
+        wrap.querySelector('.cat-dot').innerHTML = `<i data-lucide="${ICON_MAP[word]}"></i>`;
+        lucide.createIcons();
+        updateSummary(); 
+      }
       save(); buildTransactionLog();
     };
     wrap.querySelector('.bank-tag').onchange = (e) => { cats[index].bank = e.target.value; save(); updateSummary(); };
@@ -612,6 +651,8 @@ function buildList() {
       cats = newCats; save(); buildList();
     });
   });
+  
+  lucide.createIcons();
   updateSummary();
 }
 
@@ -625,9 +666,16 @@ function handleVal(e, idx, key) {
 function updateSummary() {
   const sal = parseInt(salary) || 0;
   let tPlan = 0, tAct = 0, pending = [];
+  let bankTotals = {}; // Object untuk fitur ringkasan bank
 
   cats.forEach((c, idx) => {
     tPlan += c.amount; tAct += c.actual;
+    
+    // Perhitungan Ringkasan Bank
+    if(!bankTotals[c.bank]) bankTotals[c.bank] = { planned: 0, actual: 0 };
+    bankTotals[c.bank].planned += c.amount;
+    bankTotals[c.bank].actual += c.actual;
+
     const prog = $(`prog-${c.id}`);
     if(prog) {
       let p = c.amount > 0 ? (c.actual/c.amount)*100 : 0;
@@ -637,6 +685,34 @@ function updateSummary() {
     if(c.due && c.actual < c.amount) pending.push({ ...c, idx, dateObj: new Date(c.due) });
   });
 
+  // Render Ringkasan Bank
+  const bankDiv = $('bank-summary-list');
+  const bankCard = $('bank-summary-card');
+  if (Object.keys(bankTotals).length > 0) {
+    bankDiv.innerHTML = Object.entries(bankTotals).map(([bank, vals]) => `
+      <div style="display:flex; justify-content:space-between; align-items:center; padding: 10px 0; border-bottom: 1px solid rgba(120,120,128,0.1);">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:32px; height:32px; border-radius:10px; background:rgba(120,120,128,0.1); display:flex; align-items:center; justify-content:center; color:var(--txt);">
+            <i data-lucide="landmark" style="width:16px; height:16px;"></i>
+          </div>
+          <div>
+            <div style="font-weight:600; font-size:14px;">${bank}</div>
+            <div style="font-size:11px; color:var(--txt2); margin-top:2px;">Terpakai: Rp ${fmt(vals.actual)}</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:14px; font-weight:700; color:var(--txt);">Rp ${fmt(vals.planned)}</div>
+        </div>
+      </div>
+    `).join('');
+    // Hapus border bawah item terakhir
+    if(bankDiv.lastElementChild) bankDiv.lastElementChild.style.borderBottom = 'none';
+    bankCard.style.display = 'block';
+  } else {
+    bankCard.style.display = 'none';
+  }
+
+  // Render Jadwal Tagihan
   const billDiv = $('bill-schedule-list');
   billDiv.innerHTML = '';
   if(pending.length) {
@@ -644,19 +720,22 @@ function updateSummary() {
       billDiv.innerHTML += `
         <div class="bill-item glass">
           <div style="display:flex; align-items:center; gap:10px;">
-            <div style="font-size:20px;">${b.icon}</div>
+            <div style="display:flex; align-items:center; justify-content:center; width:36px; height:36px; background:rgba(120,120,128,0.1); border-radius:10px; color:var(--txt);">
+              <i data-lucide="${b.icon || 'package'}"></i>
+            </div>
             <div>
               <div style="font-size:14px; font-weight:600;">${b.name}</div>
-              <div style="font-size:11px; opacity:0.8; margin-top:2px;">
+              <div style="font-size:11px; opacity:0.8; margin-top:2px; display:flex; align-items:center; gap:4px;">
+                <i data-lucide="calendar" style="width:10px;height:10px;color:#FF9500;"></i>
                 <span style="color:#FF9500; font-weight:600;">${getDisplayDate(b.due)}</span> · Rp ${fmt(b.amount - b.actual)}
               </div>
             </div>
           </div>
-          <button class="cal-btn" onclick="window.addToGoogleCalendar(${b.idx})">🗓️</button>
+          <button class="cal-btn" onclick="window.addToGoogleCalendar(${b.idx})"><i data-lucide="calendar-plus"></i></button>
         </div>`;
     });
   } else {
-    billDiv.innerHTML = '<div style="text-align:center; font-size:13px; opacity:0.5; padding:10px; background:var(--glass-bg); border-radius:16px; border:1px solid var(--glass-border);">Semua lunas! 🎉</div>';
+    billDiv.innerHTML = '<div style="text-align:center; font-size:13px; opacity:0.5; padding:10px; background:var(--glass-bg); border-radius:16px; border:1px solid var(--glass-border);">Semua lunas!</div>';
   }
 
   $('total-plan-val').textContent = 'Rp ' + fmt(tPlan);
@@ -668,6 +747,7 @@ function updateSummary() {
   if($('sisa-val')) $('sisa-val').textContent = 'Rp ' + fmt(sal - tPlan);
 
   buildVarianceChart();
+  lucide.createIcons();
 }
 
 $('salary-in').oninput = (e) => { salary = parseInt(e.target.value.replace(/\D/g, '')) || 0; e.target.value = fmt(salary); save(); updateSummary(); };
@@ -678,13 +758,13 @@ $('edit-mode-btn').onclick = () => {
   
   const btn = $('edit-mode-btn');
   if (isEditMode) {
-    btn.textContent = '✓';
+    btn.innerHTML = '<i data-lucide="check" style="width:16px;height:16px;"></i>';
     btn.classList.add('active');
   } else {
     btn.textContent = 'Edit';
     btn.classList.remove('active');
   }
-  buildList(); // re-render to show/hide dates
+  buildList(); 
 };
 
 // ================= PORTOFOLIO / KELOMPOK ASET =================
@@ -720,7 +800,7 @@ function buildGroupList() {
 
     const assetsHtml = (group.assets || []).map((a, ai) => `
       <div class="asset-item" data-aid="${a.id}">
-        <div class="asset-icon" id="aicon-${a.id}">${ASSET_EMOJIS[a.type] || '💎'}</div>
+        <div class="asset-icon" id="aicon-${a.id}"><i data-lucide="${ASSET_ICONS[a.type] || 'gem'}"></i></div>
         <div class="asset-info">
           <input class="a-name" type="text" value="${a.name}" placeholder="Nama aset" data-gi="${gi}" data-ai="${ai}">
           <select class="a-type" data-gi="${gi}" data-ai="${ai}">
@@ -730,13 +810,13 @@ function buildGroupList() {
         <div style="text-align:right;">
           <input class="a-amt" type="text" inputmode="numeric" value="${fmt(a.amount)}" data-gi="${gi}" data-ai="${ai}">
         </div>
-        <div class="a-del" data-gi="${gi}" data-ai="${ai}">−</div>
+        <div class="a-del" data-gi="${gi}" data-ai="${ai}"><i data-lucide="minus"></i></div>
       </div>
     `).join('');
 
     card.innerHTML = `
       <div class="group-header" data-gid="${group.id}">
-        <div class="group-icon-wrap ${group.color || 'gc-blue'}">${group.icon || '📦'}</div>
+        <div class="group-icon-wrap ${group.color || 'gc-blue'}"><i data-lucide="${group.icon || 'folder'}"></i></div>
         <div class="group-info">
           <input class="group-name-in" type="text" value="${group.name}" placeholder="Nama kelompok" data-gi="${gi}">
           <div class="group-subtitle group-subtitle-text" data-gi="${gi}">${itemCount} aset · Rp ${fmt(groupTotal)} ${targetVal > 0 ? `/ Rp ${fmt(targetVal)}` : ''}</div>
@@ -750,16 +830,16 @@ function buildGroupList() {
           
         </div>
         <div class="group-total" data-gi="${gi}">Rp ${fmt(groupTotal)}</div>
-        <div class="group-toggle ${group.open ? 'open' : ''}">›</div>
-        <div style="margin-left:4px; cursor:pointer; font-size:18px; color:var(--red); padding:4px 2px;" data-del-gi="${gi}">🗑</div>
+        <div class="group-toggle ${group.open ? 'open' : ''}"><i data-lucide="chevron-right"></i></div>
+        <div style="margin-left:4px; cursor:pointer; font-size:18px; color:var(--red); padding:4px 2px;" data-del-gi="${gi}"><i data-lucide="trash-2" style="width:18px;height:18px;"></i></div>
       </div>
       <div class="group-body ${group.open ? 'open' : ''}">
         <div id="assets-of-${group.id}">${assetsHtml}</div>
         <button style="width:100%; padding:10px; border-radius:12px; background:rgba(0,122,255,0.08); color:var(--accent); border:1px solid rgba(0,122,255,0.18); font-size:13px; font-weight:600; cursor:pointer; margin-top:4px;" data-add-asset-gi="${gi}">+ Tambah Aset</button>
         <div class="group-note-wrap" style="margin-top:12px;">
-          <div class="group-note-label">🎯 Target Dana</div>
+          <div class="group-note-label"><i data-lucide="target" style="width:12px;height:12px;vertical-align:middle;margin-right:4px;"></i> Target Dana</div>
           <input type="text" class="group-note group-target-in" placeholder="0" data-gi="${gi}" value="${targetVal === 0 ? '' : fmt(targetVal)}" inputmode="numeric" style="min-height:unset; padding:8px 14px; margin-bottom:10px;">
-          <div class="group-note-label">📝 Catatan</div>
+          <div class="group-note-label"><i data-lucide="file-text" style="width:12px;height:12px;vertical-align:middle;margin-right:4px;"></i> Catatan</div>
           <textarea class="group-note" placeholder="Misal: Dana darurat 6 bulan..." data-gi="${gi}">${group.note || ''}</textarea>
         </div>
       </div>
@@ -809,8 +889,11 @@ function buildGroupList() {
     card.querySelectorAll('.a-type').forEach(el => el.addEventListener('change', (e) => {
       const g = +e.target.dataset.gi, a = +e.target.dataset.ai;
       assetGroups[g].assets[a].type = e.target.value;
-      const icon = card.querySelector(`#aicon-${assetGroups[g].assets[a].id}`);
-      if (icon) icon.textContent = ASSET_EMOJIS[e.target.value] || '💎';
+      const iconWrap = card.querySelector(`#aicon-${assetGroups[g].assets[a].id}`);
+      if (iconWrap) {
+        iconWrap.innerHTML = `<i data-lucide="${ASSET_ICONS[e.target.value] || 'gem'}"></i>`;
+        lucide.createIcons();
+      }
       save();
     }));
 
@@ -836,6 +919,7 @@ function buildGroupList() {
       e.stopPropagation(); haptic(); assetGroups[+e.target.dataset.gi].assets.splice(+e.target.dataset.ai, 1); save(); buildGroupList();
     }));
   });
+  lucide.createIcons();
   updateTotalAsset();
 }
 
@@ -900,6 +984,9 @@ document.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => {
 });
 
 $('theme-toggle').onclick = () => { haptic(); document.body.classList.toggle('dark'); };
+
+// Jalankan render icon lucide di awal
+lucide.createIcons();
 </script>
 </body>
 </html>
