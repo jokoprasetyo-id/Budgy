@@ -596,11 +596,15 @@ function buildList() {
         <div class="cat-body">
           <input class="cat-name-in" type="text" value="${c.name}" placeholder="Kategori">
           <div class="cat-sub-info">Rp ${fmt(c.actual)} / Rp ${fmt(c.amount)}</div>
-          <div class="date-container" style="display:inline-block; margin-top: 4px;">
+          
+          <div style="display:flex; align-items:center; gap:6px; margin-top: 4px;">
             <select class="bank-tag" data-idx="${index}">${BANKS.map(b => `<option value="${b}" ${c.bank === b ? 'selected' : ''}>${b}</option>`).join('')}</select>
-            <div class="date-tag"><i data-lucide="calendar" style="width:10px;height:10px;"></i> ${getDisplayDate(c.due)}</div>
-            <input type="date" value="${c.due}" data-idx="${index}" class="due-input">
+            <div class="date-container" style="display:inline-block; margin-top: 0;">
+              <div class="date-tag"><i data-lucide="calendar" style="width:10px;height:10px;"></i> ${getDisplayDate(c.due)}</div>
+              <input type="date" value="${c.due}" data-idx="${index}" class="due-input">
+            </div>
           </div>
+
         </div>
         <div style="text-align:right">
           <input class="amount-in" type="text" inputmode="numeric" value="${fmt(c.amount)}">
