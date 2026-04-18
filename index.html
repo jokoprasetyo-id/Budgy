@@ -104,7 +104,7 @@ body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
 .a-type { background: rgba(120,120,128,0.1); border: 1px solid rgba(120,120,128,0.2); border-radius: 100px; padding: 2px 8px; font-size: 11px; font-weight: 600; color: var(--txt2); outline: none; width: fit-content; font-family: inherit; appearance: none; }
 .a-amt { background: transparent; border: none; outline: none; font-size: 15px; font-weight: 600; color: var(--grn); text-align: right; width: 95px; font-family: inherit; }
 .a-del { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,59,48,0.1); color: var(--red); display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; flex-shrink: 0; margin-left: 2px; }
-.a-del i { width: 14px; height: 14px; }
+.a-del i { width: 14px; height: 14px; pointer-events: none; }
 
 /* KELOMPOK ASET */
 .group-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); box-shadow: var(--glass-shadow); backdrop-filter: blur(32px) saturate(1.8); margin-bottom: 14px; overflow: hidden; }
@@ -330,7 +330,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// FIREBASE CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyCudBjzhXcqSWVF4kzakcPomeVj_GcHtys",
   authDomain: "budgy-7e6e1.firebaseapp.com",
@@ -345,7 +344,6 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-// CONSTANTS - UPDATED TO LUCIDE ICONS (Minimalist & Single Tone)
 const BANKS = ['BCA', 'Mandiri', 'BNI', 'BRI', 'Jago', 'SeaBank', 'GoPay', 'OVO', 'DANA', 'Tunai'];
 const ICON_MAP = { 'makan': 'utensils', 'kopi': 'coffee', 'listrik': 'zap', 'air': 'droplets', 'bensin': 'fuel', 'belanja': 'shopping-bag', 'tabung': 'piggy-bank', 'cicilan': 'credit-card', 'skincare': 'sparkles', 'nonton': 'film', 'game': 'gamepad-2' };
 const ASSET_TYPES = ['Tabungan', 'Emas', 'Saham', 'Reksadana', 'Obligasi', 'Kripto', 'Properti', 'Lainnya'];
@@ -353,15 +351,12 @@ const ASSET_ICONS = { 'Tabungan':'landmark', 'Emas':'coins', 'Saham':'trending-u
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
 const GROUP_COLORS = ['gc-blue','gc-green','gc-orange','gc-purple','gc-red','gc-teal'];
 const GROUP_ICONS_DEFAULT = ['shield','sun','line-chart','plane','home','graduation-cap','pill','car','ring','leaf'];
-
-// MIGRATION MAP (Jika sebelumnya user pakai emoji, kita konversi otomatis ke icon lucide saat memuat)
 const EMOJI_TO_LUCIDE = {
     '🍔': 'utensils', '☕': 'coffee', '⚡': 'zap', '💧': 'droplets', '⛽': 'fuel', '🛍️': 'shopping-bag', '💰': 'piggy-bank', '💳': 'credit-card', '✨': 'sparkles', '🎬': 'film', '🎮': 'gamepad-2', '📦': 'package',
     '🏦':'landmark', '🥇':'coins', '📈':'trending-up', '📊':'pie-chart', '📜':'scroll-text', '🪙':'bitcoin', '🏠':'home', '💎':'gem',
     '🛡️':'shield', '🌅':'sun', '✈️':'plane', '🎓':'graduation-cap', '💊':'pill', '🚗':'car', '💍':'ring', '🌱':'leaf'
 };
 
-// STATE
 let currentMonth = new Date().toISOString().slice(0, 7);
 let allMonthsData = JSON.parse(localStorage.getItem('budgy_months')) || {};
 let cats = [], assetGroups = [], transactions = [], salary = 0;
@@ -369,7 +364,6 @@ let isEditMode = false;
 let currentUser = null;
 let dragEl = null, startY = 0;
 
-// HELPERS
 const $ = id => document.getElementById(id);
 const haptic = () => { if(navigator.vibrate) navigator.vibrate(10); };
 const fmt = (n) => n === 0 ? '0' : Math.round(n).toLocaleString('id-ID');
@@ -385,7 +379,6 @@ function formatShort(num) {
 $('month-picker').value = currentMonth;
 $('month-picker').onchange = (e) => { currentMonth = e.target.value; haptic(); applyMonthData(); };
 
-// DATA MANAGEMENT
 function applyMonthData() {
   if (!allMonthsData[currentMonth]) {
     let prevMonths = Object.keys(allMonthsData).filter(m => m < currentMonth).sort().reverse();
@@ -400,7 +393,6 @@ function applyMonthData() {
   const d = allMonthsData[currentMonth];
   cats = d.cats || []; salary = d.salary || 0; assetGroups = d.assetGroups || []; transactions = d.transactions || [];
 
-  // MIGRATION: Convert old emojis to minimal icons
   cats.forEach(c => { if(EMOJI_TO_LUCIDE[c.icon]) c.icon = EMOJI_TO_LUCIDE[c.icon]; });
   assetGroups.forEach(g => { if(EMOJI_TO_LUCIDE[g.icon]) g.icon = EMOJI_TO_LUCIDE[g.icon]; });
   transactions.forEach(t => { if(EMOJI_TO_LUCIDE[t.catIcon]) t.catIcon = EMOJI_TO_LUCIDE[t.catIcon]; });
@@ -431,7 +423,6 @@ const save = () => {
   saveToFirebase();
 };
 
-// AUTH
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     currentUser = user;
@@ -450,7 +441,6 @@ onAuthStateChanged(auth, async (user) => {
 $('btn-login').onclick = () => signInWithPopup(auth, provider);
 $('up-logout').onclick = () => { if(confirm('Yakin ingin keluar akun?')) signOut(auth); };
 
-// ALOKASI - CALENDAR & UTIL
 window.addToGoogleCalendar = (idx) => {
   haptic();
   const c = cats[idx];
@@ -462,13 +452,13 @@ window.addToGoogleCalendar = (idx) => {
 };
 
 window.hapusKategori = function(id) { cats = cats.filter(c => c.id !== id); save(); buildList(); buildTransactionLog(); };
+
 function getDisplayDate(dateStr) {
   if(!dateStr) return 'Atur Tgl';
   const d = new Date(dateStr);
   return `${d.getDate()} ${MONTH_NAMES[d.getMonth()]}`;
 }
 
-// ================= MODAL LOGIC =================
 const txModal = $('tx-modal');
 const sheet = txModal.querySelector('.bottom-sheet');
 
@@ -476,7 +466,7 @@ $('integrated-add-btn').onclick = () => {
   haptic();
   if(isEditMode) $('edit-mode-btn').click();
   txModal.style.display = 'flex';
-  void txModal.offsetWidth; // force reflow
+  void txModal.offsetWidth;
   txModal.style.opacity = '1';
   sheet.style.transform = 'translateY(0)';
   buildTransactionLog(); 
@@ -492,7 +482,6 @@ function closeTxModal() {
 $('close-tx-modal').onclick = closeTxModal;
 txModal.onclick = (e) => { if(e.target === txModal) closeTxModal(); };
 
-// Add New Category via Modal
 $('add-new-cat-btn').onclick = () => {
   haptic();
   cats.push({id: Date.now(), name: '', amount: 0, actual: 0, icon: 'package', bank: 'BCA', due:''});
@@ -501,7 +490,6 @@ $('add-new-cat-btn').onclick = () => {
   setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 300);
 };
 
-// ================= QUICK INPUT =================
 $('qi-amt-input').oninput = (e) => {
   let val = parseInt(e.target.value.replace(/\D/g, '')) || 0;
   e.target.value = val === 0 ? '' : fmt(val);
@@ -523,7 +511,7 @@ $('qi-add-btn').onclick = () => {
       amount: amt,
       time: new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'})
     });
-    if(transactions.length > 15) transactions.pop(); // Keep history up to 15
+    if(transactions.length > 15) transactions.pop();
     
     $('qi-amt-input').value = '';
     save(); buildList(); buildTransactionLog();
@@ -548,7 +536,6 @@ function buildTransactionLog() {
   lucide.createIcons();
 }
 
-// ================= VARIANCE CHART =================
 function buildVarianceChart() {
   const container = $('variance-chart-container');
   const months = Object.keys(allMonthsData).sort().slice(-6);
@@ -560,7 +547,7 @@ function buildVarianceChart() {
     const d = allMonthsData[m];
     const planned = (d.cats || []).reduce((a,c) => a+c.amount, 0);
     const actual = (d.cats || []).reduce((a,c) => a+c.actual, 0);
-    const v = planned - actual; // Positive = savings
+    const v = planned - actual;
     if (Math.abs(v) > maxVar) maxVar = Math.abs(v);
     return { month: m.split('-')[1], val: v };
   });
@@ -580,7 +567,6 @@ function buildVarianceChart() {
   });
 }
 
-// ================= DAFTAR KATEGORI =================
 function buildList() {
   const list = $('cat-list');
   list.innerHTML = '';
@@ -670,12 +656,11 @@ function handleVal(e, idx, key) {
 function updateSummary() {
   const sal = parseInt(salary) || 0;
   let tPlan = 0, tAct = 0, pending = [];
-  let bankTotals = {}; // Object untuk fitur ringkasan bank
+  let bankTotals = {};
 
   cats.forEach((c, idx) => {
     tPlan += c.amount; tAct += c.actual;
     
-    // Perhitungan Ringkasan Bank
     if(!bankTotals[c.bank]) bankTotals[c.bank] = { planned: 0, actual: 0 };
     bankTotals[c.bank].planned += c.amount;
     bankTotals[c.bank].actual += c.actual;
@@ -689,7 +674,6 @@ function updateSummary() {
     if(c.due && c.actual < c.amount) pending.push({ ...c, idx, dateObj: new Date(c.due) });
   });
 
-  // Render Ringkasan Bank
   const bankDiv = $('bank-summary-list');
   const bankCard = $('bank-summary-card');
   if (Object.keys(bankTotals).length > 0) {
@@ -709,14 +693,12 @@ function updateSummary() {
         </div>
       </div>
     `).join('');
-    // Hapus border bawah item terakhir
     if(bankDiv.lastElementChild) bankDiv.lastElementChild.style.borderBottom = 'none';
     bankCard.style.display = 'block';
   } else {
     bankCard.style.display = 'none';
   }
 
-  // Render Jadwal Tagihan
   const billDiv = $('bill-schedule-list');
   billDiv.innerHTML = '';
   if(pending.length) {
@@ -771,7 +753,6 @@ $('edit-mode-btn').onclick = () => {
   buildList(); 
 };
 
-// ================= PORTOFOLIO / KELOMPOK ASET =================
 function getTotalAsset() {
   return assetGroups.reduce((sum, g) => sum + (g.assets || []).reduce((s, a) => s + a.amount, 0), 0);
 }
@@ -835,7 +816,7 @@ function buildGroupList() {
         </div>
         <div class="group-total" data-gi="${gi}">Rp ${fmt(groupTotal)}</div>
         <div class="group-toggle ${group.open ? 'open' : ''}"><i data-lucide="chevron-right"></i></div>
-        <div style="margin-left:4px; cursor:pointer; font-size:18px; color:var(--red); padding:4px 2px;" data-del-gi="${gi}"><i data-lucide="trash-2" style="width:18px;height:18px;"></i></div>
+        <div style="margin-left:4px; cursor:pointer; font-size:18px; color:var(--red); padding:4px 2px;" data-del-gi="${gi}"><i data-lucide="trash-2" style="width:18px;height:18px; pointer-events:none;"></i></div>
       </div>
       <div class="group-body ${group.open ? 'open' : ''}">
         <div id="assets-of-${group.id}">${assetsHtml}</div>
@@ -919,10 +900,16 @@ function buildGroupList() {
       if (pctText) { pctText.textContent = Math.round(cPct) + '%'; pctText.style.color = cPct >= 100 ? 'var(--grn)' : 'var(--txt2)'; }
     }));
 
+    // ✅ FIX: Pakai e.currentTarget bukan e.target agar icon <i> di dalam tidak mengacaukan dataset
     card.querySelectorAll('.a-del').forEach(el => el.addEventListener('click', (e) => {
-      e.stopPropagation(); haptic(); assetGroups[+e.target.dataset.gi].assets.splice(+e.target.dataset.ai, 1); save(); buildGroupList();
+      e.stopPropagation();
+      haptic();
+      const btn = e.currentTarget;
+      assetGroups[+btn.dataset.gi].assets.splice(+btn.dataset.ai, 1);
+      save(); buildGroupList();
     }));
   });
+
   lucide.createIcons();
   updateTotalAsset();
 }
@@ -969,7 +956,6 @@ function buildAssetChart() {
   });
 }
 
-// UI INTERACTIONS
 document.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => {
   haptic();
   document.querySelectorAll('.tab-btn, .tab-content').forEach(el => el.classList.remove('active'));
@@ -989,7 +975,6 @@ document.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => {
 
 $('theme-toggle').onclick = () => { haptic(); document.body.classList.toggle('dark'); };
 
-// Jalankan render icon lucide di awal
 lucide.createIcons();
 </script>
 </body>
