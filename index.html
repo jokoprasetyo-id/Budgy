@@ -2,326 +2,759 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#fef0e7">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f1117">
 <title>Budgy</title>
 <script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap');
-
 :root {
-  --glass-bg: rgba(255, 255, 255, 0.45);
-  --glass-border: rgba(255, 255, 255, 0.6);
-  --glass-shadow: 0 12px 40px rgba(0,0,0,0.06), inset 0 2px 2px rgba(255,255,255,0.8);
-  --footer-bg: rgba(200, 205, 215, 0.65); 
-  --txt: #1c1c1e; --txt2: rgba(60,60,67,0.6); --accent: #007AFF;
-  --grn: #34C759; --red: #FF3B30; --org: #FF9500;
-  --bg1: #fef0e7; --bg2: #e0f2fe; --r: 24px;
+  --bg: #0b0d14;
+  --bg2: #111520;
+  --surface: rgba(255,255,255,0.04);
+  --surface-hover: rgba(255,255,255,0.07);
+  --border: rgba(255,255,255,0.08);
+  --border-strong: rgba(255,255,255,0.14);
+  --txt: #f0f0f5;
+  --txt2: rgba(200,200,220,0.5);
+  --txt3: rgba(200,200,220,0.3);
+  --accent: #5b8dee;
+  --accent-dim: rgba(91,141,238,0.15);
+  --green: #3ecf8e;
+  --green-dim: rgba(62,207,142,0.12);
+  --red: #f87171;
+  --red-dim: rgba(248,113,113,0.12);
+  --amber: #fbbf24;
+  --amber-dim: rgba(251,191,36,0.12);
+  --purple: #a78bfa;
+  --r: 14px;
+  --r-sm: 8px;
+  --sidebar-w: 220px;
+  --nav-h: 60px;
 }
 
-body.dark {
-  --glass-bg: rgba(30, 30, 35, 0.5);
-  --glass-border: rgba(255, 255, 255, 0.15);
-  --glass-shadow: 0 12px 40px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.1);
-  --footer-bg: rgba(15, 15, 20, 0.85);
-  --txt: #f5f5f7; --txt2: rgba(235,235,245,0.6);
-  --bg1: #111418; --bg2: #05070a;
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--txt);
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-*{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent;}
-body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; background: radial-gradient(circle at top left, var(--bg1), var(--bg2)); min-height: 100vh; display: flex; justify-content: center; color: var(--txt); transition: background 0.5s ease; overscroll-behavior: none; }
-.phone-wrap { width: 100%; max-width: 420px; padding: 20px 20px 140px; position: relative; overflow-x: hidden; min-height: 100vh;}
-.glass { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); box-shadow: var(--glass-shadow); backdrop-filter: blur(32px) saturate(1.8); -webkit-backdrop-filter: blur(32px) saturate(1.8); }
+/* NOISE OVERLAY */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:0;
+  opacity:0.4;
+}
 
-/* TOP NAV */
-.top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; margin-top: env(safe-area-inset-top, 0px); padding: 0 5px; }
-.wm { font-size: 19px; font-weight: 600; display: flex; align-items: center; gap: 7px; }
-.month-selector { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 100px; padding: 6px 14px; display: flex; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-.month-input { background: transparent; border: none; color: var(--txt); font-size: 14px; font-weight: 600; outline: none; font-family: inherit; }
-::-webkit-calendar-picker-indicator { cursor: pointer; filter: opacity(0.6); }
-body.dark ::-webkit-calendar-picker-indicator { filter: invert(1); }
+/* GLASS MIXIN */
+.glass {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(20px) saturate(1.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  border-radius: var(--r);
+}
 
-/* TABS */
-.tab-content { display: none; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-.tab-content.active { display: block; }
-@keyframes slideUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+/* LAYOUT */
+.app {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
 
-/* HERO & SUMMARY */
-.hero { padding: 30px 20px; margin-bottom: 20px; text-align: center; }
-.hero-salary-in { font-size: 38px; font-weight: 300; color: var(--txt); background: transparent; border: none; outline: none; width: 100%; text-align: center; letter-spacing: -1px; }
+/* SIDEBAR */
+.sidebar {
+  width: var(--sidebar-w);
+  min-height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  border-right: 1px solid var(--border);
+  background: rgba(11,13,20,0.85);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  z-index: 100;
+  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+}
 
-/* EDIT BUTTON MINIMAL */
-.edit-btn-subtle { font-size: 13px; font-weight: 500; color: var(--txt2); background: rgba(120,120,128,0.1); padding: 4px 12px; border-radius: 100px; cursor: pointer; transition: 0.2s; }
-.edit-btn-subtle.active { color: var(--accent); background: rgba(0,122,255,0.1); font-weight: 600; }
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  margin-bottom: 32px;
+}
+.logo-icon {
+  width: 28px; height: 28px;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+}
+.logo-icon i { width: 14px; height: 14px; color: white; }
+.logo-text { font-size: 15px; font-weight: 600; letter-spacing: -0.3px; }
 
-/* KATEGORI LIST */
-.cat-list { display: flex; flex-direction: column; gap: 10px; padding-bottom: 20px; }
-.cat-wrapper { position: relative; border-radius: var(--r); }
-.cat-card { padding: 16px; display: flex; align-items: center; gap: 12px; position: relative; overflow: hidden; z-index: 1; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); }
-.cat-progress-bg { position: absolute; top: 0; left: 0; height: 100%; background: rgba(0, 122, 255, 0.06); z-index: -1; transition: width 0.8s; }
-.cat-dot { width: 40px; height: 40px; border-radius: 12px; background: rgba(120,120,128,0.12); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--txt); }
-.cat-dot i { width: 22px; height: 22px; }
-.cat-body { flex: 1; min-width: 0; }
-.cat-name-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; width: 100%; font-family: inherit;}
-.cat-sub-info { font-size: 11px; color: var(--txt2); margin-top: 2px; }
-.date-container { position: relative; display: inline-block; vertical-align: middle; margin-top: 4px;}
-.date-tag { appearance: none; background: rgba(255, 149, 0, 0.1); border: 1px solid rgba(255, 149, 0, 0.2); border-radius: 100px; padding: 2px 10px; font-size: 11px; font-weight: 600; color: #FF9500; pointer-events: none; display: flex; align-items: center; gap: 4px; }
-.due-input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 5; }
-.bank-tag { appearance: none; background: rgba(120, 120, 128, 0.1); border: 1px solid rgba(120, 120, 128, 0.2); border-radius: 100px; padding: 2px 8px; font-size: 11px; font-weight: 600; color: var(--txt2); font-family: inherit; outline: none; cursor: pointer; }
-.amount-in, .actual-in { font-size: 15px; font-weight: 600; color: var(--txt); background: transparent; border: none; outline: none; text-align: right; width: 85px; font-family: inherit; }
-.actual-in { font-size: 13px; color: var(--accent); margin-top: 2px; }
+.nav-section { margin-bottom: 24px; }
+.nav-label { font-size: 10px; font-weight: 600; color: var(--txt3); text-transform: uppercase; letter-spacing: 0.8px; padding: 0 8px; margin-bottom: 6px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px; border-radius: var(--r-sm);
+  font-size: 13.5px; font-weight: 500; color: var(--txt2);
+  cursor: pointer; transition: all 0.15s; margin-bottom: 1px;
+  border: 1px solid transparent;
+}
+.nav-item i { width: 15px; height: 15px; flex-shrink: 0; }
+.nav-item:hover { background: var(--surface-hover); color: var(--txt); }
+.nav-item.active { background: var(--accent-dim); color: var(--accent); border-color: rgba(91,141,238,0.2); }
 
-/* EDIT MODE & DRAG */
-@keyframes jiggle { 0% { transform: rotate(-0.5deg); } 50% { transform: rotate(0.5deg); } 100% { transform: rotate(-0.5deg); } }
-.edit-mode .cat-card { animation: jiggle 0.3s infinite ease-in-out; }
-.delete-badge { position: absolute; top: -4px; left: -4px; width: 24px; height: 24px; background: var(--red); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; opacity: 0; transform: scale(0); transition: 0.2s; z-index: 10; cursor:pointer; pointer-events: none; }
-.edit-mode .delete-badge { opacity: 1; transform: scale(1); pointer-events: auto; }
-.drag-handle { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 24px; color: var(--txt2); padding: 15px; display: none; cursor: grab; z-index: 20; }
-.edit-mode .drag-handle { display: block; }
-.edit-mode .amount-in, .edit-mode .actual-in, .edit-mode .date-container, .edit-mode .bank-tag { opacity: 0.2; pointer-events: none; transition: 0.3s; }
-.edit-mode .cat-name-in { pointer-events: none; }
-.cat-wrapper.dragging { z-index: 999; }
-.cat-wrapper.dragging .cat-card { animation: none !important; transform: scale(1.03); box-shadow: 0 15px 30px rgba(0,0,0,0.15); border: 1px solid var(--accent); }
+.sidebar-bottom {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
 
-/* INSIGHT CARDS & TRENDS */
-.insight-card { padding: 20px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
-.var-chart-container { display: flex; align-items: flex-end; justify-content: space-between; height: 80px; gap: 8px; padding-top: 15px; }
-.var-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
-.var-bar { width: 100%; max-width: 18px; border-radius: 4px; transition: height 0.6s ease; }
+.month-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  margin-bottom: 10px;
+}
+.month-nav-label { font-size: 12px; font-weight: 600; color: var(--txt); }
+.month-nav-btn {
+  width: 22px; height: 22px; border-radius: 6px;
+  background: var(--surface-hover); border: 1px solid var(--border);
+  color: var(--txt2); cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: 0.15s;
+}
+.month-nav-btn:hover { color: var(--txt); background: var(--border); }
+.month-nav-btn i { width: 12px; height: 12px; }
 
-/* JADWAL TAGIHAN */
-.bill-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; background: rgba(120,120,128,0.05); border-radius: 14px; margin-bottom: 10px; transition: 0.2s;}
-.cal-btn { width: 34px; height: 34px; border-radius: 8px; background: rgba(255, 149, 0, 0.15); color: #FF9500; border: 1px solid rgba(255, 149, 0, 0.3); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-.cal-btn:active { transform: scale(0.9); }
-.cal-btn i { width: 18px; height: 18px; }
+.theme-btn {
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; width: 100%; padding: 8px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-sm); color: var(--txt2); font-size: 12px;
+  font-weight: 500; cursor: pointer; transition: 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+.theme-btn:hover { color: var(--txt); background: var(--surface-hover); }
+.theme-btn i { width: 13px; height: 13px; }
 
-/* PORTOFOLIO / ASET STYLES */
-.asset-item { display: flex; align-items: center; gap: 10px; padding: 12px; background: rgba(120,120,128,0.05); border-radius: 14px; margin-bottom: 8px; }
-.asset-icon { flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: rgba(120,120,128,0.1); border-radius: 10px; color: var(--txt); }
-.asset-icon i { width: 18px; height: 18px; }
-.asset-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-.a-name { background: transparent; border: none; outline: none; font-size: 14px; font-weight: 600; color: var(--txt); font-family: inherit; width: 100%; }
-.a-type { background: rgba(120,120,128,0.1); border: 1px solid rgba(120,120,128,0.2); border-radius: 100px; padding: 2px 8px; font-size: 11px; font-weight: 600; color: var(--txt2); outline: none; width: fit-content; font-family: inherit; appearance: none; }
-.a-amt { background: transparent; border: none; outline: none; font-size: 15px; font-weight: 600; color: var(--grn); text-align: right; width: 95px; font-family: inherit; }
-.a-del { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,59,48,0.1); color: var(--red); display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; flex-shrink: 0; margin-left: 2px; }
-.a-del i { width: 14px; height: 14px; pointer-events: none; }
+/* MAIN CONTENT */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  padding: 28px 28px 80px;
+  min-height: 100vh;
+}
 
-/* KELOMPOK ASET */
-.group-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r); box-shadow: var(--glass-shadow); backdrop-filter: blur(32px) saturate(1.8); margin-bottom: 14px; overflow: hidden; }
-.group-header { display: flex; align-items: center; gap: 10px; padding: 16px 20px; cursor: pointer; user-select: none; }
-.group-icon-wrap { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--txt); }
-.group-icon-wrap i { width: 20px; height: 20px; }
-.group-info { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
-.group-name-in { background: transparent; border: none; outline: none; font-size: 15px; font-weight: 600; color: var(--txt); font-family: inherit; width: 100%; }
-.group-subtitle { font-size: 12px; color: var(--txt2); margin-top: 2px; }
-.group-total { font-size: 15px; font-weight: 700; color: var(--grn); }
-.group-toggle { font-size: 18px; color: var(--txt2); transition: transform 0.3s; flex-shrink: 0; display:flex; align-items:center; justify-content:center;}
-.group-toggle i { width: 20px; height: 20px; }
-.group-toggle.open { transform: rotate(90deg); }
-.group-body { padding: 0 16px 16px; border-top: 1px solid var(--glass-border); display: none; }
+/* PAGE HEADER */
+.page-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 24px;
+}
+.page-title { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; }
+.page-sub { font-size: 13px; color: var(--txt2); margin-top: 3px; }
+
+/* STAT CARDS ROW */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  padding: 18px 20px; border-radius: var(--r);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.stat-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+}
+.stat-label { font-size: 11px; font-weight: 600; color: var(--txt3); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 10px; }
+.stat-val { font-size: 20px; font-weight: 500; letter-spacing: -0.5px; font-family: 'DM Mono', monospace; }
+.stat-sub { font-size: 11px; color: var(--txt3); margin-top: 5px; }
+.stat-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+
+/* GRID 2 COL */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+.grid-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px; }
+
+/* SECTION CARD */
+.section-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.section-card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px 0;
+}
+.section-card-title { font-size: 13px; font-weight: 600; color: var(--txt2); text-transform: uppercase; letter-spacing: 0.5px; }
+.section-card-body { padding: 14px 20px 20px; }
+
+/* ALLOCATION TABLE */
+.alloc-table { width: 100%; border-collapse: collapse; }
+.alloc-table th { font-size: 10px; font-weight: 600; color: var(--txt3); text-transform: uppercase; letter-spacing: 0.5px; padding: 0 0 10px; text-align: left; }
+.alloc-table th:last-child, .alloc-table td:last-child { text-align: right; }
+.alloc-row { border-top: 1px solid var(--border); }
+.alloc-row td { padding: 10px 0; vertical-align: middle; }
+.alloc-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.alloc-icon i { width: 13px; height: 13px; }
+.alloc-name-in { background: transparent; border: none; outline: none; font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 500; color: var(--txt); width: 120px; }
+.alloc-name-in::placeholder { color: var(--txt3); }
+.alloc-progress { width: 100%; height: 3px; background: rgba(255,255,255,0.06); border-radius: 10px; overflow: hidden; margin-top: 4px; }
+.alloc-progress-fill { height: 100%; border-radius: 10px; transition: width 0.6s ease; }
+.bank-pill {
+  font-size: 10px; font-weight: 600; color: var(--txt3);
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+  border-radius: 100px; padding: 2px 7px;
+  font-family: 'DM Mono', monospace;
+  cursor: pointer; outline: none; appearance: none;
+}
+.date-pill {
+  font-size: 10px; font-weight: 600; color: var(--amber);
+  background: var(--amber-dim); border: 1px solid rgba(251,191,36,0.15);
+  border-radius: 100px; padding: 2px 7px; cursor: pointer;
+  white-space: nowrap; display: inline-flex; align-items: center; gap: 3px;
+}
+.date-pill i { width: 9px; height: 9px; }
+.num-in {
+  background: transparent; border: none; outline: none;
+  font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500;
+  color: var(--txt); text-align: right; width: 90px;
+}
+.num-in.actual { color: var(--accent); font-size: 11px; }
+.num-in::placeholder { color: var(--txt3); }
+.del-btn {
+  width: 24px; height: 24px; border-radius: 6px;
+  background: transparent; border: none; color: var(--txt3);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: 0.15s; opacity: 0;
+}
+.del-btn i { width: 12px; height: 12px; pointer-events: none; }
+.alloc-row:hover .del-btn { opacity: 1; }
+.del-btn:hover { background: var(--red-dim); color: var(--red); }
+
+/* EDIT MODE */
+.edit-mode .alloc-row td:nth-child(4),
+.edit-mode .alloc-row td:nth-child(5) { opacity: 0.2; pointer-events: none; }
+.jiggle { animation: jiggle 0.35s infinite ease-in-out; }
+@keyframes jiggle { 0%{transform:rotate(-0.4deg)} 50%{transform:rotate(0.4deg)} 100%{transform:rotate(-0.4deg)} }
+
+/* VARIANCE CHART */
+.var-chart { display: flex; align-items: flex-end; gap: 8px; height: 60px; padding: 0 0 4px; }
+.var-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+.var-bar { width: 100%; max-width: 24px; border-radius: 3px 3px 0 0; transition: height 0.5s ease; min-height: 3px; }
+.var-month { font-size: 9px; color: var(--txt3); margin-top: 4px; font-weight: 600; font-family: 'DM Mono', monospace; }
+
+/* BILL ITEMS */
+.bill-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.bill-row:last-child { border-bottom: none; }
+.bill-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--amber-dim); border: 1px solid rgba(251,191,36,0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--amber); }
+.bill-icon i { width: 13px; height: 13px; }
+.cal-add-btn {
+  margin-left: auto; padding: 5px 10px; border-radius: 6px;
+  background: var(--surface-hover); border: 1px solid var(--border);
+  color: var(--txt2); font-size: 11px; font-weight: 500; cursor: pointer;
+  display: flex; align-items: center; gap: 4px; transition: 0.15s;
+  white-space: nowrap; font-family: 'DM Sans', sans-serif;
+}
+.cal-add-btn:hover { color: var(--accent); border-color: rgba(91,141,238,0.3); background: var(--accent-dim); }
+.cal-add-btn i { width: 11px; height: 11px; }
+
+/* BANK SUMMARY */
+.bank-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 0; border-bottom: 1px solid var(--border);
+}
+.bank-row:last-child { border-bottom: none; }
+
+/* PORTFOLIO */
+.group-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r); margin-bottom: 12px; overflow: hidden;
+}
+.group-head {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; cursor: pointer; user-select: none; transition: background 0.15s;
+}
+.group-head:hover { background: var(--surface-hover); }
+.group-badge { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.group-badge i { width: 15px; height: 15px; }
+.group-name-in { background: transparent; border: none; outline: none; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; color: var(--txt); flex: 1; }
+.group-name-in::placeholder { color: var(--txt3); }
+.group-pct { font-size: 11px; font-weight: 600; font-family: 'DM Mono', monospace; }
+.group-total { font-size: 14px; font-weight: 600; color: var(--green); font-family: 'DM Mono', monospace; margin-left: 8px; }
+.group-chev { width: 18px; height: 18px; color: var(--txt3); transition: transform 0.25s; }
+.group-chev.open { transform: rotate(90deg); }
+.group-del-btn { width: 24px; height: 24px; border-radius: 6px; background: transparent; border: none; color: var(--txt3); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.15s; }
+.group-del-btn i { width: 13px; height: 13px; pointer-events: none; }
+.group-del-btn:hover { background: var(--red-dim); color: var(--red); }
+.group-body { display: none; padding: 0 16px 16px; border-top: 1px solid var(--border); }
 .group-body.open { display: block; padding-top: 12px; }
-.group-note-wrap { margin-top: 8px; }
-.group-note { background: rgba(120,120,128,0.06); border: 1px solid rgba(120,120,128,0.15); border-radius: 12px; padding: 10px 14px; font-size: 13px; color: var(--txt); font-family: inherit; outline: none; width: 100%; resize: none; min-height: 60px; }
-.group-note::placeholder { color: var(--txt2); }
-.group-note-label { font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 6px; }
+.group-prog-row { display: flex; align-items: center; gap: 8px; padding: 2px 14px 10px 62px; }
+.group-prog-track { flex: 1; height: 3px; background: rgba(255,255,255,0.06); border-radius: 10px; overflow: hidden; }
+.group-prog-fill { height: 100%; border-radius: 10px; background: var(--accent); transition: width 0.4s; }
+.asset-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.asset-row:last-of-type { border-bottom: none; }
+.asset-type-icon { width: 28px; height: 28px; border-radius: 7px; background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--txt2); }
+.asset-type-icon i { width: 12px; height: 12px; }
+.a-name { background: transparent; border: none; outline: none; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--txt); flex: 1; min-width: 0; }
+.a-name::placeholder { color: var(--txt3); }
+.a-type {
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+  border-radius: 6px; padding: 3px 6px; font-size: 10px; font-weight: 600;
+  color: var(--txt2); outline: none; appearance: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+.a-amt { background: transparent; border: none; outline: none; font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: var(--green); text-align: right; width: 90px; }
+.a-amt::placeholder { color: var(--txt3); }
+.a-del { width: 22px; height: 22px; border-radius: 6px; background: transparent; border: none; color: var(--txt3); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.15s; }
+.a-del i { width: 11px; height: 11px; pointer-events: none; }
+.a-del:hover { background: var(--red-dim); color: var(--red); }
 
-/* TARGET PROGRESS BAR (ASET) */
-.group-prog-container { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
-.group-prog-track { flex: 1; height: 5px; background: rgba(120,120,128,0.1); border-radius: 10px; overflow: hidden; }
-.group-prog-fill { height: 100%; background: var(--accent); transition: width 0.4s ease, background 0.4s ease; }
-.group-prog-pct { font-size: 10px; font-weight: 700; color: var(--txt2); font-variant-numeric: tabular-nums; transition: color 0.4s ease; }
+/* TARGET INPUT */
+.target-row { display: flex; align-items: center; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+.target-label { font-size: 11px; color: var(--txt3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; flex-shrink: 0; }
+.target-in { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 7px; padding: 5px 10px; font-size: 12px; font-family: 'DM Mono', monospace; color: var(--txt); outline: none; width: 140px; }
+.note-in { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 12px; color: var(--txt); font-family: 'DM Sans', sans-serif; outline: none; width: 100%; resize: none; min-height: 50px; margin-top: 8px; }
+.note-in::placeholder { color: var(--txt3); }
 
-/* GRAFIK ASET BULANAN */
-.asset-chart-container { display: flex; align-items: flex-end; justify-content: space-between; height: 140px; gap: 6px; padding-top: 20px; }
-.ac-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
-.ac-bar { width: 100%; max-width: 26px; background: rgba(120,120,128,0.15); border-radius: 6px 6px 0 0; transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s; }
-.ac-bar.active { background: var(--grn); box-shadow: 0 0 12px rgba(52,199,89,0.25); }
-.ac-month { font-size: 10px; color: var(--txt2); margin-top: 8px; text-transform: uppercase; font-weight: 600; transition: 0.3s; }
-.ac-bar-wrap.active .ac-month { color: var(--txt); }
-.ac-val { font-size: 10px; color: var(--txt2); font-weight: 600; margin-bottom: 6px; transition: 0.3s; }
-.ac-bar-wrap.active .ac-val { color: var(--txt); font-weight: 700; }
+/* ADD ASSET BTN */
+.add-asset-btn {
+  width: 100%; padding: 8px; margin-top: 8px;
+  border-radius: 8px; background: rgba(91,141,238,0.06);
+  border: 1px dashed rgba(91,141,238,0.25); color: var(--accent);
+  font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+.add-asset-btn:hover { background: var(--accent-dim); }
 
-/* PROFILE & BUTTONS */
-.profile-card { align-items: center; text-align: center; margin-top: 20px; }
-.up-avatar { width: 72px; height: 72px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; color: var(--txt); background: rgba(120,120,128,0.1); border: 3px solid var(--glass-border); margin: 0 auto 12px; }
-.up-avatar i { width: 32px; height: 32px; }
-.up-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.up-name { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
-.up-email { font-size: 13px; color: var(--txt2); margin-bottom: 20px; }
-.btn-red { width: 100%; padding: 14px; border-radius: 100px; font-size: 15px; font-weight: 600; cursor: pointer; background: rgba(255,59,48,0.08); color: var(--red); border: 1px solid rgba(255,59,48,0.2); transition: 0.2s; }
-.btn-red:active { transform: scale(0.97); }
-.btn-blue { width: 100%; padding: 14px; border-radius: 100px; font-size: 15px; font-weight: 600; cursor: pointer; background: var(--accent); color: white; border: none; box-shadow: 0 8px 20px rgba(0, 122, 255, 0.3); transition: 0.2s; }
-.btn-blue:active { transform: scale(0.97); }
-.btn-menu { width: 100%; padding: 16px 20px; border-radius: var(--r); font-size: 15px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--txt); margin-top: 10px; transition: 0.2s; }
-.btn-menu:active { transform: scale(0.97); }
+/* ASSET CHART */
+.asset-chart { display: flex; align-items: flex-end; gap: 6px; height: 100px; padding: 0 0 4px; }
+.ac-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+.ac-bar { width: 100%; max-width: 28px; background: rgba(255,255,255,0.07); border-radius: 4px 4px 0 0; transition: height 0.6s cubic-bezier(0.16,1,0.3,1); }
+.ac-bar.active { background: var(--green); }
+.ac-month { font-size: 9px; color: var(--txt3); margin-top: 5px; font-family: 'DM Mono', monospace; font-weight: 600; }
+.ac-col.active .ac-month { color: var(--green); }
+.ac-val { font-size: 9px; color: var(--txt3); margin-bottom: 4px; font-family: 'DM Mono', monospace; }
+.ac-col.active .ac-val { color: var(--txt2); }
 
-/* NAVIGATION */
-.bottom-nav-container { position: fixed; bottom: max(30px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 380px; z-index: 100; }
-.bottom-glass-bar { display: flex; justify-content: space-between; align-items: center; background: var(--footer-bg); border: 1px solid var(--glass-border); border-radius: 99px; padding: 8px 15px; height: 72px; backdrop-filter: blur(40px) saturate(2); -webkit-backdrop-filter: blur(40px) saturate(2); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-.tab-btn { width: 35%; text-align: center; border: none; background: transparent; color: var(--txt2); font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;}
-.tab-btn i { width: 22px; height: 22px; transition: 0.3s; }
-.tab-btn.active { color: var(--txt); }
-.tab-btn.active i { color: var(--accent); }
-.integrated-add-btn { position: absolute; left: 50%; transform: translateX(-50%); width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 300; cursor: pointer; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--accent); z-index: 101; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
-.integrated-add-btn:active { transform: translateX(-50%) scale(0.9); }
+/* TOTAL WEALTH */
+.wealth-hero { padding: 20px; text-align: center; border-bottom: 1px solid var(--border); }
+.wealth-val { font-size: 28px; font-weight: 500; font-family: 'DM Mono', monospace; color: var(--green); letter-spacing: -1px; }
 
-/* BOTTOM SHEET MODAL (TRANSAKSI) */
-.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 1000; display: none; align-items: flex-end; justify-content: center; opacity: 0; transition: opacity 0.3s; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
-.bottom-sheet { width: 100%; max-width: 420px; background: var(--glass-bg); border-top: 1px solid var(--glass-border); border-radius: 28px 28px 0 0; padding: 12px 20px 40px; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 -20px 40px rgba(0,0,0,0.15); backdrop-filter: blur(32px) saturate(1.8); -webkit-backdrop-filter: blur(32px) saturate(1.8); display: flex; flex-direction: column;}
-.drag-pill { width: 40px; height: 5px; background: rgba(120,120,128,0.3); border-radius: 10px; align-self: center; margin-bottom: 20px; }
-.sheet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.sheet-title { font-size: 18px; font-weight: 700; color: var(--txt); }
-.sheet-close { width: 32px; height: 32px; border-radius: 50%; background: rgba(120,120,128,0.1); border: none; font-size: 14px; font-weight: bold; color: var(--txt2); cursor: pointer; display:flex; align-items:center; justify-content:center;}
-.sheet-close i { width: 18px; height: 18px; }
+/* MODAL / BOTTOM SHEET */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 200; display: none; align-items: flex-end; justify-content: center;
+  opacity: 0; transition: opacity 0.3s;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.modal-sheet {
+  width: 100%; max-width: 500px;
+  background: #14161f;
+  border: 1px solid var(--border-strong);
+  border-radius: 20px 20px 0 0;
+  padding: 12px 24px 40px;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.drag-pill { width: 36px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 10px; margin: 0 auto 20px; }
+.sheet-title { font-size: 16px; font-weight: 600; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; }
+.sheet-close { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.08); border: none; color: var(--txt2); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.sheet-close i { width: 14px; height: 14px; }
 
-/* MODAL QUICK INPUT */
-.qi-minimal-row { display: flex; gap: 8px; margin-bottom: 24px; align-items: stretch; width: 100%; box-sizing: border-box; }
-.qi-field { min-width: 0; background: rgba(120,120,128,0.08); border: 1px solid var(--glass-border); border-radius: 16px; padding: 12px 10px; color: var(--txt); font-size: 14px; outline: none; font-family: inherit; }
-.qi-select-subtle { flex: 1.2; appearance: none; }
-.qi-input-subtle { flex: 1; font-weight: 600; }
-.qi-btn-subtle { flex-shrink: 0; width: 48px; background: var(--accent); color: white; border: none; border-radius: 16px; font-size: 26px; font-weight: 300; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,122,255,0.2); display: flex; align-items: center; justify-content: center; padding: 0; }
-.qi-btn-subtle:active { transform: scale(0.9); }
+/* TX FORM */
+.tx-row { display: flex; gap: 10px; margin-bottom: 20px; }
+.tx-select {
+  flex: 1.4; padding: 10px 12px; border-radius: 10px;
+  background: rgba(255,255,255,0.06); border: 1px solid var(--border-strong);
+  color: var(--txt); font-size: 13px; outline: none; appearance: none;
+  font-family: 'DM Sans', sans-serif; cursor: pointer;
+}
+.tx-input {
+  flex: 1; padding: 10px 12px; border-radius: 10px;
+  background: rgba(255,255,255,0.06); border: 1px solid var(--border-strong);
+  color: var(--txt); font-size: 13px; outline: none; text-align: right;
+  font-family: 'DM Mono', monospace;
+}
+.tx-input::placeholder { color: var(--txt3); font-family: 'DM Sans', sans-serif; }
+.tx-btn {
+  width: 42px; border-radius: 10px;
+  background: var(--accent); border: none; color: white; font-size: 20px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: 0.2s;
+}
+.tx-btn:active { transform: scale(0.93); }
+.tx-btn i { width: 20px; height: 20px; }
 
-/* MODAL LOG LIST */
-.log-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(120,120,128,0.1); }
-.log-item:last-child { border-bottom: none; padding-bottom: 0;}
-.log-info { flex: 1; min-width: 0; }
-.log-name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.log-date { font-size: 11px; color: var(--txt2); }
-.log-amt { font-size: 14px; font-weight: 700; color: var(--red); white-space: nowrap; }
+/* LOG LIST */
+.log-item { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+.log-item:last-child { border-bottom: none; }
+.log-icon { width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--txt2); flex-shrink: 0; }
+.log-icon i { width: 13px; height: 13px; }
+.log-name { font-size: 13px; font-weight: 500; }
+.log-time { font-size: 11px; color: var(--txt3); font-family: 'DM Mono', monospace; }
+.log-amt { font-size: 13px; font-weight: 600; color: var(--red); font-family: 'DM Mono', monospace; white-space: nowrap; margin-left: auto; }
 
-.add-cat-btn { width: 100%; padding: 14px; background: rgba(0,122,255,0.08); color: var(--accent); border-radius: 16px; font-weight: 600; border: none; font-size: 14px; cursor: pointer; margin-top: 10px; transition: 0.2s;}
-.add-cat-btn:active { transform: scale(0.97); }
+.add-cat-btn {
+  width: 100%; padding: 11px; border-radius: 10px;
+  background: rgba(255,255,255,0.04); border: 1px dashed rgba(255,255,255,0.1);
+  color: var(--txt2); font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: 0.15s; margin-top: 12px; font-family: 'DM Sans', sans-serif;
+}
+.add-cat-btn:hover { background: rgba(255,255,255,0.08); color: var(--txt); }
 
-/* GROUP COLOR PRESETS */
-.gc-blue { background: rgba(0,122,255,0.12); }
-.gc-green { background: rgba(52,199,89,0.12); }
-.gc-orange { background: rgba(255,149,0,0.12); }
-.gc-purple { background: rgba(175,82,222,0.12); }
-.gc-red { background: rgba(255,59,48,0.12); }
-.gc-teal { background: rgba(90,200,250,0.12); }
+/* ADD BTN FLOATING */
+.fab {
+  position: fixed; bottom: 28px; right: 28px;
+  width: 48px; height: 48px; border-radius: 14px;
+  background: var(--accent); border: none; color: white;
+  box-shadow: 0 8px 24px rgba(91,141,238,0.35);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  z-index: 50; transition: all 0.2s;
+}
+.fab:hover { transform: scale(1.05); box-shadow: 0 12px 30px rgba(91,141,238,0.4); }
+.fab:active { transform: scale(0.95); }
+.fab i { width: 22px; height: 22px; }
+
+/* HAMBURGER */
+.hamburger {
+  display: none; width: 36px; height: 36px; border-radius: 9px;
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--txt2); cursor: pointer; align-items: center; justify-content: center;
+}
+.hamburger i { width: 16px; height: 16px; }
+
+/* MOBILE NAV OVERLAY */
+.sidebar-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5); z-index: 99;
+}
+
+/* SALARY INPUT */
+.salary-wrap { display: flex; align-items: center; gap: 6px; }
+.salary-prefix { font-size: 12px; color: var(--txt3); font-family: 'DM Mono', monospace; }
+.salary-in {
+  background: transparent; border: none; outline: none;
+  font-family: 'DM Mono', monospace; font-size: 20px; font-weight: 500;
+  color: var(--txt); letter-spacing: -0.5px; width: 180px;
+}
+.salary-in::placeholder { color: var(--txt3); }
+
+/* BADGE */
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 100px; font-size: 10px; font-weight: 600; }
+.badge-green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(62,207,142,0.2); }
+.badge-red { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
+.badge-amber { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(251,191,36,0.2); }
+
+/* RESPONSIVENESS */
+@media (max-width: 1024px) {
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-overlay { display: block; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
+  .main { margin-left: 0; padding: 16px 16px 80px; }
+  .hamburger { display: flex; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .page-header { flex-wrap: wrap; gap: 10px; }
+  .fab { bottom: 20px; right: 20px; }
+  .alloc-table th:nth-child(3), .alloc-table td:nth-child(3) { display: none; }
+}
+
+@media (max-width: 480px) {
+  .stats-row { grid-template-columns: 1fr 1fr; }
+}
+
+/* TAB PAGES */
+.page { display: none; animation: fadeUp 0.35s cubic-bezier(0.16,1,0.3,1); }
+.page.active { display: block; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+/* LIGHT MODE */
+body.light {
+  --bg: #f4f5f8;
+  --bg2: #eceef3;
+  --surface: rgba(255,255,255,0.7);
+  --surface-hover: rgba(255,255,255,0.9);
+  --border: rgba(0,0,0,0.07);
+  --border-strong: rgba(0,0,0,0.12);
+  --txt: #0f1117;
+  --txt2: rgba(15,17,23,0.5);
+  --txt3: rgba(15,17,23,0.3);
+  --accent: #2563eb;
+  --accent-dim: rgba(37,99,235,0.1);
+  --green: #059669;
+  --green-dim: rgba(5,150,105,0.1);
+  --red: #dc2626;
+  --red-dim: rgba(220,38,38,0.08);
+  --amber: #d97706;
+  --amber-dim: rgba(217,119,6,0.1);
+}
+body.light .sidebar { background: rgba(244,245,248,0.92); }
+body.light .modal-sheet { background: #fff; }
 </style>
 </head>
 <body>
 
-<div class="phone-wrap">
-  <div class="top-nav">
-    <div class="wm"><i data-lucide="feather" style="color:var(--accent); width:20px; height:20px;"></i> Budgy</div>
-    <div class="month-selector">
-      <input type="month" id="month-picker" class="month-input">
-    </div>
-  </div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
 
-  <div id="tab-alokasi" class="tab-content active">
-    
-    <div class="glass hero">
-      <div style="font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 10px;">Gaji Bulan Ini</div>
-      <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
-        <span style="font-size:20px; opacity:0.4;">Rp</span>
-        <input class="hero-salary-in" id="salary-in" type="text" inputmode="numeric" />
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="logo">
+      <div class="logo-icon"><i data-lucide="feather"></i></div>
+      <div class="logo-text">Budgy</div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Menu</div>
+      <div class="nav-item active" data-page="alokasi">
+        <i data-lucide="layout-dashboard"></i> Alokasi
+      </div>
+      <div class="nav-item" data-page="portofolio">
+        <i data-lucide="briefcase"></i> Portofolio
       </div>
     </div>
 
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px; padding: 0 5px;">
-      <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase;">Alokasi Pengeluaran</div>
-      <div id="edit-mode-btn" class="edit-btn-subtle">Edit</div>
-    </div>
-    
-    <div id="cat-list" class="cat-list"></div>
-
-    <div class="glass insight-card" id="bank-summary-card" style="display:none; margin-bottom: 20px;">
-      <div style="font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 5px;">Ringkasan Saldo Bank</div>
-      <div id="bank-summary-list"></div>
-    </div>
-
-    <div class="glass insight-card">
-      <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Rencana</span><strong id="total-plan-val"></strong></div>
-      <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:4px;"><span>Aktual</span><strong id="total-actual-val" style="color:var(--accent);"></strong></div>
-      <div style="margin-top: 10px; border-top:1px solid var(--glass-border); padding-top:12px;">
-        <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Sisa Budget</span><strong id="selisih-val"></strong></div>
-        <div style="width:100%; height:6px; background:rgba(120,120,128,0.1); border-radius:10px; margin-top:8px; overflow:hidden;"><div id="diff-bar" style="height:100%; width:0%; transition:0.5s;"></div></div>
+    <div class="sidebar-bottom">
+      <div class="month-nav glass" style="border-radius: var(--r-sm); padding: 8px 10px; display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; background:var(--surface); border:1px solid var(--border);">
+        <button class="month-nav-btn" id="prev-month"><i data-lucide="chevron-left"></i></button>
+        <span class="month-nav-label" id="month-display">—</span>
+        <button class="month-nav-btn" id="next-month"><i data-lucide="chevron-right"></i></button>
       </div>
-      <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:12px;"><span>Sisa Gaji Bebas</span><strong id="sisa-val" style="color:var(--grn);"></strong></div>
-      
-      <div style="margin-top: 15px; border-top:1px solid var(--glass-border); padding-top:15px;">
-        <div style="font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase;">Tren Bulanan</div>
-        <div id="variance-chart-container" class="var-chart-container"></div>
+      <button class="theme-btn" id="theme-toggle">
+        <i data-lucide="sun"></i> Ganti Tema
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <!-- TOP ROW MOBILE -->
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
+      <button class="hamburger" id="hamburger"><i data-lucide="menu"></i></button>
+      <div>
+        <div class="page-title" id="page-title">Alokasi Anggaran</div>
+        <div class="page-sub" id="page-sub">Kelola pengeluaran bulanan kamu</div>
       </div>
-    </div>
-
-    <div style="margin: 20px 0 10px; font-size: 13px; font-weight: 600; color: var(--txt2); text-transform: uppercase; padding-left: 8px;">Jadwal Tagihan</div>
-    <div id="bill-schedule-list" style="margin-bottom: 20px;"></div>
-  </div>
-
-  <div id="tab-portofolio" class="tab-content">
-    <div class="glass" style="padding: 30px 20px; margin-bottom: 14px; text-align:center;">
-      <div style="font-size:11px; font-weight:600; color:var(--txt2); text-transform:uppercase; margin-bottom:8px;">Total Kekayaan</div>
-      <div style="font-size:32px; font-weight:700; color:var(--grn); letter-spacing:-1px;" id="total-asset-val">Rp 0</div>
-    </div>
-
-    <div class="glass insight-card" style="margin-bottom: 14px;">
-      <div style="font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 5px;">Riwayat Kekayaan</div>
-      <div id="asset-chart-container" class="asset-chart-container"></div>
-    </div>
-
-    <div style="display:flex; justify-content:space-between; align-items:center; margin: 10px 0 12px; padding: 0 5px;">
-      <div style="font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase;">Kelompok Aset</div>
-      <div id="add-group-btn" style="cursor:pointer; color: var(--accent); font-weight:600; font-size: 13px; background: rgba(0,122,255,0.1); padding: 4px 12px; border-radius: 100px;">+ Kelompok</div>
-    </div>
-    <div id="group-list"></div>
-
-    <div class="glass insight-card profile-card">
-      <div id="user-logged-out" style="display:flex; flex-direction:column; width:100%; align-items:center;">
-        <div style="margin-bottom:10px; color:var(--txt2);"><i data-lucide="cloud" style="width:48px;height:48px;"></i></div>
-        <h3 style="margin-bottom:6px;">Simpan ke Cloud</h3>
-        <p style="font-size:13px; color:var(--txt2); margin-bottom:20px;">Login dengan Google agar data aman & tersinkronisasi antar perangkat.</p>
-        <button class="btn-blue" id="btn-login">Masuk dengan Google</button>
-      </div>
-      <div id="user-logged-in" style="display:none; flex-direction:column; width:100%; align-items:center;">
-        <div class="up-avatar" id="up-avatar"><i data-lucide="user"></i></div>
-        <div class="up-name" id="up-name">—</div>
-        <div class="up-email" id="up-email"></div>
-        <button class="btn-red" id="up-logout">Keluar Akun</button>
+      <div style="margin-left:auto; display:flex; align-items:center; gap:10px;">
+        <!-- salary input on desktop top -->
+        <div class="salary-wrap glass" style="padding:8px 14px; border-radius:10px;">
+          <span class="salary-prefix">Rp</span>
+          <input class="salary-in" id="salary-in" type="text" inputmode="numeric" placeholder="0">
+          <span class="salary-prefix" style="margin-left:3px; font-size:10px;">gaji</span>
+        </div>
       </div>
     </div>
 
-    <button class="btn-menu" id="theme-toggle" style="margin-bottom: 10px;">
-      <div style="display:flex; align-items:center; gap:10px;"><i data-lucide="moon" style="width:18px;height:18px;"></i> <span>Tema Tampilan</span></div>
-      <i data-lucide="chevron-right" style="color:var(--txt2); width:18px;height:18px;"></i>
-    </button>
-  </div>
+    <!-- PAGE: ALOKASI -->
+    <div id="page-alokasi" class="page active">
+      <!-- STAT CARDS -->
+      <div class="stats-row" id="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Total Gaji</div>
+          <div class="stat-val" id="sc-salary">Rp 0</div>
+          <div class="stat-sub">Bulan ini</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Rencana</div>
+          <div class="stat-val" id="sc-plan">Rp 0</div>
+          <div class="stat-sub" id="sc-plan-pct">— dari gaji</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Aktual</div>
+          <div class="stat-val" id="sc-actual" style="color:var(--accent);">Rp 0</div>
+          <div class="stat-sub" id="sc-actual-pct">— dari rencana</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Sisa Gaji Bebas</div>
+          <div class="stat-val" id="sc-sisa" style="color:var(--green);">Rp 0</div>
+          <div class="stat-sub" id="sc-sisa-badge"></div>
+        </div>
+      </div>
+
+      <!-- ALOKASI + SUMMARY -->
+      <div class="grid-3">
+        <!-- ALOKASI TABLE -->
+        <div class="section-card">
+          <div class="section-card-header">
+            <span class="section-card-title">Alokasi Pengeluaran</span>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <div id="edit-btn" style="font-size:12px; font-weight:600; color:var(--txt2); cursor:pointer; padding:4px 10px; border-radius:100px; border:1px solid var(--border); background:var(--surface); transition:0.15s;">Edit</div>
+            </div>
+          </div>
+          <div class="section-card-body">
+            <table class="alloc-table" id="alloc-table">
+              <thead>
+                <tr>
+                  <th style="width:34px;"></th>
+                  <th>Kategori</th>
+                  <th>Bank · Tgl</th>
+                  <th style="text-align:right;">Rencana</th>
+                  <th style="text-align:right; color:var(--accent);">Aktual</th>
+                  <th style="width:28px;"></th>
+                </tr>
+              </thead>
+              <tbody id="alloc-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div>
+          <!-- Ringkasan -->
+          <div class="section-card" style="margin-bottom:16px;">
+            <div class="section-card-header"><span class="section-card-title">Ringkasan</span></div>
+            <div class="section-card-body">
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:13px;">
+                <span style="color:var(--txt2);">Rencana</span>
+                <span style="font-family:'DM Mono',monospace; font-weight:500;" id="sum-plan">Rp 0</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:13px;">
+                <span style="color:var(--txt2);">Aktual</span>
+                <span style="font-family:'DM Mono',monospace; font-weight:500; color:var(--accent);" id="sum-actual">Rp 0</span>
+              </div>
+              <div style="width:100%; height:3px; background:rgba(255,255,255,0.06); border-radius:10px; overflow:hidden; margin-bottom:12px;">
+                <div id="sum-bar" style="height:100%; background:var(--accent); border-radius:10px; transition:width 0.5s; width:0%;"></div>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:13px;">
+                <span style="color:var(--txt2);">Sisa budget</span>
+                <span style="font-family:'DM Mono',monospace; font-weight:600;" id="sum-diff">Rp 0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tren -->
+          <div class="section-card" style="margin-bottom:16px;">
+            <div class="section-card-header"><span class="section-card-title">Tren Bulanan</span></div>
+            <div class="section-card-body">
+              <div id="var-chart" class="var-chart"></div>
+              <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--txt3); margin-top:4px; font-family:'DM Mono',monospace;">
+                <span style="display:flex;align-items:center;gap:4px;"><span style="width:8px;height:8px;background:var(--green);border-radius:2px;display:inline-block;"></span>Hemat</span>
+                <span style="display:flex;align-items:center;gap:4px;"><span style="width:8px;height:8px;background:var(--red);border-radius:2px;display:inline-block;"></span>Lebih</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bank summary (if any) -->
+          <div class="section-card" id="bank-card" style="display:none;">
+            <div class="section-card-header"><span class="section-card-title">Per Bank</span></div>
+            <div class="section-card-body" id="bank-body"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- JADWAL TAGIHAN -->
+      <div class="section-card">
+        <div class="section-card-header"><span class="section-card-title">Jadwal Tagihan</span></div>
+        <div class="section-card-body" id="bill-body"></div>
+      </div>
+    </div>
+
+    <!-- PAGE: PORTOFOLIO -->
+    <div id="page-portofolio" class="page">
+      <!-- Wealth + Chart -->
+      <div class="grid-2" style="margin-bottom:20px;">
+        <div class="section-card">
+          <div class="wealth-hero">
+            <div style="font-size:11px; font-weight:600; color:var(--txt3); text-transform:uppercase; letter-spacing:0.6px; margin-bottom:8px;">Total Kekayaan</div>
+            <div class="wealth-val" id="total-asset-val">Rp 0</div>
+          </div>
+          <div class="section-card-header" style="padding-top:14px;"><span class="section-card-title">Riwayat Kekayaan</span></div>
+          <div class="section-card-body">
+            <div id="asset-chart" class="asset-chart"></div>
+          </div>
+        </div>
+
+        <!-- Cloud sync -->
+        <div class="section-card" style="display:flex; flex-direction:column;">
+          <div class="section-card-header"><span class="section-card-title">Akun & Sinkronisasi</span></div>
+          <div class="section-card-body" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
+            <div id="user-logged-out">
+              <div style="width:48px;height:48px;border-radius:14px;background:var(--accent-dim);border:1px solid rgba(91,141,238,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 12px; color:var(--accent);">
+                <i data-lucide="cloud" style="width:20px;height:20px;"></i>
+              </div>
+              <div style="font-size:14px;font-weight:600;margin-bottom:6px;">Simpan ke Cloud</div>
+              <div style="font-size:12px;color:var(--txt2);margin-bottom:16px;">Login agar data tersinkronisasi antar perangkat.</div>
+              <button style="padding:9px 20px;border-radius:9px;background:var(--accent);border:none;color:white;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;" id="btn-login">Masuk dengan Google</button>
+            </div>
+            <div id="user-logged-in" style="display:none; width:100%; flex-direction:column; align-items:center;">
+              <div id="up-avatar" style="width:52px;height:52px;border-radius:50%;overflow:hidden;margin-bottom:10px;border:2px solid var(--border-strong);display:flex;align-items:center;justify-content:center;background:var(--surface);color:var(--txt2);">
+                <i data-lucide="user" style="width:22px;height:22px;"></i>
+              </div>
+              <div style="font-size:15px;font-weight:600;margin-bottom:3px;" id="up-name">—</div>
+              <div style="font-size:12px;color:var(--txt2);margin-bottom:16px;" id="up-email"></div>
+              <button style="padding:9px 20px;border-radius:9px;background:var(--red-dim);border:1px solid rgba(248,113,113,0.2);color:var(--red);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;" id="up-logout">Keluar Akun</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GROUP LIST -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <span style="font-size:12px; font-weight:600; color:var(--txt2); text-transform:uppercase; letter-spacing:0.5px;">Kelompok Aset</span>
+        <button id="add-group-btn" style="padding:6px 14px; border-radius:100px; background:var(--accent-dim); border:1px solid rgba(91,141,238,0.2); color:var(--accent); font-size:12px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif;">+ Kelompok</button>
+      </div>
+      <div id="group-list"></div>
+    </div>
+  </main>
 </div>
 
-<div class="bottom-nav-container">
-  <div class="bottom-glass-bar">
-    <button class="tab-btn active" data-tab="tab-alokasi">
-      <i data-lucide="wallet"></i>Alokasi
-    </button>
-    <div class="integrated-add-btn" id="integrated-add-btn"><i data-lucide="plus" style="width:28px;height:28px;"></i></div>
-    <button class="tab-btn" data-tab="tab-portofolio">
-      <i data-lucide="briefcase"></i>Portofolio
-    </button>
-  </div>
-</div>
+<!-- FAB -->
+<button class="fab" id="fab-btn"><i data-lucide="plus"></i></button>
 
+<!-- TRANSACTION MODAL -->
 <div id="tx-modal" class="modal-overlay">
-  <div class="bottom-sheet">
+  <div class="modal-sheet">
     <div class="drag-pill"></div>
-    <div class="sheet-header">
-      <div class="sheet-title">Catat Transaksi</div>
-      <button class="sheet-close" id="close-tx-modal"><i data-lucide="x"></i></button>
+    <div class="sheet-title">
+      Catat Transaksi
+      <button class="sheet-close" id="close-modal"><i data-lucide="x"></i></button>
     </div>
-
-    <div class="qi-minimal-row">
-      <select id="qi-cat-select" class="qi-field qi-select-subtle"><option value="">Kategori</option></select>
-      <input id="qi-amt-input" class="qi-field qi-input-subtle" type="text" inputmode="numeric" placeholder="Nominal Rp">
-      <button id="qi-add-btn" class="qi-btn-subtle"><i data-lucide="plus" style="width:24px;height:24px;"></i></button>
+    <div class="tx-row">
+      <select id="qi-cat" class="tx-select"><option value="">Pilih kategori</option></select>
+      <input id="qi-amt" class="tx-input" type="text" inputmode="numeric" placeholder="Nominal Rp">
+      <button id="qi-add" class="tx-btn"><i data-lucide="plus"></i></button>
     </div>
-
-    <div style="font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; margin-bottom: 10px;">Log Transaksi Terakhir</div>
-    <div id="transaction-log-list" style="max-height: 200px; overflow-y: auto; margin-bottom: 15px;"></div>
-
-    <button id="add-new-cat-btn" class="add-cat-btn">+ Tambah Kategori Baru</button>
+    <div style="font-size:11px; font-weight:600; color:var(--txt3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px;">Riwayat Transaksi</div>
+    <div id="tx-log" style="max-height:220px; overflow-y:auto; margin-bottom:14px;"></div>
+    <button id="add-cat-btn" class="add-cat-btn">+ Tambah Kategori Baru</button>
   </div>
 </div>
 
@@ -338,644 +771,544 @@ const firebaseConfig = {
   messagingSenderId: "733464255051",
   appId: "1:733464255051:web:d30d49716990d3a8a7cbce"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-const BANKS = ['BCA', 'Mandiri', 'BNI', 'BRI', 'Jago', 'SeaBank', 'GoPay', 'OVO', 'DANA', 'Tunai'];
-const ICON_MAP = { 'makan': 'utensils', 'kopi': 'coffee', 'listrik': 'zap', 'air': 'droplets', 'bensin': 'fuel', 'belanja': 'shopping-bag', 'tabung': 'piggy-bank', 'cicilan': 'credit-card', 'skincare': 'sparkles', 'nonton': 'film', 'game': 'gamepad-2' };
-const ASSET_TYPES = ['Tabungan', 'Emas', 'Saham', 'Reksadana', 'Obligasi', 'Kripto', 'Properti', 'Lainnya'];
-const ASSET_ICONS = { 'Tabungan':'landmark', 'Emas':'coins', 'Saham':'trending-up', 'Reksadana':'pie-chart', 'Obligasi':'scroll-text', 'Kripto':'bitcoin', 'Properti':'home', 'Lainnya':'gem' };
-const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
-const GROUP_COLORS = ['gc-blue','gc-green','gc-orange','gc-purple','gc-red','gc-teal'];
-const GROUP_ICONS_DEFAULT = ['shield','sun','line-chart','plane','home','graduation-cap','pill','car','ring','leaf'];
-const EMOJI_TO_LUCIDE = {
-    '🍔': 'utensils', '☕': 'coffee', '⚡': 'zap', '💧': 'droplets', '⛽': 'fuel', '🛍️': 'shopping-bag', '💰': 'piggy-bank', '💳': 'credit-card', '✨': 'sparkles', '🎬': 'film', '🎮': 'gamepad-2', '📦': 'package',
-    '🏦':'landmark', '🥇':'coins', '📈':'trending-up', '📊':'pie-chart', '📜':'scroll-text', '🪙':'bitcoin', '🏠':'home', '💎':'gem',
-    '🛡️':'shield', '🌅':'sun', '✈️':'plane', '🎓':'graduation-cap', '💊':'pill', '🚗':'car', '💍':'ring', '🌱':'leaf'
-};
-
-let currentMonth = new Date().toISOString().slice(0, 7);
-let allMonthsData = JSON.parse(localStorage.getItem('budgy_months')) || {};
-let cats = [], assetGroups = [], transactions = [], salary = 0;
-let isEditMode = false;
-let currentUser = null;
-let dragEl = null, startY = 0;
+const BANKS = ['BCA','Mandiri','BNI','BRI','Jago','SeaBank','GoPay','OVO','DANA','Tunai'];
+const ICON_MAP = {'makan':'utensils','kopi':'coffee','listrik':'zap','air':'droplets','bensin':'fuel','belanja':'shopping-bag','tabung':'piggy-bank','cicilan':'credit-card','skincare':'sparkles','nonton':'film','game':'gamepad-2'};
+const ASSET_TYPES = ['Tabungan','Emas','Saham','Reksadana','Obligasi','Kripto','Properti','Lainnya'];
+const ASSET_ICONS = {'Tabungan':'landmark','Emas':'coins','Saham':'trending-up','Reksadana':'pie-chart','Obligasi':'scroll-text','Kripto':'bitcoin','Properti':'home','Lainnya':'gem'};
+const MONTH_NAMES = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
+const GC = ['rgba(91,141,238,0.15)','rgba(62,207,142,0.15)','rgba(251,191,36,0.15)','rgba(167,139,250,0.15)','rgba(248,113,113,0.15)','rgba(45,212,191,0.15)'];
+const GC_TEXT = ['var(--accent)','var(--green)','var(--amber)','var(--purple)','var(--red)','#2dd4bf'];
+const G_ICONS = ['shield','sun','line-chart','plane','home','graduation-cap','pill','car','ring','leaf'];
+const EMOJI_MAP = {'🍔':'utensils','☕':'coffee','⚡':'zap','💧':'droplets','⛽':'fuel','🛍️':'shopping-bag','💰':'piggy-bank','💳':'credit-card','✨':'sparkles','🎬':'film','🎮':'gamepad-2','📦':'package','🏦':'landmark','🥇':'coins','📈':'trending-up','📊':'pie-chart','📜':'scroll-text','🪙':'bitcoin','🏠':'home','💎':'gem','🛡️':'shield','🌅':'sun','✈️':'plane','🎓':'graduation-cap','💊':'pill','🚗':'car','💍':'ring','🌱':'leaf'};
 
 const $ = id => document.getElementById(id);
-const haptic = () => { if(navigator.vibrate) navigator.vibrate(10); };
-const fmt = (n) => n === 0 ? '0' : Math.round(n).toLocaleString('id-ID');
+const haptic = () => { if(navigator.vibrate) navigator.vibrate(8); };
+const fmt = n => n === 0 ? '0' : Math.round(n).toLocaleString('id-ID');
+const fmtShort = n => { const a = Math.abs(n); if(a>=1e9) return (n/1e9).toFixed(1).replace('.0','')+'M'; if(a>=1e6) return (n/1e6).toFixed(1).replace('.0','')+'Jt'; if(a>=1e3) return (n/1e3).toFixed(0)+'K'; return n; };
 
-function formatShort(num) {
-  const abs = Math.abs(num);
-  if(abs >= 1000000000) return (num/1000000000).toFixed(1).replace('.0','') + 'M';
-  if(abs >= 1000000) return (num/1000000).toFixed(1).replace('.0','') + 'Jt';
-  if(abs >= 1000) return (num/1000).toFixed(0) + 'K';
-  return num;
+let currentMonth = new Date().toISOString().slice(0,7);
+let allData = JSON.parse(localStorage.getItem('budgy_v2')) || {};
+let cats = [], groups = [], txns = [], salary = 0;
+let isEdit = false;
+let currentUser = null;
+
+function getMonthLabel(m) {
+  const [y, mo] = m.split('-');
+  return `${MONTH_NAMES[parseInt(mo)-1]} ${y}`;
 }
 
-$('month-picker').value = currentMonth;
-$('month-picker').onchange = (e) => { currentMonth = e.target.value; haptic(); applyMonthData(); };
+function updateMonthDisplay() {
+  $('month-display').textContent = getMonthLabel(currentMonth);
+}
 
-function applyMonthData() {
-  if (!allMonthsData[currentMonth]) {
-    let prevMonths = Object.keys(allMonthsData).filter(m => m < currentMonth).sort().reverse();
+function shiftMonth(dir) {
+  const d = new Date(currentMonth + '-01');
+  d.setMonth(d.getMonth() + dir);
+  currentMonth = d.toISOString().slice(0,7);
+  haptic(); updateMonthDisplay(); applyMonth();
+}
+
+$('prev-month').onclick = () => shiftMonth(-1);
+$('next-month').onclick = () => shiftMonth(1);
+updateMonthDisplay();
+
+function applyMonth() {
+  if (!allData[currentMonth]) {
+    const prevMonths = Object.keys(allData).filter(m => m < currentMonth).sort().reverse();
     let prevGroups = [], prevSalary = 0;
     if (prevMonths.length > 0) {
-      let last = allMonthsData[prevMonths[0]];
-      if (last.assetGroups) prevGroups = JSON.parse(JSON.stringify(last.assetGroups));
+      const last = allData[prevMonths[0]];
+      if (last.groups) prevGroups = JSON.parse(JSON.stringify(last.groups));
       if (last.salary) prevSalary = last.salary;
     }
-    allMonthsData[currentMonth] = { cats: [], salary: prevSalary, assetGroups: prevGroups, transactions: [] };
+    allData[currentMonth] = { cats: [], salary: prevSalary, groups: prevGroups, txns: [] };
   }
-  const d = allMonthsData[currentMonth];
-  cats = d.cats || []; salary = d.salary || 0; assetGroups = d.assetGroups || []; transactions = d.transactions || [];
-
-  cats.forEach(c => { if(EMOJI_TO_LUCIDE[c.icon]) c.icon = EMOJI_TO_LUCIDE[c.icon]; });
-  assetGroups.forEach(g => { if(EMOJI_TO_LUCIDE[g.icon]) g.icon = EMOJI_TO_LUCIDE[g.icon]; });
-  transactions.forEach(t => { if(EMOJI_TO_LUCIDE[t.catIcon]) t.catIcon = EMOJI_TO_LUCIDE[t.catIcon]; });
-
+  const d = allData[currentMonth];
+  cats = d.cats || []; salary = d.salary || 0; groups = d.groups || []; txns = d.txns || [];
+  cats.forEach(c => { if(EMOJI_MAP[c.icon]) c.icon = EMOJI_MAP[c.icon]; });
+  groups.forEach(g => { if(EMOJI_MAP[g.icon]) g.icon = EMOJI_MAP[g.icon]; });
+  txns.forEach(t => { if(EMOJI_MAP[t.catIcon]) t.catIcon = EMOJI_MAP[t.catIcon]; });
   $('salary-in').value = fmt(salary);
-  buildList(); buildGroupList(); buildAssetChart(); buildTransactionLog();
+  buildAlloc(); buildGroupList(); buildAssetChart(); buildTxLog();
 }
 
 async function saveToFirebase() {
-  allMonthsData[currentMonth] = { cats, salary, assetGroups, transactions };
   if (!currentUser) return;
-  try { await setDoc(doc(db, "users", currentUser.uid), { months: allMonthsData }, { merge: true }); }
-  catch (e) { console.error(e); }
+  try { await setDoc(doc(db, "users", currentUser.uid), { months: allData }, { merge: true }); } catch(e) {}
 }
-
 async function loadFromFirebase() {
   if (!currentUser) return;
-  const docSnap = await getDoc(doc(db, "users", currentUser.uid));
-  if (docSnap.exists()) {
-    allMonthsData = docSnap.data().months || {};
-  }
-  applyMonthData();
+  const snap = await getDoc(doc(db, "users", currentUser.uid));
+  if (snap.exists()) allData = snap.data().months || {};
+  applyMonth();
 }
-
 const save = () => {
-  allMonthsData[currentMonth] = { cats, salary, assetGroups, transactions };
-  localStorage.setItem('budgy_months', JSON.stringify(allMonthsData));
+  allData[currentMonth] = { cats, salary, groups, txns };
+  localStorage.setItem('budgy_v2', JSON.stringify(allData));
   saveToFirebase();
 };
 
-onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(auth, async user => {
   if (user) {
     currentUser = user;
-    $('user-logged-out').style.display = 'none'; $('user-logged-in').style.display = 'flex';
-    $('up-avatar').innerHTML = `<img src="${user.photoURL}">`;
+    $('user-logged-out').style.display = 'none';
+    $('user-logged-in').style.display = 'flex';
+    $('up-avatar').innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover;">`;
     $('up-name').textContent = user.displayName || 'Pengguna';
     $('up-email').textContent = user.email || '';
     await loadFromFirebase();
   } else {
     currentUser = null;
-    $('user-logged-out').style.display = 'flex'; $('user-logged-in').style.display = 'none';
-    applyMonthData();
+    $('user-logged-out').style.display = 'block';
+    $('user-logged-in').style.display = 'none';
+    applyMonth();
   }
 });
 
 $('btn-login').onclick = () => signInWithPopup(auth, provider);
-$('up-logout').onclick = () => { if(confirm('Yakin ingin keluar akun?')) signOut(auth); };
+$('up-logout').onclick = () => { if(confirm('Yakin keluar?')) signOut(auth); };
 
-window.addToGoogleCalendar = (idx) => {
-  haptic();
-  const c = cats[idx];
-  const dateStr = c.due.replace(/-/g, '');
-  const title = encodeURIComponent(`Bayar ${c.name} - Rp ${fmt(c.amount - c.actual)}`);
-  const details = encodeURIComponent(`Budgy Reminder: Tagihan ${c.name}\nBank: ${c.bank}`);
-  const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dateStr}/${dateStr}&details=${details}&sf=true&output=xml`;
-  window.open(url, '_blank');
+// SALARY
+$('salary-in').oninput = e => {
+  salary = parseInt(e.target.value.replace(/\D/g,'')) || 0;
+  e.target.value = fmt(salary); save(); updateSummary();
 };
 
-window.hapusKategori = function(id) { cats = cats.filter(c => c.id !== id); save(); buildList(); buildTransactionLog(); };
-
-function getDisplayDate(dateStr) {
-  if(!dateStr) return 'Atur Tgl';
-  const d = new Date(dateStr);
-  return `${d.getDate()} ${MONTH_NAMES[d.getMonth()]}`;
-}
-
-const txModal = $('tx-modal');
-const sheet = txModal.querySelector('.bottom-sheet');
-
-$('integrated-add-btn').onclick = () => {
-  haptic();
-  if(isEditMode) $('edit-mode-btn').click();
-  txModal.style.display = 'flex';
-  void txModal.offsetWidth;
-  txModal.style.opacity = '1';
-  sheet.style.transform = 'translateY(0)';
-  buildTransactionLog(); 
-};
-
-function closeTxModal() {
-  haptic();
-  txModal.style.opacity = '0';
-  sheet.style.transform = 'translateY(100%)';
-  setTimeout(() => txModal.style.display = 'none', 400);
-}
-
-$('close-tx-modal').onclick = closeTxModal;
-txModal.onclick = (e) => { if(e.target === txModal) closeTxModal(); };
-
-$('add-new-cat-btn').onclick = () => {
-  haptic();
-  cats.push({id: Date.now(), name: '', amount: 0, actual: 0, icon: 'package', bank: 'BCA', due:''});
-  save(); buildList(); buildTransactionLog();
-  closeTxModal();
-  setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 300);
-};
-
-$('qi-amt-input').oninput = (e) => {
-  let val = parseInt(e.target.value.replace(/\D/g, '')) || 0;
-  e.target.value = val === 0 ? '' : fmt(val);
-};
-
-$('qi-add-btn').onclick = () => {
-  const catId = $('qi-cat-select').value;
-  const amt = parseInt($('qi-amt-input').value.replace(/\D/g, '')) || 0;
-  if (!catId || amt <= 0) return;
-
-  haptic();
-  const catIdx = cats.findIndex(c => c.id == catId);
-  if (catIdx !== -1) {
-    cats[catIdx].actual += amt;
-    transactions.unshift({
-      id: Date.now(),
-      catName: cats[catIdx].name,
-      catIcon: cats[catIdx].icon || 'package',
-      amount: amt,
-      time: new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'})
-    });
-    if(transactions.length > 15) transactions.pop();
-    
-    $('qi-amt-input').value = '';
-    save(); buildList(); buildTransactionLog();
-  }
-};
-
-function buildTransactionLog() {
-  const logDiv = $('transaction-log-list');
-  logDiv.innerHTML = transactions.length ? '' : '<div style="font-size:12px; color:var(--txt2); text-align:center; padding: 10px;">Belum ada riwayat transaksi.</div>';
-  transactions.forEach(t => {
-    logDiv.innerHTML += `<div class="log-item">
-      <div style="width:36px; height:36px; border-radius:10px; background:rgba(120,120,128,0.1); display:flex; align-items:center; justify-content:center; color:var(--txt);">
-        <i data-lucide="${t.catIcon}"></i>
-      </div>
-      <div class="log-info"><div class="log-name">${t.catName}</div><div class="log-date">${t.time}</div></div>
-      <div class="log-amt">- Rp ${fmt(t.amount)}</div>
-    </div>`;
-  });
-
-  const sel = $('qi-cat-select');
-  sel.innerHTML = '<option value="">Pilih Kategori</option>' + cats.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-  lucide.createIcons();
-}
-
-function buildVarianceChart() {
-  const container = $('variance-chart-container');
-  const months = Object.keys(allMonthsData).sort().slice(-6);
-  if (!months.length) return;
-
-  container.innerHTML = '';
-  let maxVar = 0;
-  const data = months.map(m => {
-    const d = allMonthsData[m];
-    const planned = (d.cats || []).reduce((a,c) => a+c.amount, 0);
-    const actual = (d.cats || []).reduce((a,c) => a+c.actual, 0);
-    const v = planned - actual;
-    if (Math.abs(v) > maxVar) maxVar = Math.abs(v);
-    return { month: m.split('-')[1], val: v };
-  });
-
-  data.forEach(d => {
-    const h = maxVar > 0 ? (Math.abs(d.val) / maxVar) * 100 : 5;
-    const isSaving = d.val >= 0;
-    const bar = document.createElement('div');
-    bar.className = 'var-bar';
-    bar.style.height = h + '%';
-    bar.style.background = isSaving ? 'var(--grn)' : 'var(--red)';
-    bar.style.opacity = d.month == currentMonth.split('-')[1] ? '1' : '0.3';
-    const wrap = document.createElement('div');
-    wrap.className = 'var-bar-wrap';
-    wrap.appendChild(bar);
-    container.appendChild(wrap);
-  });
-}
-
-function buildList() {
-  const list = $('cat-list');
-  list.innerHTML = '';
-  cats.forEach((c, index) => {
-    const wrap = document.createElement('div');
-    wrap.className = 'cat-wrapper';
-    wrap.dataset.id = c.id;
-    wrap.innerHTML = `
-      <div class="delete-badge" onclick="window.hapusKategori(${c.id})"><i data-lucide="x" style="width:14px; height:14px;"></i></div>
-      <div class="cat-card">
-        <div class="cat-progress-bg" id="prog-${c.id}"></div>
-        <div class="cat-dot"><i data-lucide="${c.icon || 'package'}"></i></div>
-        <div class="cat-body">
-          <input class="cat-name-in" type="text" value="${c.name}" placeholder="Kategori">
-          <div class="cat-sub-info">Rp ${fmt(c.actual)} / Rp ${fmt(c.amount)}</div>
-          
-          <div style="display:flex; align-items:center; gap:6px; margin-top: 4px;">
-            <select class="bank-tag" data-idx="${index}">${BANKS.map(b => `<option value="${b}" ${c.bank === b ? 'selected' : ''}>${b}</option>`).join('')}</select>
-            <div class="date-container" style="display:inline-block; margin-top: 0;">
-              <div class="date-tag"><i data-lucide="calendar" style="width:10px;height:10px;"></i> ${getDisplayDate(c.due)}</div>
-              <input type="date" value="${c.due}" data-idx="${index}" class="due-input">
-            </div>
+// ALLOC BUILD
+function buildAlloc() {
+  const tbody = $('alloc-body');
+  tbody.innerHTML = '';
+  cats.forEach((c, i) => {
+    const pct = c.amount > 0 ? Math.min((c.actual/c.amount)*100, 100) : 0;
+    const overBudget = c.actual > c.amount && c.amount > 0;
+    const tr = document.createElement('tr');
+    tr.className = `alloc-row${isEdit ? ' jiggle' : ''}`;
+    tr.innerHTML = `
+      <td>
+        <div class="alloc-icon" style="background:rgba(91,141,238,0.12); color:var(--accent);">
+          <i data-lucide="${c.icon || 'package'}"></i>
+        </div>
+      </td>
+      <td>
+        <input class="alloc-name-in" type="text" value="${c.name}" placeholder="Kategori">
+        <div style="display:flex; gap:5px; margin-top:4px; align-items:center; flex-wrap:wrap;">
+          <select class="bank-pill">${BANKS.map(b=>`<option value="${b}" ${c.bank===b?'selected':''}>${b}</option>`).join('')}</select>
+          <div style="position:relative; display:inline-block;">
+            <div class="date-pill"><i data-lucide="calendar"></i>${c.due ? fmtDate(c.due) : 'Atur'}</div>
+            <input type="date" value="${c.due||''}" style="position:absolute;inset:0;opacity:0;cursor:pointer;z-index:5;" class="due-in">
           </div>
-
         </div>
-        <div style="text-align:right">
-          <input class="amount-in" type="text" inputmode="numeric" value="${fmt(c.amount)}">
-          <input class="actual-in" type="text" inputmode="numeric" value="${fmt(c.actual)}">
-        </div>
-        <div class="drag-handle"><i data-lucide="grip-vertical"></i></div>
-      </div>`;
-    list.appendChild(wrap);
+      </td>
+      <td>
+        <div class="alloc-progress" style="width:80px;"><div class="alloc-progress-fill" style="width:${pct}%; background:${overBudget?'var(--red)':'var(--accent)'};"></div></div>
+        <div style="font-size:10px; color:var(--txt3); font-family:'DM Mono',monospace; margin-top:2px;">${Math.round(pct)}%</div>
+      </td>
+      <td style="text-align:right;">
+        <input class="num-in" type="text" inputmode="numeric" value="${fmt(c.amount)}">
+      </td>
+      <td style="text-align:right;">
+        <input class="num-in actual" type="text" inputmode="numeric" value="${fmt(c.actual)}">
+      </td>
+      <td><button class="del-btn"><i data-lucide="x"></i></button></td>
+    `;
+    tbody.appendChild(tr);
 
-    wrap.querySelector('.due-input').onchange = (e) => { cats[index].due = e.target.value; save(); updateSummary(); buildList(); };
-    wrap.querySelector('.cat-name-in').oninput = (e) => {
-      cats[index].name = e.target.value;
-      const word = e.target.value.toLowerCase().split(' ').pop();
-      if(ICON_MAP[word]) { 
-        cats[index].icon = ICON_MAP[word]; 
-        wrap.querySelector('.cat-dot').innerHTML = `<i data-lucide="${ICON_MAP[word]}"></i>`;
-        lucide.createIcons();
-        updateSummary(); 
-      }
-      save(); buildTransactionLog();
+    tr.querySelector('.alloc-name-in').oninput = e => {
+      cats[i].name = e.target.value;
+      const w = e.target.value.toLowerCase().split(' ').pop();
+      if(ICON_MAP[w]) { cats[i].icon = ICON_MAP[w]; tr.querySelector('.alloc-icon').innerHTML = `<i data-lucide="${ICON_MAP[w]}"></i>`; lucide.createIcons(); }
+      save(); buildTxLog();
     };
-    wrap.querySelector('.bank-tag').onchange = (e) => { cats[index].bank = e.target.value; save(); updateSummary(); };
-    wrap.querySelector('.amount-in').oninput = (e) => handleVal(e, index, 'amount');
-    wrap.querySelector('.actual-in').oninput = (e) => handleVal(e, index, 'actual');
-
-    const handle = wrap.querySelector('.drag-handle');
-    handle.addEventListener('touchstart', (e) => { e.preventDefault(); dragEl = wrap; dragEl.classList.add('dragging'); startY = e.touches[0].clientY; haptic(); }, {passive: false});
-    handle.addEventListener('touchmove', (e) => {
-      if(!dragEl) return; e.preventDefault();
-      let y = e.touches[0].clientY; dragEl.style.transform = `translateY(${y - startY}px)`;
-      let siblings = [...document.querySelectorAll('.cat-wrapper:not(.dragging)')];
-      let nextEl = siblings.find(sib => { let rect = sib.getBoundingClientRect(); return y > rect.top && y < rect.bottom; });
-      if(nextEl) {
-        let rect = nextEl.getBoundingClientRect();
-        if(y > rect.top + rect.height / 2) list.insertBefore(dragEl, nextEl.nextSibling);
-        else list.insertBefore(dragEl, nextEl);
-        startY = y; dragEl.style.transform = `translateY(0)`; haptic();
-      }
-    }, {passive: false});
-    handle.addEventListener('touchend', () => {
-      if(!dragEl) return;
-      dragEl.classList.remove('dragging'); dragEl.style.transform = ''; dragEl = null;
-      let newCats = [];
-      document.querySelectorAll('.cat-wrapper').forEach(w => {
-        let cat = cats.find(c => c.id === parseInt(w.dataset.id));
-        if(cat) newCats.push(cat);
-      });
-      cats = newCats; save(); buildList();
+    tr.querySelector('.bank-pill').onchange = e => { cats[i].bank = e.target.value; save(); updateSummary(); };
+    tr.querySelector('.due-in').onchange = e => { cats[i].due = e.target.value; save(); buildAlloc(); };
+    tr.querySelectorAll('.num-in').forEach((el, ni) => {
+      el.oninput = e => {
+        const v = parseInt(e.target.value.replace(/\D/g,'')) || 0;
+        cats[i][ni === 0 ? 'amount' : 'actual'] = v;
+        e.target.value = fmt(v); save(); updateSummary();
+      };
     });
+    tr.querySelector('.del-btn').onclick = () => { cats.splice(i, 1); save(); buildAlloc(); buildTxLog(); };
   });
-  
   lucide.createIcons();
   updateSummary();
 }
 
-function handleVal(e, idx, key) {
-  let val = parseInt(e.target.value.replace(/\D/g, '')) || 0;
-  cats[idx][key] = val;
-  e.target.value = fmt(val);
-  save(); updateSummary();
+function fmtDate(s) {
+  const d = new Date(s); return `${d.getDate()} ${MONTH_NAMES[d.getMonth()]}`;
 }
 
 function updateSummary() {
-  const sal = parseInt(salary) || 0;
-  let tPlan = 0, tAct = 0, pending = [];
-  let bankTotals = {};
-
-  cats.forEach((c, idx) => {
+  const sal = salary || 0;
+  let tPlan = 0, tAct = 0;
+  const bankTotals = {};
+  const pending = [];
+  cats.forEach((c, i) => {
     tPlan += c.amount; tAct += c.actual;
-    
-    if(!bankTotals[c.bank]) bankTotals[c.bank] = { planned: 0, actual: 0 };
+    if (!bankTotals[c.bank]) bankTotals[c.bank] = { planned: 0, actual: 0 };
     bankTotals[c.bank].planned += c.amount;
     bankTotals[c.bank].actual += c.actual;
-
-    const prog = $(`prog-${c.id}`);
-    if(prog) {
-      let p = c.amount > 0 ? (c.actual/c.amount)*100 : 0;
-      prog.style.width = Math.min(p, 100) + '%';
-      prog.style.backgroundColor = p > 100 ? 'rgba(255,59,48,0.15)' : 'rgba(0,122,255,0.06)';
-    }
-    if(c.due && c.actual < c.amount) pending.push({ ...c, idx, dateObj: new Date(c.due) });
+    if (c.due && c.actual < c.amount) pending.push({...c, i, dateObj: new Date(c.due)});
   });
 
-  const bankDiv = $('bank-summary-list');
-  const bankCard = $('bank-summary-card');
-  if (Object.keys(bankTotals).length > 0) {
-    bankDiv.innerHTML = Object.entries(bankTotals).map(([bank, vals]) => `
-      <div style="display:flex; justify-content:space-between; align-items:center; padding: 10px 0; border-bottom: 1px solid rgba(120,120,128,0.1);">
-        <div style="display:flex; align-items:center; gap:10px;">
-          <div style="width:32px; height:32px; border-radius:10px; background:rgba(120,120,128,0.1); display:flex; align-items:center; justify-content:center; color:var(--txt);">
-            <i data-lucide="landmark" style="width:16px; height:16px;"></i>
-          </div>
+  // Stat cards
+  $('sc-salary').textContent = 'Rp ' + fmt(sal);
+  $('sc-plan').textContent = 'Rp ' + fmt(tPlan);
+  $('sc-plan-pct').textContent = sal > 0 ? `${Math.round((tPlan/sal)*100)}% dari gaji` : '— dari gaji';
+  $('sc-actual').textContent = 'Rp ' + fmt(tAct);
+  $('sc-actual-pct').textContent = tPlan > 0 ? `${Math.round((tAct/tPlan)*100)}% dari rencana` : '— dari rencana';
+  const sisa = sal - tPlan;
+  $('sc-sisa').textContent = 'Rp ' + fmt(sisa);
+  $('sc-sisa-badge').innerHTML = sisa >= 0 ? `<span class="badge badge-green">Aman</span>` : `<span class="badge badge-red">Melebihi gaji</span>`;
+
+  // Summary
+  $('sum-plan').textContent = 'Rp ' + fmt(tPlan);
+  $('sum-actual').textContent = 'Rp ' + fmt(tAct);
+  const diff = tPlan - tAct;
+  $('sum-diff').textContent = 'Rp ' + fmt(diff);
+  $('sum-diff').style.color = diff < 0 ? 'var(--red)' : 'var(--txt)';
+  $('sum-bar').style.width = tPlan > 0 ? Math.min((tAct/tPlan)*100,100)+'%' : '0%';
+
+  // Bank
+  const bKeys = Object.keys(bankTotals);
+  if (bKeys.length > 0) {
+    $('bank-body').innerHTML = bKeys.map(b => `
+      <div class="bank-row">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:26px;height:26px;border-radius:7px;background:var(--surface-hover);display:flex;align-items:center;justify-content:center;color:var(--txt2);"><i data-lucide="landmark" style="width:12px;height:12px;"></i></div>
           <div>
-            <div style="font-weight:600; font-size:14px;">${bank}</div>
-            <div style="font-size:11px; color:var(--txt2); margin-top:2px;">Terpakai: Rp ${fmt(vals.actual)}</div>
+            <div style="font-size:13px;font-weight:600;">${b}</div>
+            <div style="font-size:10px;color:var(--txt3);font-family:'DM Mono',monospace;">Aktual: Rp ${fmt(bankTotals[b].actual)}</div>
           </div>
         </div>
-        <div style="text-align:right;">
-          <div style="font-size:14px; font-weight:700; color:var(--txt);">Rp ${fmt(vals.planned)}</div>
-        </div>
+        <div style="font-size:13px;font-weight:600;font-family:'DM Mono',monospace;">Rp ${fmt(bankTotals[b].planned)}</div>
       </div>
     `).join('');
-    if(bankDiv.lastElementChild) bankDiv.lastElementChild.style.borderBottom = 'none';
-    bankCard.style.display = 'block';
+    $('bank-card').style.display = 'block';
   } else {
-    bankCard.style.display = 'none';
+    $('bank-card').style.display = 'none';
   }
 
-  const billDiv = $('bill-schedule-list');
-  billDiv.innerHTML = '';
-  if(pending.length) {
-    pending.sort((a,b) => a.dateObj - b.dateObj).forEach(b => {
-      billDiv.innerHTML += `
-        <div class="bill-item glass">
-          <div style="display:flex; align-items:center; gap:10px;">
-            <div style="display:flex; align-items:center; justify-content:center; width:36px; height:36px; background:rgba(120,120,128,0.1); border-radius:10px; color:var(--txt);">
-              <i data-lucide="${b.icon || 'package'}"></i>
-            </div>
-            <div>
-              <div style="font-size:14px; font-weight:600;">${b.name}</div>
-              <div style="font-size:11px; opacity:0.8; margin-top:2px; display:flex; align-items:center; gap:4px;">
-                <i data-lucide="calendar" style="width:10px;height:10px;color:#FF9500;"></i>
-                <span style="color:#FF9500; font-weight:600;">${getDisplayDate(b.due)}</span> · Rp ${fmt(b.amount - b.actual)}
-              </div>
-            </div>
-          </div>
-          <button class="cal-btn" onclick="window.addToGoogleCalendar(${b.idx})"><i data-lucide="calendar-plus"></i></button>
-        </div>`;
-    });
+  // Bills
+  const billDiv = $('bill-body');
+  if (pending.length) {
+    billDiv.innerHTML = pending.sort((a,b)=>a.dateObj-b.dateObj).map(p => `
+      <div class="bill-row">
+        <div class="bill-icon"><i data-lucide="${p.icon||'package'}"></i></div>
+        <div>
+          <div style="font-size:13px;font-weight:600;">${p.name}</div>
+          <div style="font-size:11px;color:var(--amber);font-family:'DM Mono',monospace;margin-top:2px;">${fmtDate(p.due)} · Rp ${fmt(p.amount - p.actual)} sisa</div>
+        </div>
+        <button class="cal-add-btn" onclick="window._addCal(${p.i})"><i data-lucide="calendar-plus"></i> Google Cal</button>
+      </div>
+    `).join('');
   } else {
-    billDiv.innerHTML = '<div style="text-align:center; font-size:13px; opacity:0.5; padding:10px; background:var(--glass-bg); border-radius:16px; border:1px solid var(--glass-border);">Semua lunas!</div>';
+    billDiv.innerHTML = `<div style="text-align:center;font-size:12px;color:var(--txt3);padding:12px;">Semua tagihan lunas 🎉</div>`;
   }
-
-  $('total-plan-val').textContent = 'Rp ' + fmt(tPlan);
-  $('total-actual-val').textContent = 'Rp ' + fmt(tAct);
-  const diff = tPlan - tAct;
-  $('selisih-val').textContent = 'Rp ' + fmt(diff);
-  $('selisih-val').style.color = diff < 0 ? 'var(--red)' : 'var(--txt)';
-  $('diff-bar').style.width = tPlan > 0 ? Math.min((tAct/tPlan)*100, 100)+'%' : '0%';
-  if($('sisa-val')) $('sisa-val').textContent = 'Rp ' + fmt(sal - tPlan);
 
   buildVarianceChart();
   lucide.createIcons();
 }
 
-$('salary-in').oninput = (e) => { salary = parseInt(e.target.value.replace(/\D/g, '')) || 0; e.target.value = fmt(salary); save(); updateSummary(); };
-
-$('edit-mode-btn').onclick = () => {
-  haptic(); isEditMode = !isEditMode;
-  $('cat-list').classList.toggle('edit-mode');
-  
-  const btn = $('edit-mode-btn');
-  if (isEditMode) {
-    btn.innerHTML = '<i data-lucide="check" style="width:16px;height:16px;"></i>';
-    btn.classList.add('active');
-  } else {
-    btn.textContent = 'Edit';
-    btn.classList.remove('active');
-  }
-  buildList(); 
+window._addCal = (idx) => {
+  const c = cats[idx];
+  if (!c || !c.due) return;
+  const d = c.due.replace(/-/g,'');
+  const title = encodeURIComponent(`Bayar ${c.name} - Rp ${fmt(c.amount - c.actual)}`);
+  window.open(`https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${d}/${d}&sf=true&output=xml`,'_blank');
 };
 
-function getTotalAsset() {
-  return assetGroups.reduce((sum, g) => sum + (g.assets || []).reduce((s, a) => s + a.amount, 0), 0);
+function buildVarianceChart() {
+  const container = $('var-chart');
+  const months = Object.keys(allData).sort().slice(-6);
+  if (!months.length) { container.innerHTML = '<div style="font-size:11px;color:var(--txt3);text-align:center;width:100%;align-self:center;">Belum ada data</div>'; return; }
+  let maxV = 0;
+  const data = months.map(m => {
+    const d = allData[m];
+    const plan = (d.cats||[]).reduce((a,c)=>a+c.amount,0);
+    const act = (d.cats||[]).reduce((a,c)=>a+c.actual,0);
+    const v = plan - act;
+    if(Math.abs(v) > maxV) maxV = Math.abs(v);
+    return { month: m.split('-')[1], val: v };
+  });
+  container.innerHTML = '';
+  data.forEach(d => {
+    const h = maxV > 0 ? (Math.abs(d.val)/maxV)*100 : 5;
+    const isCur = d.month === currentMonth.split('-')[1];
+    const col = document.createElement('div');
+    col.className = 'var-bar-col';
+    col.innerHTML = `<div class="var-bar" style="height:${h}%;background:${d.val>=0?'var(--green)':'var(--red)'};opacity:${isCur?1:0.35};"></div><div class="var-month">${MONTH_NAMES[parseInt(d.month)-1]}</div>`;
+    container.appendChild(col);
+  });
 }
 
-function updateTotalAsset() {
-  $('total-asset-val').textContent = 'Rp ' + fmt(getTotalAsset());
-  buildAssetChart();
+// EDIT MODE
+$('edit-btn').onclick = () => {
+  haptic(); isEdit = !isEdit;
+  const btn = $('edit-btn');
+  if (isEdit) {
+    btn.textContent = 'Selesai';
+    btn.style.color = 'var(--accent)';
+    btn.style.borderColor = 'rgba(91,141,238,0.3)';
+    btn.style.background = 'var(--accent-dim)';
+  } else {
+    btn.textContent = 'Edit';
+    btn.style.color = '';
+    btn.style.borderColor = '';
+    btn.style.background = '';
+  }
+  buildAlloc();
+};
+
+// MODAL
+const modal = $('tx-modal');
+const sheet = modal.querySelector('.modal-sheet');
+function openModal() {
+  haptic(); buildTxLog();
+  modal.style.display = 'flex';
+  void modal.offsetWidth;
+  modal.style.opacity = '1';
+  sheet.style.transform = 'translateY(0)';
+}
+function closeModal() {
+  haptic();
+  modal.style.opacity = '0';
+  sheet.style.transform = 'translateY(100%)';
+  setTimeout(()=>modal.style.display='none', 400);
+}
+$('fab-btn').onclick = openModal;
+$('close-modal').onclick = closeModal;
+modal.onclick = e => { if(e.target===modal) closeModal(); };
+
+$('qi-amt').oninput = e => {
+  const v = parseInt(e.target.value.replace(/\D/g,'')) || 0;
+  e.target.value = v === 0 ? '' : fmt(v);
+};
+
+$('qi-add').onclick = () => {
+  const catId = $('qi-cat').value;
+  const amt = parseInt($('qi-amt').value.replace(/\D/g,'')) || 0;
+  if (!catId || amt <= 0) return;
+  haptic();
+  const idx = cats.findIndex(c => c.id == catId);
+  if (idx !== -1) {
+    cats[idx].actual += amt;
+    txns.unshift({ id: Date.now(), catName: cats[idx].name, catIcon: cats[idx].icon||'package', amount: amt, time: new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}) });
+    if(txns.length > 15) txns.pop();
+    $('qi-amt').value = '';
+    save(); buildAlloc(); buildTxLog();
+  }
+};
+
+$('add-cat-btn').onclick = () => {
+  haptic();
+  cats.push({ id: Date.now(), name: '', amount: 0, actual: 0, icon: 'package', bank: 'BCA', due: '' });
+  save(); buildAlloc(); closeModal();
+  setTimeout(() => window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'}), 300);
+};
+
+function buildTxLog() {
+  const log = $('tx-log');
+  log.innerHTML = txns.length ? txns.map(t => `
+    <div class="log-item">
+      <div class="log-icon"><i data-lucide="${t.catIcon}"></i></div>
+      <div><div class="log-name">${t.catName}</div><div class="log-time">${t.time}</div></div>
+      <div class="log-amt">−Rp ${fmt(t.amount)}</div>
+    </div>
+  `).join('') : `<div style="font-size:12px;color:var(--txt3);text-align:center;padding:12px;">Belum ada transaksi.</div>`;
+
+  const sel = $('qi-cat');
+  sel.innerHTML = '<option value="">Pilih kategori</option>' + cats.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+  lucide.createIcons();
 }
 
+// PORTFOLIO
 function buildGroupList() {
   const list = $('group-list');
   list.innerHTML = '';
-
-  if (assetGroups.length === 0) {
-    list.innerHTML = `<div style="text-align:center; font-size:13px; color:var(--txt2); padding: 20px 0;">Belum ada kelompok aset. Klik <strong>+ Kelompok</strong> untuk membuat.</div>`;
-    updateTotalAsset();
-    return;
+  if (!groups.length) {
+    list.innerHTML = `<div style="text-align:center;font-size:13px;color:var(--txt3);padding:24px;">Belum ada kelompok. Klik <strong style="color:var(--txt2);">+ Kelompok</strong> untuk membuat.</div>`;
+    updateTotalAsset(); return;
   }
-
-  assetGroups.forEach((group, gi) => {
-    const groupTotal = (group.assets || []).reduce((s, a) => s + a.amount, 0);
-    const itemCount = (group.assets || []).length;
-    const targetVal = group.target || 0;
-    const pct = targetVal > 0 ? Math.min((groupTotal / targetVal) * 100, 100) : 0;
-    const pctColor = pct >= 100 ? 'var(--grn)' : 'var(--txt2)';
+  groups.forEach((g, gi) => {
+    const gTotal = (g.assets||[]).reduce((s,a)=>s+a.amount, 0);
+    const target = g.target || 0;
+    const pct = target > 0 ? Math.min((gTotal/target)*100, 100) : 0;
+    const colorBg = GC[gi % GC.length];
+    const colorTxt = GC_TEXT[gi % GC_TEXT.length];
 
     const card = document.createElement('div');
     card.className = 'group-card';
-    card.dataset.gid = group.id;
-
-    const assetsHtml = (group.assets || []).map((a, ai) => `
-      <div class="asset-item" data-aid="${a.id}">
-        <div class="asset-icon" id="aicon-${a.id}"><i data-lucide="${ASSET_ICONS[a.type] || 'gem'}"></i></div>
-        <div class="asset-info">
-          <input class="a-name" type="text" value="${a.name}" placeholder="Nama aset" data-gi="${gi}" data-ai="${ai}">
-          <select class="a-type" data-gi="${gi}" data-ai="${ai}">
-            ${ASSET_TYPES.map(t => `<option value="${t}" ${a.type === t ? 'selected' : ''}>${t}</option>`).join('')}
-          </select>
-        </div>
-        <div style="text-align:right;">
-          <input class="a-amt" type="text" inputmode="numeric" value="${fmt(a.amount)}" data-gi="${gi}" data-ai="${ai}">
-        </div>
-        <div class="a-del" data-gi="${gi}" data-ai="${ai}"><i data-lucide="minus"></i></div>
-      </div>
-    `).join('');
-
     card.innerHTML = `
-      <div class="group-header" data-gid="${group.id}">
-        <div class="group-icon-wrap ${group.color || 'gc-blue'}"><i data-lucide="${group.icon || 'folder'}"></i></div>
-        <div class="group-info">
-          <input class="group-name-in" type="text" value="${group.name}" placeholder="Nama kelompok" data-gi="${gi}">
-          <div class="group-subtitle group-subtitle-text" data-gi="${gi}">${itemCount} aset · Rp ${fmt(groupTotal)} ${targetVal > 0 ? `/ Rp ${fmt(targetVal)}` : ''}</div>
-          
-          <div class="group-prog-container">
-            <div class="group-prog-track">
-              <div class="group-prog-fill" data-gi="${gi}" style="width:${pct}%; background:${pct >= 100 ? 'var(--grn)' : 'var(--accent)'};"></div>
-            </div>
-            <div class="group-prog-pct" data-gi="${gi}" style="color:${pctColor};">${Math.round(pct)}%</div>
-          </div>
-          
+      <div class="group-head" data-gi="${gi}">
+        <div class="group-badge" style="background:${colorBg}; color:${colorTxt};">
+          <i data-lucide="${g.icon||'folder'}"></i>
         </div>
-        <div class="group-total" data-gi="${gi}">Rp ${fmt(groupTotal)}</div>
-        <div class="group-toggle ${group.open ? 'open' : ''}"><i data-lucide="chevron-right"></i></div>
-        <div style="margin-left:4px; cursor:pointer; font-size:18px; color:var(--red); padding:4px 2px;" data-del-gi="${gi}"><i data-lucide="trash-2" style="width:18px;height:18px; pointer-events:none;"></i></div>
+        <input class="group-name-in" type="text" value="${g.name}" placeholder="Nama kelompok">
+        ${target > 0 ? `<span class="group-pct" style="color:${pct>=100?'var(--green)':'var(--txt3)'};">${Math.round(pct)}%</span>` : ''}
+        <span class="group-total">Rp ${fmt(gTotal)}</span>
+        <i data-lucide="chevron-right" class="group-chev ${g.open?'open':''}"></i>
+        <button class="group-del-btn" data-del-gi="${gi}"><i data-lucide="trash-2"></i></button>
       </div>
-      <div class="group-body ${group.open ? 'open' : ''}">
-        <div id="assets-of-${group.id}">${assetsHtml}</div>
-        <button style="width:100%; padding:10px; border-radius:12px; background:rgba(0,122,255,0.08); color:var(--accent); border:1px solid rgba(0,122,255,0.18); font-size:13px; font-weight:600; cursor:pointer; margin-top:4px;" data-add-asset-gi="${gi}">+ Tambah Aset</button>
-        <div class="group-note-wrap" style="margin-top:12px;">
-          <div class="group-note-label"><i data-lucide="target" style="width:12px;height:12px;vertical-align:middle;margin-right:4px;"></i> Target Dana</div>
-          <input type="text" class="group-note group-target-in" placeholder="0" data-gi="${gi}" value="${targetVal === 0 ? '' : fmt(targetVal)}" inputmode="numeric" style="min-height:unset; padding:8px 14px; margin-bottom:10px;">
-          <div class="group-note-label"><i data-lucide="file-text" style="width:12px;height:12px;vertical-align:middle;margin-right:4px;"></i> Catatan</div>
-          <textarea class="group-note" placeholder="Misal: Dana darurat 6 bulan..." data-gi="${gi}">${group.note || ''}</textarea>
+      ${target > 0 ? `<div class="group-prog-row"><div class="group-prog-track"><div class="group-prog-fill" style="width:${pct}%; background:${pct>=100?'var(--green)':'var(--accent)'};"></div></div></div>` : ''}
+      <div class="group-body ${g.open?'open':''}">
+        <div id="assets-${g.id}">
+          ${(g.assets||[]).map((a,ai) => `
+            <div class="asset-row">
+              <div class="asset-type-icon" id="aicon-${a.id}"><i data-lucide="${ASSET_ICONS[a.type]||'gem'}"></i></div>
+              <input class="a-name" type="text" value="${a.name}" placeholder="Nama aset" data-gi="${gi}" data-ai="${ai}">
+              <select class="a-type" data-gi="${gi}" data-ai="${ai}">
+                ${ASSET_TYPES.map(t=>`<option value="${t}" ${a.type===t?'selected':''}>${t}</option>`).join('')}
+              </select>
+              <input class="a-amt" type="text" inputmode="numeric" value="${fmt(a.amount)}" placeholder="0" data-gi="${gi}" data-ai="${ai}">
+              <button class="a-del" data-gi="${gi}" data-ai="${ai}"><i data-lucide="minus"></i></button>
+            </div>
+          `).join('')}
         </div>
+        <button class="add-asset-btn" data-add-gi="${gi}">+ Tambah Aset</button>
+        <div class="target-row">
+          <span class="target-label">Target</span>
+          <input type="text" class="target-in" placeholder="Rp 0" value="${target === 0 ? '' : fmt(target)}" inputmode="numeric" data-target-gi="${gi}">
+        </div>
+        <textarea class="note-in" placeholder="Catatan..." data-note-gi="${gi}">${g.note||''}</textarea>
       </div>
     `;
     list.appendChild(card);
 
-    card.querySelector('.group-header').addEventListener('click', (e) => {
-      if (e.target.closest('[data-del-gi]') || e.target.closest('.group-name-in') || e.target.closest('[data-add-asset-gi]')) return;
-      haptic(); assetGroups[gi].open = !assetGroups[gi].open; save(); buildGroupList();
+    card.querySelector('.group-head').addEventListener('click', e => {
+      if (e.target.closest('[data-del-gi]') || e.target.closest('.group-name-in')) return;
+      haptic(); groups[gi].open = !groups[gi].open; save(); buildGroupList();
     });
-
-    card.querySelector('[data-del-gi]').addEventListener('click', (e) => {
+    card.querySelector('[data-del-gi]').addEventListener('click', e => {
       e.stopPropagation();
-      if (confirm(`Hapus kelompok "${group.name}"?`)) { haptic(); assetGroups.splice(gi, 1); save(); buildGroupList(); }
+      if (confirm(`Hapus kelompok "${g.name||'ini'}"?`)) { haptic(); groups.splice(gi,1); save(); buildGroupList(); }
     });
-
-    card.querySelector(`[data-gi="${gi}"].group-name-in`).addEventListener('input', (e) => { assetGroups[gi].name = e.target.value; save(); });
-
-    card.querySelector(`.group-target-in[data-gi="${gi}"]`).addEventListener('input', (e) => {
-      let val = parseInt(e.target.value.replace(/\D/g, '')) || 0;
-      assetGroups[gi].target = val; e.target.value = val === 0 ? '' : fmt(val); save();
-
-      const currentAssetTotal = (assetGroups[gi].assets || []).reduce((s, a) => s + a.amount, 0);
-      let cPct = val > 0 ? Math.min((currentAssetTotal / val) * 100, 100) : 0;
-      const fill = card.querySelector(`.group-prog-fill[data-gi="${gi}"]`);
-      if (fill) { fill.style.width = cPct + '%'; fill.style.background = cPct >= 100 ? 'var(--grn)' : 'var(--accent)'; }
-      const pctText = card.querySelector(`.group-prog-pct[data-gi="${gi}"]`);
-      if (pctText) { pctText.textContent = Math.round(cPct) + '%'; pctText.style.color = cPct >= 100 ? 'var(--grn)' : 'var(--txt2)'; }
-      const subtitle = card.querySelector(`.group-subtitle-text[data-gi="${gi}"]`);
-      if (subtitle) { subtitle.textContent = `${(assetGroups[gi].assets || []).length} aset · Rp ${fmt(currentAssetTotal)} ${val > 0 ? `/ Rp ${fmt(val)}` : ''}`; }
+    card.querySelector('.group-name-in').addEventListener('input', e => { groups[gi].name = e.target.value; save(); });
+    
+    const targetIn = card.querySelector(`[data-target-gi="${gi}"]`);
+    targetIn.addEventListener('input', e => {
+      const v = parseInt(e.target.value.replace(/\D/g,'')) || 0;
+      groups[gi].target = v; e.target.value = v === 0 ? '' : fmt(v); save(); buildGroupList();
     });
+    card.querySelector(`[data-note-gi="${gi}"]`).addEventListener('input', e => { groups[gi].note = e.target.value; save(); });
 
-    card.querySelector(`.group-note[data-gi="${gi}"]`).addEventListener('input', (e) => { assetGroups[gi].note = e.target.value; save(); });
-
-    card.querySelector(`[data-add-asset-gi="${gi}"]`).addEventListener('click', (e) => {
+    card.querySelector(`[data-add-gi="${gi}"]`).addEventListener('click', e => {
       e.stopPropagation(); haptic();
-      if (!assetGroups[gi].assets) assetGroups[gi].assets = [];
-      assetGroups[gi].assets.push({ id: Date.now(), name: '', type: 'Tabungan', amount: 0 });
+      if (!groups[gi].assets) groups[gi].assets = [];
+      groups[gi].assets.push({ id: Date.now(), name: '', type: 'Tabungan', amount: 0 });
       save(); buildGroupList();
     });
 
-    card.querySelectorAll('.a-name').forEach(el => el.addEventListener('input', (e) => {
-      const g = +e.target.dataset.gi, a = +e.target.dataset.ai;
-      assetGroups[g].assets[a].name = e.target.value; save();
-    }));
-
-    card.querySelectorAll('.a-type').forEach(el => el.addEventListener('change', (e) => {
-      const g = +e.target.dataset.gi, a = +e.target.dataset.ai;
-      assetGroups[g].assets[a].type = e.target.value;
-      const iconWrap = card.querySelector(`#aicon-${assetGroups[g].assets[a].id}`);
-      if (iconWrap) {
-        iconWrap.innerHTML = `<i data-lucide="${ASSET_ICONS[e.target.value] || 'gem'}"></i>`;
-        lucide.createIcons();
-      }
+    card.querySelectorAll('.a-name').forEach(el => el.addEventListener('input', e => { groups[+e.target.dataset.gi].assets[+e.target.dataset.ai].name = e.target.value; save(); }));
+    card.querySelectorAll('.a-type').forEach(el => el.addEventListener('change', e => {
+      const g2 = +e.target.dataset.gi, a2 = +e.target.dataset.ai;
+      groups[g2].assets[a2].type = e.target.value;
+      const ico = card.querySelector(`#aicon-${groups[g2].assets[a2].id}`);
+      if (ico) { ico.innerHTML = `<i data-lucide="${ASSET_ICONS[e.target.value]||'gem'}"></i>`; lucide.createIcons(); }
       save();
     }));
-
-    card.querySelectorAll('.a-amt').forEach(el => el.addEventListener('input', (e) => {
-      const g = +e.target.dataset.gi, a = +e.target.dataset.ai;
-      let val = parseInt(e.target.value.replace(/\D/g, '')) || 0;
-      assetGroups[g].assets[a].amount = val; e.target.value = val === 0 ? '' : fmt(val); save(); updateTotalAsset();
-
-      const currentGroupTotal = assetGroups[g].assets.reduce((sum, ast) => sum + ast.amount, 0);
-      card.querySelector(`.group-total[data-gi="${g}"]`).textContent = 'Rp ' + fmt(currentGroupTotal);
-      const currentTarget = assetGroups[g].target || 0;
-      const sub = card.querySelector(`.group-subtitle-text[data-gi="${g}"]`);
-      if (sub) sub.textContent = `${assetGroups[g].assets.length} aset · Rp ${fmt(currentGroupTotal)} ${currentTarget > 0 ? `/ Rp ${fmt(currentTarget)}` : ''}`;
-
-      let cPct = currentTarget > 0 ? Math.min((currentGroupTotal / currentTarget) * 100, 100) : 0;
-      const fill = card.querySelector(`.group-prog-fill[data-gi="${g}"]`);
-      if (fill) { fill.style.width = cPct + '%'; fill.style.background = cPct >= 100 ? 'var(--grn)' : 'var(--accent)'; }
-      const pctText = card.querySelector(`.group-prog-pct[data-gi="${g}"]`);
-      if (pctText) { pctText.textContent = Math.round(cPct) + '%'; pctText.style.color = cPct >= 100 ? 'var(--grn)' : 'var(--txt2)'; }
+    card.querySelectorAll('.a-amt').forEach(el => el.addEventListener('input', e => {
+      const g2 = +e.target.dataset.gi, a2 = +e.target.dataset.ai;
+      const v = parseInt(e.target.value.replace(/\D/g,'')) || 0;
+      groups[g2].assets[a2].amount = v; e.target.value = v === 0 ? '' : fmt(v); save(); updateTotalAsset();
+      const newTotal = groups[g2].assets.reduce((s,a)=>s+a.amount,0);
+      const headTotal = card.querySelector('.group-total');
+      if(headTotal) headTotal.textContent = 'Rp ' + fmt(newTotal);
     }));
-
-    // ✅ FIX: Pakai e.currentTarget bukan e.target agar icon <i> di dalam tidak mengacaukan dataset
-    card.querySelectorAll('.a-del').forEach(el => el.addEventListener('click', (e) => {
-      e.stopPropagation();
-      haptic();
+    card.querySelectorAll('.a-del').forEach(el => el.addEventListener('click', e => {
+      e.stopPropagation(); haptic();
       const btn = e.currentTarget;
-      assetGroups[+btn.dataset.gi].assets.splice(+btn.dataset.ai, 1);
+      groups[+btn.dataset.gi].assets.splice(+btn.dataset.ai,1);
       save(); buildGroupList();
     }));
   });
-
   lucide.createIcons();
   updateTotalAsset();
 }
 
+function updateTotalAsset() {
+  const t = groups.reduce((s,g) => s + (g.assets||[]).reduce((ss,a)=>ss+a.amount,0), 0);
+  $('total-asset-val').textContent = 'Rp ' + fmt(t);
+}
+
 $('add-group-btn').onclick = () => {
   haptic();
-  const colorIdx = assetGroups.length % GROUP_COLORS.length;
-  const iconIdx = assetGroups.length % GROUP_ICONS_DEFAULT.length;
-  assetGroups.push({ id: Date.now(), name: '', icon: GROUP_ICONS_DEFAULT[iconIdx], color: GROUP_COLORS[colorIdx], note: '', target: 0, open: true, assets: [] });
-  save(); buildGroupList(); setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
+  const idx = groups.length;
+  groups.push({ id: Date.now(), name: '', icon: G_ICONS[idx % G_ICONS.length], note: '', target: 0, open: true, assets: [] });
+  save(); buildGroupList();
+  setTimeout(() => window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'}), 100);
 };
 
 function buildAssetChart() {
-  const container = $('asset-chart-container');
-  if(!container) return;
-  const months = Object.keys(allMonthsData).sort().slice(-6);
-  let maxVal = 0;
-  const chartData = months.map(m => {
-    const groups = allMonthsData[m].assetGroups || [];
-    const t = groups.reduce((sum, g) => sum + (g.assets || []).reduce((s, a) => s + a.amount, 0), 0);
-    if(t > maxVal) maxVal = t;
+  const container = $('asset-chart');
+  const months = Object.keys(allData).sort().slice(-6);
+  let maxV = 0;
+  const data = months.map(m => {
+    const t = (allData[m].groups||[]).reduce((s,g)=>s+(g.assets||[]).reduce((ss,a)=>ss+a.amount,0),0);
+    if(t > maxV) maxV = t;
     return { month: m, total: t };
   });
-
-  if(maxVal === 0) {
-    container.innerHTML = '<div style="text-align:center;font-size:12px;color:var(--txt2);width:100%; align-self:center;">Belum ada data aset</div>';
-    return;
-  }
-
+  if(maxV === 0) { container.innerHTML = '<div style="font-size:11px;color:var(--txt3);text-align:center;width:100%;align-self:center;">Belum ada data aset</div>'; return; }
   container.innerHTML = '';
-  chartData.forEach(d => {
-    const isCurrent = d.month === currentMonth;
-    const heightPct = Math.max((d.total / maxVal) * 100, 5);
-    const dObj = new Date(d.month + '-01');
-    const mName = MONTH_NAMES[dObj.getMonth()];
-    const wrap = document.createElement('div');
-    wrap.className = `ac-bar-wrap ${isCurrent ? 'active' : ''}`;
-    wrap.innerHTML = `
-      <div class="ac-val">${formatShort(d.total)}</div>
-      <div class="ac-bar ${isCurrent ? 'active' : ''}" style="height:${heightPct}%;"></div>
-      <div class="ac-month">${mName}</div>
-    `;
-    container.appendChild(wrap);
+  data.forEach(d => {
+    const isCur = d.month === currentMonth;
+    const h = Math.max((d.total/maxV)*100, 5);
+    const mObj = new Date(d.month + '-01');
+    const col = document.createElement('div');
+    col.className = `ac-col ${isCur?'active':''}`;
+    col.innerHTML = `<div class="ac-val">${fmtShort(d.total)}</div><div class="ac-bar ${isCur?'active':''}" style="height:${h}%;"></div><div class="ac-month">${MONTH_NAMES[mObj.getMonth()]}</div>`;
+    container.appendChild(col);
   });
 }
 
-document.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => {
-  haptic();
-  document.querySelectorAll('.tab-btn, .tab-content').forEach(el => el.classList.remove('active'));
-  b.classList.add('active'); $(b.dataset.tab).classList.add('active');
-  if(isEditMode) $('edit-mode-btn').click();
-
-  if (b.dataset.tab === 'tab-portofolio') {
-    $('integrated-add-btn').style.transform = 'translate(-50%, 50px)';
-    $('integrated-add-btn').style.opacity = '0';
-    $('integrated-add-btn').style.pointerEvents = 'none';
-  } else {
-    $('integrated-add-btn').style.transform = 'translateX(-50%)';
-    $('integrated-add-btn').style.opacity = '1';
-    $('integrated-add-btn').style.pointerEvents = 'auto';
-  }
+// PAGE NAVIGATION
+document.querySelectorAll('.nav-item').forEach(el => {
+  el.onclick = () => {
+    haptic();
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    const pg = el.dataset.page;
+    $(`page-${pg}`).classList.add('active');
+    if (pg === 'alokasi') {
+      $('page-title').textContent = 'Alokasi Anggaran';
+      $('page-sub').textContent = 'Kelola pengeluaran bulanan kamu';
+      $('fab-btn').style.display = 'flex';
+    } else {
+      $('page-title').textContent = 'Portofolio';
+      $('page-sub').textContent = 'Pantau kekayaan & aset kamu';
+      $('fab-btn').style.display = 'none';
+    }
+    if (window.innerWidth <= 768) { $('sidebar').classList.remove('open'); $('sidebar-overlay').classList.remove('open'); }
+    if (pg === 'portofolio') { buildAssetChart(); }
+  };
 });
 
-$('theme-toggle').onclick = () => { haptic(); document.body.classList.toggle('dark'); };
+// HAMBURGER
+$('hamburger').onclick = () => {
+  $('sidebar').classList.toggle('open');
+  $('sidebar-overlay').classList.toggle('open');
+};
+$('sidebar-overlay').onclick = () => {
+  $('sidebar').classList.remove('open');
+  $('sidebar-overlay').classList.remove('open');
+};
+
+// THEME
+$('theme-toggle').onclick = () => {
+  haptic();
+  document.body.classList.toggle('light');
+  const icon = $('theme-toggle').querySelector('i');
+  lucide.createIcons();
+};
 
 lucide.createIcons();
+applyMonth();
 </script>
 </body>
 </html>
