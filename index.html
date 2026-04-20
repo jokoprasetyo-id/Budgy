@@ -233,10 +233,46 @@ body.dark .ic-orange{background:rgba(251,146,60,0.12);color:#fb923c;}
 .add-asset-btn{width:100%;padding:8px;margin-top:8px;border-radius:8px;background:var(--accent-dim);border:1px dashed rgba(37,99,235,0.3);color:var(--accent);font-size:12px;font-weight:600;cursor:pointer;transition:0.15s;font-family:'DM Sans',sans-serif;}
 body.dark .add-asset-btn{border-color:rgba(91,141,238,0.3);}
 
-/* WEALTH */
-.wealth-hero{padding:22px 18px 16px;text-align:center;border-bottom:1px solid var(--border);}
-.wealth-lbl{font-size:10.5px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px;}
-.wealth-val{font-size:30px;font-weight:700;font-family:'DM Mono',monospace;color:var(--green);letter-spacing:-1px;}
+/* DEBT */
+.debt-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:10px;overflow:hidden;}
+.debt-hd{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;user-select:none;transition:background 0.15s;}
+.debt-hd:hover{background:var(--surface-hover);}
+.debt-badge{width:34px;height:34px;border-radius:10px;background:var(--red-dim);color:var(--red);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.debt-badge i{width:15px;height:15px;}
+.debt-name-in{background:transparent;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:600;color:var(--txt);flex:1;}
+.debt-name-in::placeholder{color:var(--txt3);}
+.debt-sisa{font-size:13px;font-weight:700;color:var(--red);font-family:'DM Mono',monospace;margin-left:4px;}
+.debt-chev{width:16px;height:16px;color:var(--txt3);transition:transform 0.25s;flex-shrink:0;}
+.debt-chev.open{transform:rotate(90deg);}
+.debt-del{width:26px;height:26px;border-radius:7px;background:transparent;border:none;color:var(--txt3);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:0.15s;flex-shrink:0;}
+.debt-del i{width:13px;height:13px;pointer-events:none;}
+.debt-del:hover{background:var(--red-dim);color:var(--red);}
+.debt-prog-row{display:flex;align-items:center;gap:8px;padding:0 14px 10px 58px;}
+.debt-prog-tr{flex:1;height:3px;background:var(--prog-track);border-radius:10px;overflow:hidden;}
+.debt-prog-fi{height:100%;background:var(--red);border-radius:10px;transition:width 0.4s;}
+.debt-body{display:none;padding:0 14px 14px;border-top:1px solid var(--border);}
+.debt-body.open{display:block;padding-top:12px;}
+.debt-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.df-group{display:flex;flex-direction:column;gap:4px;}
+.df-lbl{font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:0.5px;}
+.df-in{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:12.5px;font-family:'DM Mono',monospace;color:var(--txt);outline:none;width:100%;}
+.df-sel{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:12.5px;color:var(--txt);outline:none;appearance:none;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;}
+.df-due{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:12.5px;font-family:'DM Sans',sans-serif;color:var(--txt);outline:none;width:100%;}
+.debt-lunas-btn{width:100%;padding:9px;border-radius:9px;background:var(--green-dim);border:1px solid rgba(5,150,105,0.2);color:var(--green);font-size:12.5px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:0.15s;margin-top:4px;}
+.debt-lunas-btn:hover{background:var(--green);color:white;}
+.debt-stats-row{display:flex;gap:8px;margin-bottom:10px;}
+.debt-stat{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:9px 12px;}
+.debt-stat-lbl{font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:4px;}
+.debt-stat-val{font-size:13px;font-weight:700;font-family:'DM Mono',monospace;}
+.overdue-badge{display:inline-flex;align-items:center;gap:3px;background:var(--red-dim);color:var(--red);border-radius:100px;padding:2px 8px;font-size:10px;font-weight:700;margin-left:6px;}
+.overdue-badge i{width:10px;height:10px;}
+
+/* NET WORTH HERO */
+.nw-hero{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;gap:0;border-bottom:1px solid var(--border);}
+.nw-col{padding:16px 18px;text-align:center;}
+.nw-div{background:var(--border);margin:12px 0;}
+.nw-lbl{font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
+.nw-val{font-size:20px;font-weight:700;font-family:'DM Mono',monospace;letter-spacing:-0.5px;}
 
 /* ASSET CHART */
 .asset-chart{display:flex;align-items:flex-end;gap:6px;height:90px;}
@@ -427,7 +463,13 @@ body.dark .fab{box-shadow:0 6px 20px rgba(91,141,238,0.3);}
     <div id="page-portofolio" class="page">
       <div class="grid-2">
         <div class="sc">
-          <div class="wealth-hero"><div class="wealth-lbl">Total Kekayaan</div><div class="wealth-val" id="total-asset-val">Rp 0</div></div>
+          <div class="nw-hero">
+            <div class="nw-col"><div class="nw-lbl">Total Aset</div><div class="nw-val" id="total-asset-val" style="color:var(--green);">Rp 0</div></div>
+            <div class="nw-div"></div>
+            <div class="nw-col"><div class="nw-lbl">Total Utang</div><div class="nw-val" id="total-debt-val" style="color:var(--red);">Rp 0</div></div>
+            <div class="nw-div"></div>
+            <div class="nw-col"><div class="nw-lbl">Net Worth</div><div class="nw-val" id="net-worth-val">Rp 0</div></div>
+          </div>
           <div class="sc-hd" style="padding-top:14px;"><span class="sc-title">Riwayat Kekayaan</span></div>
           <div class="sc-body"><div id="asset-chart" class="asset-chart"></div></div>
         </div>
@@ -455,6 +497,13 @@ body.dark .fab{box-shadow:0 6px 20px rgba(91,141,238,0.3);}
         <button id="add-group-btn" style="padding:6px 14px;border-radius:100px;background:var(--accent-dim);border:1px solid rgba(37,99,235,0.25);color:var(--accent);font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">+ Kelompok</button>
       </div>
       <div id="group-list"></div>
+
+      <!-- UTANG SECTION -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;margin-bottom:13px;">
+        <span style="font-size:11px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:0.6px;">Daftar Utang</span>
+        <button id="add-debt-btn" style="padding:6px 14px;border-radius:100px;background:var(--red-dim);border:1px solid rgba(220,38,38,0.2);color:var(--red);font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">+ Tambah Utang</button>
+      </div>
+      <div id="debt-list"></div>
     </div>
   </main>
 </div>
@@ -548,8 +597,11 @@ const moLbl=m=>{const[y,mo]=m.split('-');return`${MO[parseInt(mo)-1]} ${y}`;};
 // ─── Helper: parse angka dari string berformat (boleh ada titik ribuan) ───
 const parseNum=s=>parseInt((s||'').replace(/\./g,'').replace(/,/g,'').replace(/[^\d]/g,''))||0;
 
+const DEBT_TYPES=['KPR','KKB','KTA','Kartu Kredit','Pinjol','Hutang Teman','Hutang Keluarga','Lainnya'];
+const DEBT_ICONS={'KPR':'home','KKB':'car','KTA':'banknote','Kartu Kredit':'credit-card','Pinjol':'smartphone','Hutang Teman':'users','Hutang Keluarga':'heart','Lainnya':'hand-coins'};
+
 let currentMonth=new Date().toISOString().slice(0,7);
-let allData={}, cats=[], groups=[], txns=[], salary=0;
+let allData={}, cats=[], groups=[], txns=[], debts=[], salary=0;
 let isEdit=false, currentUser=null, dragSrc=null;
 
 /* DATA MIGRATION */
@@ -600,20 +652,20 @@ function applyMonth(){
         }));
       }
     }
-    allData[currentMonth]={cats:pc,salary:ps,groups:pg,txns:[]};
+    allData[currentMonth]={cats:pc,salary:ps,groups:pg,txns:[],debts:[]};
   }
   const d=allData[currentMonth];
-  cats=d.cats||[]; salary=d.salary||0; groups=d.groups||[]; txns=d.txns||[];
+  cats=d.cats||[]; salary=d.salary||0; groups=d.groups||[]; txns=d.txns||[]; debts=d.debts||[];
   cats.forEach(c=>{if(EMOJI_MAP[c.icon])c.icon=EMOJI_MAP[c.icon];});
   groups.forEach(g=>{if(EMOJI_MAP[g.icon])g.icon=EMOJI_MAP[g.icon];});
   txns.forEach(t=>{if(EMOJI_MAP[t.catIcon])t.catIcon=EMOJI_MAP[t.catIcon];});
   $('salary-in').value=fmt(salary);
-  buildAlloc(); buildGroupList(); buildAssetChart(); buildTxLog();
+  buildAlloc(); buildGroupList(); buildDebtList(); buildAssetChart(); buildTxLog();
 }
 
 async function saveToFB(){if(!currentUser)return;try{await setDoc(doc(db,'users',currentUser.uid),{months:allData},{merge:true});}catch(e){}}
 async function loadFromFB(){if(!currentUser)return;const s=await getDoc(doc(db,'users',currentUser.uid));if(s.exists())allData=s.data().months||{};applyMonth();}
-const save=()=>{allData[currentMonth]={cats,salary,groups,txns};localStorage.setItem('budgy_v2',JSON.stringify(allData));saveToFB();};
+const save=()=>{allData[currentMonth]={cats,salary,groups,txns,debts};localStorage.setItem('budgy_v2',JSON.stringify(allData));saveToFB();};
 
 onAuthStateChanged(auth,async user=>{
   if(user){
@@ -1025,8 +1077,158 @@ function buildGroupList(){
 
 function updateTotalAsset(){
   const t=groups.reduce((s,g)=>s+(g.assets||[]).reduce((ss,a)=>ss+a.amount,0),0);
+  const td=debts.reduce((s,d)=>s+(d.sisa||0),0);
+  const nw=t-td;
   if($('total-asset-val'))$('total-asset-val').textContent='Rp '+fmt(t);
+  if($('total-debt-val'))$('total-debt-val').textContent='Rp '+fmt(td);
+  if($('net-worth-val')){
+    $('net-worth-val').textContent='Rp '+fmt(nw);
+    $('net-worth-val').style.color=nw>=0?'var(--green)':'var(--red)';
+  }
 }
+
+/* ─── DEBT SECTION ─── */
+function sisaMonth(d){
+  if(!d.deadline)return null;
+  const now=new Date(),dl=new Date(d.deadline);
+  const diff=Math.ceil((dl-now)/(1000*60*60*24*30));
+  return diff;
+}
+
+function buildDebtList(){
+  const list=$('debt-list');if(!list)return;
+  list.innerHTML='';
+  if(!debts.length){
+    list.innerHTML=`<div style="text-align:center;font-size:13px;color:var(--txt3);padding:20px;border:1px dashed var(--border);border-radius:var(--r);">Tidak ada utang 🎉 <br><span style="font-size:11px;">Klik <strong style="color:var(--txt2);">+ Tambah Utang</strong> jika ada.</span></div>`;
+    updateTotalAsset();return;
+  }
+  const today=new Date();
+  debts.forEach((d,di)=>{
+    const total=d.total||0,sisa=d.sisa||0,cicilan=d.cicilan||0;
+    const lunasPct=total>0?Math.min(((total-sisa)/total)*100,100):0;
+    const isOverdue=d.deadline&&new Date(d.deadline)<today&&sisa>0;
+    const moSisa=sisaMonth(d);
+    const icon=DEBT_ICONS[d.type||'Lainnya']||'hand-coins';
+
+    const card=document.createElement('div');card.className='debt-card';
+    card.innerHTML=`
+      <div class="debt-hd">
+        <div class="debt-badge"><i data-lucide="${icon}"></i></div>
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <input class="debt-name-in" type="text" value="${d.name||''}" placeholder="Nama utang">
+            ${isOverdue?`<span class="overdue-badge"><i data-lucide="alert-triangle"></i>Lewat jatuh tempo</span>`:''}
+          </div>
+          <div style="font-size:10px;color:var(--txt3);margin-top:1px;font-family:'DM Mono',monospace;">${d.type||'Lainnya'}${cicilan>0?` · cicilan Rp ${fmt(cicilan)}/bln`:''}${d.deadline?` · ${moSisa!==null?(moSisa<=0?'<span style="color:var(--red)">Sudah lewat</span>':(moSisa===1?'<span style="color:var(--amber)">1 bulan lagi</span>':`${moSisa} bln lagi`)):''}`:''}</div>
+        </div>
+        <span class="debt-sisa">${sisa>0?'Rp '+fmt(sisa):'<span style="color:var(--green);font-size:11px;">LUNAS ✓</span>'}</span>
+        <i data-lucide="chevron-right" class="debt-chev ${d.open?'open':''}"></i>
+        <button class="debt-del" data-ddi="${di}"><i data-lucide="trash-2"></i></button>
+      </div>
+      <div class="debt-prog-row">
+        <div class="debt-prog-tr"><div class="debt-prog-fi" style="width:${lunasPct}%;background:${lunasPct>=100?'var(--green)':isOverdue?'var(--red)':'var(--amber)'};"></div></div>
+        <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--txt3);flex-shrink:0;">${Math.round(lunasPct)}% lunas</span>
+      </div>
+      <div class="debt-body ${d.open?'open':''}">
+        <div class="debt-stats-row">
+          <div class="debt-stat">
+            <div class="debt-stat-lbl">Total Utang</div>
+            <div class="debt-stat-val" style="color:var(--txt);" id="dstat-total-${di}">Rp ${fmt(total)}</div>
+          </div>
+          <div class="debt-stat">
+            <div class="debt-stat-lbl">Sudah Bayar</div>
+            <div class="debt-stat-val" style="color:var(--green);">Rp ${fmt(total-sisa)}</div>
+          </div>
+          <div class="debt-stat">
+            <div class="debt-stat-lbl">Sisa</div>
+            <div class="debt-stat-val" style="color:var(--red);" id="dstat-sisa-${di}">Rp ${fmt(sisa)}</div>
+          </div>
+        </div>
+        <div class="debt-fields">
+          <div class="df-group">
+            <div class="df-lbl">Jenis Utang</div>
+            <select class="df-sel" data-ddi="${di}" id="dtype-${di}">${DEBT_TYPES.map(t=>`<option value="${t}"${(d.type||'Lainnya')===t?' selected':''}>${t}</option>`).join('')}</select>
+          </div>
+          <div class="df-group">
+            <div class="df-lbl">Total Pokok</div>
+            <input class="df-in" type="text" inputmode="numeric" placeholder="0" value="${total===0?'':fmt(total)}" data-ddi="${di}" id="dtotal-${di}">
+          </div>
+          <div class="df-group">
+            <div class="df-lbl">Sisa Utang</div>
+            <input class="df-in" type="text" inputmode="numeric" placeholder="0" value="${sisa===0?'':fmt(sisa)}" data-ddi="${di}" id="dsisa-${di}">
+          </div>
+          <div class="df-group">
+            <div class="df-lbl">Cicilan / Bulan</div>
+            <input class="df-in" type="text" inputmode="numeric" placeholder="0" value="${cicilan===0?'':fmt(cicilan)}" data-ddi="${di}" id="dcic-${di}">
+          </div>
+          <div class="df-group">
+            <div class="df-lbl">Jatuh Tempo</div>
+            <input class="df-due" type="date" value="${d.deadline||''}" data-ddi="${di}" id="ddue-${di}">
+          </div>
+          <div class="df-group">
+            <div class="df-lbl">Kreditur</div>
+            <input class="df-in" type="text" placeholder="Bank / nama orang" value="${d.kreditur||''}" data-ddi="${di}" id="dkred-${di}" style="font-family:'DM Sans',sans-serif;font-size:12.5px;">
+          </div>
+        </div>
+        <button class="debt-lunas-btn" data-ddi="${di}">✓ Tandai Lunas</button>
+      </div>
+    `;
+    list.appendChild(card);
+
+    // toggle open
+    card.querySelector('.debt-hd').addEventListener('click',e=>{
+      if(e.target.closest('[data-ddi]')&&!e.target.closest('.debt-name-in'))return;
+      if(e.target.closest('.debt-del'))return;
+      haptic();debts[di].open=!debts[di].open;save();buildDebtList();
+    });
+    card.querySelector('.debt-del').addEventListener('click',e=>{
+      e.stopPropagation();
+      if(confirm(`Hapus utang "${d.name||'ini'}"?`)){haptic();debts.splice(di,1);save();buildDebtList();}
+    });
+    card.querySelector('.debt-name-in').addEventListener('input',e=>{debts[di].name=e.target.value;save();});
+    card.querySelector(`#dtype-${di}`).addEventListener('change',e=>{
+      debts[di].type=e.target.value;
+      const ico2=card.querySelector('.debt-badge');
+      ico2.innerHTML=`<i data-lucide="${DEBT_ICONS[e.target.value]||'hand-coins'}"></i>`;
+      lucide.createIcons();save();buildDebtList();
+    });
+    card.querySelector(`#ddue-${di}`).addEventListener('change',e=>{debts[di].deadline=e.target.value;save();buildDebtList();});
+    card.querySelector(`#dkred-${di}`).addEventListener('input',e=>{debts[di].kreditur=e.target.value;save();});
+
+    // numeric fields
+    const attachDebtNum=(id,field)=>{
+      const el=card.querySelector(`#${id}`);
+      if(!el)return;
+      el.addEventListener('focus',()=>{const v=debts[di][field]||0;el.value=v===0?'':String(v);});
+      el.addEventListener('input',()=>{el.value=el.value.replace(/[^\d]/g,'');});
+      el.addEventListener('blur',()=>{
+        const v=parseInt(el.value)||0;debts[di][field]=v;el.value=v===0?'':fmt(v);
+        save();updateTotalAsset();
+        // update stats inline
+        const st=card.querySelector(`#dstat-total-${di}`);if(st)st.textContent='Rp '+fmt(debts[di].total||0);
+        const ss=card.querySelector(`#dstat-sisa-${di}`);if(ss)ss.textContent='Rp '+fmt(debts[di].sisa||0);
+      });
+      el.addEventListener('keydown',e=>{if(e.key==='Enter')el.blur();});
+    };
+    attachDebtNum(`dtotal-${di}`,'total');
+    attachDebtNum(`dsisa-${di}`,'sisa');
+    attachDebtNum(`dcic-${di}`,'cicilan');
+
+    // lunas button
+    card.querySelector('.debt-lunas-btn').addEventListener('click',e=>{
+      e.stopPropagation();haptic();
+      debts[di].sisa=0;save();buildDebtList();
+    });
+  });
+  lucide.createIcons();updateTotalAsset();
+}
+
+$('add-debt-btn').onclick=()=>{
+  haptic();
+  debts.push({id:Date.now(),name:'',type:'Lainnya',total:0,sisa:0,cicilan:0,deadline:'',kreditur:'',open:true});
+  save();buildDebtList();
+  setTimeout(()=>document.getElementById('debt-list').scrollIntoView({behavior:'smooth',block:'start'}),100);
+};
 
 $('add-group-btn').onclick=()=>{
   haptic();const idx=groups.length;
@@ -1066,7 +1268,7 @@ function switchPage(pg){
     $('pg-title').textContent='Portofolio';
     $('pg-sub').textContent='Pantau kekayaan & aset kamu';
     $('fab-btn').style.display='none';
-    buildAssetChart();buildGroupList();
+    buildAssetChart();buildGroupList();buildDebtList();
   }
   if(window.innerWidth<=768){$('sidebar').classList.remove('open');$('sb-overlay').classList.remove('open');}
 }
