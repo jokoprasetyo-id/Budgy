@@ -519,7 +519,7 @@ const ICON_MAP={
   'pulsa':'smartphone','kuota':'smartphone','paket':'smartphone','telpon':'smartphone',
   'gym':'dumbbell','fitness':'dumbbell','olahraga':'activity','lari':'activity',
   'travel':'plane','liburan':'plane','wisata':'plane','tiket':'ticket','hotel':'building-2',
-  'kost':'home','kontrakan':'home','sewa':'home','rumah':'home','kontrakan':'home',
+  'kost':'home','kontrakan':'home','sewa':'home','rumah':'home',
   'pendidikan':'graduation-cap','kuliah':'graduation-cap','sekolah':'graduation-cap','les':'graduation-cap','kursus':'graduation-cap','bimbel':'graduation-cap',
   'donasi':'heart','sedekah':'heart','amal':'heart','zakat':'heart','infak':'heart',
   'hiburan':'music','musik':'music','spotify':'music','konser':'music','youtube':'music',
@@ -545,11 +545,14 @@ const fmtS=n=>{const a=Math.abs(n);if(a>=1e9)return(n/1e9).toFixed(1).replace('.
 const fmtD=s=>{const d=new Date(s);return`${d.getDate()} ${MO[d.getMonth()]}`;};
 const moLbl=m=>{const[y,mo]=m.split('-');return`${MO[parseInt(mo)-1]} ${y}`;};
 
+// ─── Helper: parse angka dari string berformat (boleh ada titik ribuan) ───
+const parseNum=s=>parseInt((s||'').replace(/\./g,'').replace(/,/g,'').replace(/[^\d]/g,''))||0;
+
 let currentMonth=new Date().toISOString().slice(0,7);
 let allData={}, cats=[], groups=[], txns=[], salary=0;
 let isEdit=false, currentUser=null, dragSrc=null;
 
-/* DATA MIGRATION: support budgy_months (old) and budgy_v2 (new) */
+/* DATA MIGRATION */
 (function(){
   let raw=localStorage.getItem('budgy_v2');
   if(raw){try{allData=JSON.parse(raw);return;}catch(e){}}
@@ -570,14 +573,34 @@ let isEdit=false, currentUser=null, dragSrc=null;
 $('mo-lbl').textContent=moLbl(currentMonth);
 $('prev-mo').onclick=()=>shiftMo(-1);
 $('next-mo').onclick=()=>shiftMo(1);
-function shiftMo(d){const dt=new Date(currentMonth+'-01');dt.setMonth(dt.getMonth()+d);currentMonth=dt.toISOString().slice(0,7);haptic();$('mo-lbl').textContent=moLbl(currentMonth);applyMonth();}
+function shiftMo(d){
+  const dt=new Date(currentMonth+'-01');
+  dt.setMonth(dt.getMonth()+d);
+  currentMonth=dt.toISOString().slice(0,7);
+  haptic();
+  $('mo-lbl').textContent=moLbl(currentMonth);
+  applyMonth();
+}
 
 function applyMonth(){
   if(!allData[currentMonth]){
+    // ─── FIX 1: copy cats + groups + salary dari bulan terakhir ───
     const prev=Object.keys(allData).filter(m=>m<currentMonth).sort().reverse();
-    let pg=[],ps=0;
-    if(prev.length){const L=allData[prev[0]];if(L.groups)pg=JSON.parse(JSON.stringify(L.groups));if(L.salary)ps=L.salary;}
-    allData[currentMonth]={cats:[],salary:ps,groups:pg,txns:[]};
+    let pg=[],pc=[],ps=0;
+    if(prev.length){
+      const L=allData[prev[0]];
+      if(L.groups) pg=JSON.parse(JSON.stringify(L.groups));
+      if(L.salary) ps=L.salary;
+      if(L.cats){
+        // Copy struktur kategori (nama, icon, bank, due, amount) — reset actual & txns
+        pc=JSON.parse(JSON.stringify(L.cats)).map(c=>({
+          ...c,
+          actual:0,   // reset aktual ke 0 untuk bulan baru
+          id:Date.now()+Math.random() // id baru supaya tidak clash
+        }));
+      }
+    }
+    allData[currentMonth]={cats:pc,salary:ps,groups:pg,txns:[]};
   }
   const d=allData[currentMonth];
   cats=d.cats||[]; salary=d.salary||0; groups=d.groups||[]; txns=d.txns||[];
@@ -611,12 +634,45 @@ onAuthStateChanged(auth,async user=>{
 $('btn-login').onclick=()=>signInWithPopup(auth,provider);
 $('up-logout').onclick=()=>{if(confirm('Yakin keluar?'))signOut(auth);};
 
-$('salary-in').oninput=e=>{salary=parseInt(e.target.value.replace(/\D/g,''))||0;e.target.value=fmt(salary);save();updateSummary();};
+// ─── FIX 2: salary input — raw saat focus, format saat blur ───
+$('salary-in').addEventListener('focus',e=>{
+  const v=parseNum(e.target.value);
+  e.target.value=v===0?'':String(v);
+});
+$('salary-in').addEventListener('input',e=>{
+  // Izinkan hanya angka, hapus semua bukan digit
+  e.target.value=e.target.value.replace(/[^\d]/g,'');
+  salary=parseInt(e.target.value)||0;
+  save();updateSummary();
+});
+$('salary-in').addEventListener('blur',e=>{
+  salary=parseInt(e.target.value)||0;
+  e.target.value=fmt(salary);
+});
 
 function guessIcon(name){
   const nm=name.toLowerCase();
   for(const kw of Object.keys(ICON_MAP)){if(nm.includes(kw))return ICON_MAP[kw];}
   return 'package';
+}
+
+// ─── Helper buat input angka dengan pola: raw saat focus, format saat blur ───
+function attachNumInput(el, getCb, setCb){
+  el.addEventListener('focus',()=>{
+    const v=getCb();
+    el.value=v===0?'':String(v);
+  });
+  el.addEventListener('input',()=>{
+    el.value=el.value.replace(/[^\d]/g,'');
+  });
+  el.addEventListener('blur',()=>{
+    const v=parseInt(el.value)||0;
+    setCb(v);
+    el.value=fmt(v);
+    save();updateSummary();
+  });
+  // Juga trigger save saat Enter
+  el.addEventListener('keydown',e=>{if(e.key==='Enter')el.blur();});
 }
 
 /* BUILD ALLOC with drag reorder */
@@ -668,9 +724,12 @@ function buildAlloc(){
     };
     row.querySelector('.bank-pill').onchange=e=>{cats[i].bank=e.target.value;save();updateSummary();};
     row.querySelector('.due-in').onchange=e=>{cats[i].due=e.target.value;save();buildAlloc();};
+
+    // ─── FIX 2 applied: num-in inputs ───
     const ns=row.querySelectorAll('.num-in');
-    ns[0].oninput=e=>{const v=parseInt(e.target.value.replace(/\D/g,''))||0;cats[i].amount=v;e.target.value=fmt(v);save();updateSummary();};
-    ns[1].oninput=e=>{const v=parseInt(e.target.value.replace(/\D/g,''))||0;cats[i].actual=v;e.target.value=fmt(v);save();updateSummary();};
+    attachNumInput(ns[0], ()=>cats[i].amount, v=>{ cats[i].amount=v; });
+    attachNumInput(ns[1], ()=>cats[i].actual, v=>{ cats[i].actual=v; });
+
     row.querySelector('.del-btn').onclick=()=>{cats.splice(i,1);save();buildAlloc();buildTxLog();};
 
     // Desktop drag
@@ -812,7 +871,12 @@ const closeModal=()=>{haptic();modal.style.opacity='0';sheet.style.transform='tr
 $('fab-btn').onclick=openModal;
 $('close-modal').onclick=closeModal;
 modal.onclick=e=>{if(e.target===modal)closeModal();};
-$('qi-amt').oninput=e=>{const v=parseInt(e.target.value.replace(/\D/g,''))||0;e.target.value=v===0?'':fmt(v);};
+
+// ─── FIX 2: modal amount input ───
+$('qi-amt').addEventListener('input',e=>{
+  e.target.value=e.target.value.replace(/[^\d]/g,'');
+});
+
 $('qi-add').onclick=()=>{
   const cid=$('qi-cat').value,amt=parseInt($('qi-amt').value.replace(/\D/g,''))||0;
   if(!cid||amt<=0)return;haptic();
@@ -894,10 +958,24 @@ function buildGroupList(){
       if(confirm(`Hapus kelompok "${g.name||'ini'}"?`)){haptic();groups.splice(gi,1);save();buildGroupList();}
     });
     card.querySelector('.group-name').addEventListener('input',e=>{groups[gi].name=e.target.value;save();});
-    card.querySelector(`[data-tgi="${gi}"]`).addEventListener('input',e=>{
-      const v=parseInt(e.target.value.replace(/\D/g,''))||0;
-      groups[gi].target=v;e.target.value=v===0?'':fmt(v);save();buildGroupList();
+
+    // ─── FIX 2: target input ───
+    const tgtEl=card.querySelector(`[data-tgi="${gi}"]`);
+    tgtEl.addEventListener('focus',()=>{
+      const v=groups[gi].target||0;
+      tgtEl.value=v===0?'':String(v);
     });
+    tgtEl.addEventListener('input',()=>{
+      tgtEl.value=tgtEl.value.replace(/[^\d]/g,'');
+    });
+    tgtEl.addEventListener('blur',()=>{
+      const v=parseInt(tgtEl.value)||0;
+      groups[gi].target=v;
+      tgtEl.value=v===0?'':fmt(v);
+      save();buildGroupList();
+    });
+    tgtEl.addEventListener('keydown',e=>{if(e.key==='Enter')tgtEl.blur();});
+
     card.querySelector(`[data-ngi="${gi}"]`).addEventListener('input',e=>{groups[gi].note=e.target.value;save();});
     card.querySelector(`[data-addgi="${gi}"]`).addEventListener('click',e=>{
       e.stopPropagation();haptic();
@@ -913,13 +991,28 @@ function buildGroupList(){
       if(ico){ico.innerHTML=`<i data-lucide="${ASSET_ICONS[e.target.value]||'gem'}"></i>`;lucide.createIcons();}
       save();
     }));
-    card.querySelectorAll('.a-amt').forEach(el=>el.addEventListener('input',e=>{
-      const g2=+e.target.dataset.gi,a2=+e.target.dataset.ai;
-      const v=parseInt(e.target.value.replace(/\D/g,''))||0;
-      groups[g2].assets[a2].amount=v;e.target.value=v===0?'':fmt(v);save();updateTotalAsset();
-      const nt=groups[g2].assets.reduce((s,a)=>s+a.amount,0);
-      const ht=card.querySelector('.group-total');if(ht)ht.textContent='Rp '+fmt(nt);
-    }));
+
+    // ─── FIX 2: asset amount input ───
+    card.querySelectorAll('.a-amt').forEach(el=>{
+      const g2=()=>+el.dataset.gi, a2=()=>+el.dataset.ai;
+      el.addEventListener('focus',()=>{
+        const v=groups[g2()].assets[a2()].amount||0;
+        el.value=v===0?'':String(v);
+      });
+      el.addEventListener('input',()=>{
+        el.value=el.value.replace(/[^\d]/g,'');
+      });
+      el.addEventListener('blur',()=>{
+        const v=parseInt(el.value)||0;
+        groups[g2()].assets[a2()].amount=v;
+        el.value=v===0?'':fmt(v);
+        save();updateTotalAsset();
+        const nt=groups[g2()].assets.reduce((s,a)=>s+a.amount,0);
+        const ht=card.querySelector('.group-total');if(ht)ht.textContent='Rp '+fmt(nt);
+      });
+      el.addEventListener('keydown',e=>{if(e.key==='Enter')el.blur();});
+    });
+
     card.querySelectorAll('.a-del').forEach(el=>el.addEventListener('click',e=>{
       e.stopPropagation();haptic();
       const b=e.currentTarget;
