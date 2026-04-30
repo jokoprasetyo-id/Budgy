@@ -227,7 +227,7 @@
         <button id="btn-login" style="width: 100%; padding: 12px; border-radius: 12px; background: var(--accent); color: white; border: none; font-size: 14px; font-family: inherit; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s;">
           <i data-lucide="log-in" style="width: 16px; height: 16px;"></i> Masuk dengan Google
         </button>
-        <div style="font-size: 11px; text-align: center; color: var(--txt-dim); margin-top: 8px;">Simpan dan sinkronkan datamu dengan aman.</div>
+        <div style="font-size: 11px; text-align: center; color: var(--txt-dim); margin-top: 8px;">Simpan dan sinkronkan datamu secara realtime.</div>
       </div>
       <div id="user-logged-in" style="display: none; align-items: center; justify-content: space-between; background: var(--input-bg); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--card-border);">
         <div style="display: flex; align-items: center; gap: 12px;">
@@ -299,11 +299,11 @@
   <button id="btn-add-goal" class="btn-add-goal"><i data-lucide="folder-plus"></i> Tambah Tujuan Tabungan</button>
 </div>
 
-<!-- MODULE SCRIPT UNTUK FIREBASE -->
+<!-- MODULE SCRIPT UNTUK FIREBASE (REALTIME SYNC) -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
   // Konfigurasi Firebase Anda
   const FB = {
@@ -321,6 +321,7 @@
   const provider = new GoogleAuthProvider();
 
   let currentUser = null;
+  let syncListener = null;
 
   // --- EXISTING LOGIC ---
   let EXCHANGE_RATES = {
@@ -367,11 +368,11 @@
 
   // Initialize Local Data First
   const loadLocalData = () => {
-    const saved = localStorage.getItem('liquid_assets_v13');
+    const saved = localStorage.getItem('liquid_assets_v14');
     if (saved) { 
       try { let parsed = JSON.parse(saved); if(parsed.history) state = parsed; } catch (e) {} 
     } else {
-      const oldSaved = localStorage.getItem('liquid_assets_v12');
+      const oldSaved = localStorage.getItem('liquid_assets_v13');
       if(oldSaved) { try { let parsed = JSON.parse(oldSaved); if(parsed.history) state = parsed; } catch(e) {} }
     }
 
@@ -393,37 +394,8 @@
   async function saveToFB() {
     if (!currentUser) return;
     try {
-      // Menggunakan collection 'liquid_assets_users' agar tidak bentrok dengan Budgy
       await setDoc(doc(db, 'liquid_assets_users', currentUser.uid), { state: state }, { merge: true });
     } catch(e) { console.error("Firebase save failed", e); }
-  }
-
-  async function loadFromFB() {
-    if (!currentUser) return;
-    try {
-      const s = await getDoc(doc(db, 'liquid_assets_users', currentUser.uid));
-      if (s.exists() && s.data().state) {
-        state = s.data().state;
-        // Pastikan bulan saat ini tetap ada
-        if (!state.history[currentMonthStr]) {
-          const pastMonths = Object.keys(state.history).filter(m => m < currentMonthStr).sort().reverse();
-          let clonedGoals = []; let clonedDebt = 0;
-          if (pastMonths.length > 0) {
-            clonedGoals = JSON.parse(JSON.stringify(state.history[pastMonths[0]].goals));
-            clonedDebt = state.history[pastMonths[0]].debt || 0;
-          } else { clonedGoals = JSON.parse(JSON.stringify(defaultGoals)); }
-          state.history[currentMonthStr] = { lastUpdated: Date.now(), netWorth: 0, debt: clonedDebt, goals: clonedGoals };
-        }
-        EXCHANGE_RATES['Emas Antam (g)'] = state.rates['Emas Antam (g)'];
-        EXCHANGE_RATES['Emas G24 (g)'] = state.rates['Emas G24 (g)'];
-        EXCHANGE_RATES['Dinar KR'] = state.rates['Dinar KR'];
-        saveSilentLocalOnly();
-        renderUI();
-      } else {
-        // Jika data di cloud kosong, timpa dengan data lokal saat ini
-        saveToFB();
-      }
-    } catch(e) { console.error("Firebase load failed", e); }
   }
 
   // Hook Firebase Auth UI
@@ -440,19 +412,50 @@
       document.getElementById('up-avatar').src = user.photoURL || '';
       document.getElementById('up-name').textContent = user.displayName || 'Pengguna';
       document.getElementById('up-email').textContent = user.email || '';
-      await loadFromFB();
+      
+      // REALTIME LISTENER MAGIC
+      syncListener = onSnapshot(doc(db, 'liquid_assets_users', currentUser.uid), (docSnap) => {
+        // Jika perubahan berasal dari ketikan di browser/perangkat ini sendiri, ABAIKAN
+        // agar tidak terjadi loop dan ketikan tidak terganggu.
+        if (docSnap.metadata.hasPendingWrites) return;
+
+        if (docSnap.exists() && docSnap.data().state) {
+          state = docSnap.data().state;
+          
+          if (!state.history[currentMonthStr]) {
+            const pastMonths = Object.keys(state.history).filter(m => m < currentMonthStr).sort().reverse();
+            let clonedGoals = []; let clonedDebt = 0;
+            if (pastMonths.length > 0) {
+              clonedGoals = JSON.parse(JSON.stringify(state.history[pastMonths[0]].goals));
+              clonedDebt = state.history[pastMonths[0]].debt || 0;
+            } else { clonedGoals = JSON.parse(JSON.stringify(defaultGoals)); }
+            state.history[currentMonthStr] = { lastUpdated: Date.now(), netWorth: 0, debt: clonedDebt, goals: clonedGoals };
+          }
+          EXCHANGE_RATES['Emas Antam (g)'] = state.rates['Emas Antam (g)'];
+          EXCHANGE_RATES['Emas G24 (g)'] = state.rates['Emas G24 (g)'];
+          EXCHANGE_RATES['Dinar KR'] = state.rates['Dinar KR'];
+          
+          saveSilentLocalOnly();
+          renderUI(); // Perbarui tampilan dengan data terbaru dari perangkat lain!
+        } else {
+          // Jika di cloud masih kosong, push data lokal ke sana
+          saveToFB();
+        }
+      });
+
     } else {
       currentUser = null;
+      if (syncListener) { syncListener(); syncListener = null; } // Matikan pendengar jika logout
       document.getElementById('user-logged-out').style.display = 'block';
       document.getElementById('user-logged-in').style.display = 'none';
     }
   });
 
   // Saving Logic Overrides
-  const saveSilentLocalOnly = () => localStorage.setItem('liquid_assets_v13', JSON.stringify(state));
+  const saveSilentLocalOnly = () => localStorage.setItem('liquid_assets_v14', JSON.stringify(state));
   const saveSilent = () => {
     saveSilentLocalOnly();
-    saveToFB(); // Trigger cloud sync
+    saveToFB(); // Push perubahan lokal ke Cloud
   };
   const saveAndRender = () => { 
     state.history[currentMonthStr].lastUpdated = Date.now();
